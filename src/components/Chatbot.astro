@@ -1,0 +1,98 @@
+---
+// No necesitamos definir questions y results aquí, ya que las moveremos al <script>.
+---
+
+<div class="chatbot">
+  <p class="question" id="question-text"></p>
+  <div id="options-container"></div>
+  <p id="result" style="display: none;"></p>
+</div>
+
+<script>
+  // Definimos questions y results dentro del <script>
+  const questions = [
+    { id: 1, text: "Hola Bienvenido a nuestro chatbot ¿Quiere información?", options: ["Sí", "No"] },
+    { id: 2, text: "¿Tienes fiebre?", options: ["Sí", "No"] },
+    { id: 3, text: "¿Tienes tos?", options: ["Sí", "No"] },
+  ];
+
+  const results = {
+    "Sí,Sí,Sí": "Podrías tener una infección respiratoria.",
+    "Sí,Sí,No": "Podría ser una gripe común.",
+    "Sí,No,Sí": "Podrías estar resfriado.",
+    "No,No,No": "Parece que estás bien.",
+  };
+
+  // Variables de estado
+  let step = 0;
+  let answers = [];
+
+  // Función para avanzar a la siguiente pregunta
+  function nextQuestion(answer) {
+    answers.push(answer);
+    step++;
+
+    if (step < questions.length) {
+      updateQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  // Función para actualizar la pregunta actual
+  function updateQuestion() {
+    const questionText = document.getElementById("question-text");
+    const optionsContainer = document.getElementById("options-container");
+
+    if (questionText && optionsContainer) {
+      questionText.innerText = questions[step].text;
+      optionsContainer.innerHTML = "";
+
+      questions[step].options.forEach((option) => {
+        const btn = document.createElement("button");
+        btn.innerText = option;
+        btn.className = "button";
+        btn.addEventListener("click", () => nextQuestion(option));
+        optionsContainer.appendChild(btn);
+      });
+    }
+  }
+
+  // Función para mostrar el resultado
+  function showResult() {
+    const key = answers.join(",");
+    const questionText = document.getElementById("question-text");
+    const optionsContainer = document.getElementById("options-container");
+    const resultText = document.getElementById("result");
+
+    if (questionText && optionsContainer && resultText) {
+      questionText.style.display = "none";
+      optionsContainer.style.display = "none";
+      resultText.innerText = results[key] || "No tenemos un diagnóstico para tus respuestas.";
+      resultText.style.display = "block";
+    }
+  }
+
+  // Inicializar la primera pregunta
+  updateQuestion();
+</script>
+
+<style>
+  .chatbot {
+    border: 2px solid #333;
+    padding: 16px;
+    border-radius: 8px;
+    width: 300px;
+  }
+  .question {
+    font-weight: bold;
+  }
+  .button {
+    background: blue;
+    color: white;
+    padding: 8px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+</style>
