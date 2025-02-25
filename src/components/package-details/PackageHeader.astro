@@ -1,0 +1,54 @@
+---
+const { title, price, originalPrice, savings } = Astro.props;
+---
+
+<div class="package-header">
+    <h1>{title}</h1>
+    <p class="price">${price.toFixed(2)}</p>
+    {
+        originalPrice && (
+            <div class="price-details">
+                <span class="original-price">
+                    Precio Regular ${originalPrice.toFixed(2)}
+                </span>
+                <span class="savings">(Ahorra {savings})</span>
+            </div>
+        )
+    }
+</div>
+
+<style>
+    .package-header {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #4a90e2, #50b89a);
+        color: white;
+        text-align: center;
+    }
+    .package-header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+    .price {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 1rem 0;
+    }
+    .price-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+    }
+    .original-price {
+        text-decoration: line-through;
+        opacity: 0.8;
+    }
+    .savings {
+        font-weight: 600;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        display: inline-block;
+        margin: 0 auto;
+    }
+</style>

@@ -1,0 +1,68 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PricingCard from "../components/pricing/PricingCard.astro";
+---
+
+<Layout>
+    <section class="pricing-section">
+        <div class="pricing-container">
+            <h1>Paquetes de Microdosis</h1>
+            <div class="pricing-cards">
+                <PricingCard
+                    title="1 Mes de Suministro"
+                    price="$160.00"
+                    originalPrice="$480.00"
+                    savings="Ahorra 67%"
+                    features={[
+                        "Envío estándar gratuito",
+                        "Guía de uso personalizado",
+                        "Soporte básico por email",
+                    ]}
+                    link="/microdosis-package/1"
+                />
+                <PricingCard
+                    title="Paquete de 3 Meses"
+                    price="$390.00"
+                    originalPrice="$480.00"
+                    savings="Ahorra 19%"
+                    features={[
+                        "Envío prioritario gratuito",
+                        "Guía avanzada de microdosificación",
+                        "Soporte prioritario por WhatsApp",
+                    ]}
+                    link="/microdosis-package/2"
+                />
+            </div>
+        </div>
+    </section>
+</Layout>
+
+<style is:global>
+    :root {
+        --color-primary: #4a90e2;
+        --color-secondary: #50b89a;
+        --color-accent: #9b59b6;
+    }
+
+    .pricing-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+
+    .pricing-section h1,
+    .subscription-section h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        color: #2c3e50;
+        font-weight: 700;
+    }
+
+    .pricing-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+</style>

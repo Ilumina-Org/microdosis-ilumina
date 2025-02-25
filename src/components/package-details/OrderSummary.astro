@@ -1,0 +1,89 @@
+---
+const { title, price } = Astro.props;
+---
+
+<div class="order-summary">
+    <h2>Resumen de Compra</h2>
+    <div class="summary-item">
+        <span>Producto:</span>
+        <span>{title}</span>
+    </div>
+    <div class="summary-item">
+        <span>Precio:</span>
+        <span>${price.toFixed(2)}</span>
+    </div>
+    <div class="summary-item">
+        <span>Envío:</span>
+        <span>Gratis</span>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-total">
+        <span>Total:</span>
+        <span>${price.toFixed(2)}</span>
+    </div>
+
+    <div class="secure-payment">
+        <span class="secure-icon">🔒</span>
+        <span>Pago 100% Seguro</span>
+    </div>
+
+    <div class="help-section">
+        <h3>¿Necesitas ayuda?</h3>
+        <p>Contáctanos por WhatsApp al:</p>
+        <a href="https://wa.me/TUNUMERO" class="whatsapp-button">
+            <span class="whatsapp-icon">📱</span>
+            Enviar Mensaje
+        </a>
+    </div>
+</div>
+
+<style>
+    .order-summary {
+        background: #f3f3f3;
+        color: #333;
+        border-radius: 8px;
+        padding: 1rem;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        height: fit-content;
+    }
+    .order-summary h2 {
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+    }
+    .summary-item,
+    .summary-total,
+    .secure-payment,
+    .help-section {
+        margin-bottom: 1rem;
+    }
+    .summary-divider {
+        border-top: 1px solid #ccc;
+        margin: 1rem 0;
+    }
+    .summary-total span {
+        font-weight: 600;
+    }
+    .secure-payment {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .help-section p {
+        margin-bottom: 0.5rem;
+    }
+    .whatsapp-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: #25d366;
+        color: #fff;
+        padding: 0.6rem 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .whatsapp-button:hover {
+        background: #20bb57;
+    }
+</style>

@@ -1,0 +1,69 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getPackageData } from "../../utils/package";
+import { getMercadoPagoPreference } from "../../utils/mercadopago";
+
+import PackageHeader from "../../components/package-details/PackageHeader.astro";
+import PackageDescription from "../../components/package-details/PackageDescription.astro";
+import PaymentOptions from "../../components/package-details/PaymentsOptions.astro";
+import GuaranteeBox from "../../components/package-details/GuaranteeBox.astro";
+import OrderSummary from "../../components/package-details/OrderSummary.astro";
+
+const { id } = Astro.params;
+const packageData = await getPackageData(id);
+const preferenceId = await getMercadoPagoPreference(packageData);
+---
+
+<Layout>
+    <div class="package-container">
+        <div class="package-detail">
+            <PackageHeader
+                title={packageData.title}
+                price={packageData.price}
+                originalPrice={packageData.originalPrice}
+                savings={packageData.savings}
+            />
+
+            <PackageDescription description={packageData.description} />
+
+            <PaymentOptions
+                preferenceId={preferenceId}
+                title={packageData.title}
+                price={packageData.price}
+            />
+
+            <GuaranteeBox />
+        </div>
+
+        <OrderSummary title={packageData.title} price={packageData.price} />
+    </div>
+</Layout>
+
+<style>
+    html {
+        font-size: 14px;
+        color: #333;
+    }
+
+    .package-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1rem;
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .package-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .package-detail {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+</style>
