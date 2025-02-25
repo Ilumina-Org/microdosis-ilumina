@@ -1,68 +1,63 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 
-const MercadoPagoCheckoutPro = ({
-  mercado_pago_credentials,
-  product_data,
-  preferenceId: externalPreferenceId,
-}) => {
-  const [preferenceId, setPreferenceId] = useState(
-    externalPreferenceId || null,
-  );
-  const [loading, setLoading] = useState(!externalPreferenceId);
-  const [error, setError] = useState(null);
+const MercadoPagoCheckoutPro = ({ product_data }: { product_data: any }) => {
+  const [preferenceId, setPreferenceId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const initialized = useRef(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+    let isMounted = true;
+
     const initializePayment = async () => {
       try {
-        if (!mercado_pago_credentials.public_key) {
-          throw new Error("Falta la public key de Mercado Pago");
+        if (!initialized.current) {
+          initMercadoPago(import.meta.env.PUBLIC_MERCADOPAGO_PUBLIC_KEY, {
+            locale: "es-PE",
+          });
+          initialized.current = true;
         }
-        await initMercadoPago(mercado_pago_credentials.public_key, {
-          locale: "es-AR",
-        });
-
-        if (!product_data || externalPreferenceId) return;
 
         const response = await fetch("/api/create-preference", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(product_data),
+          signal: controller.signal,
         });
 
-        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-
         const data = await response.json();
-        if (!data?.id) throw new Error("Formato de respuesta inválido");
+        if (!data.id) throw new Error("Error al crear preferencia");
 
-        setPreferenceId(data.id);
+        if (isMounted) {
+          setPreferenceId(data.id);
+        }
       } catch (err) {
-        console.error("Error:", err);
-        setError(err instanceof Error ? err.message : "Error desconocido");
+        if (isMounted && !controller.signal.aborted) {
+          setError(err instanceof Error ? err.message : "Error desconocido");
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     initializePayment();
-  }, [mercado_pago_credentials.public_key, externalPreferenceId, product_data]);
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [product_data]);
 
   if (loading) return <div>Cargando pasarela de pago...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="mercado-pago-container">
-      {preferenceId && (
-        <Wallet
-          initialization={{ preferenceId }}
-          customization={{
-            texts: {
-              action: "pay",
-              valueProp: "security_details",
-            },
-          }}
-        />
-      )}
+      {preferenceId && <Wallet initialization={{ preferenceId }} />}
     </div>
   );
 };

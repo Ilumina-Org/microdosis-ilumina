@@ -1,8 +1,8 @@
-export async function post({ request }) {
+import type { APIRoute } from "astro";
+export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
 
-  // Validación básica
   if (!data.email || !data.address) {
     return new Response(
       JSON.stringify({ success: false, message: "Faltan campos requeridos" }),
@@ -13,8 +13,7 @@ export async function post({ request }) {
   data.timestamp = new Date().toISOString();
 
   try {
-    const GOOGLE_SCRIPT_URL = "TU_URL_DEPLOYED_SCRIPT"; // Reemplazar con tu URL real
-
+    const GOOGLE_SCRIPT_URL = "TU_URL_DEPLOYED_SCRIPT";
     const response = await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       body: JSON.stringify(data),
@@ -33,13 +32,22 @@ export async function post({ request }) {
       }),
       { status: 200 },
     );
-  } catch (error) {
+  } catch (error: unknown) {
+    let errorMessage = "Error al guardar en Google Sheets";
+
+    if (error instanceof Error) {
+      console.error(error);
+      errorMessage = error.message;
+    } else {
+      console.error("Error inesperado", error);
+    }
+
     return new Response(
       JSON.stringify({
         success: false,
-        message: error.message,
+        message: errorMessage,
       }),
       { status: 500 },
     );
   }
-}
+};
