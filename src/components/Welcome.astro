@@ -1,179 +1,245 @@
 ---
 import astroLogo from '../assets/astro.svg';
 import background from '../assets/background.svg';
-import staticModel from '../assets/model_static.png'
+import staticModel from '../assets/model_static.png';
 ---
 
 <div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
 	<main>
-    <section id="hero" style={{flexDirection: 'row', border: '1px solid white', alignItems: 'center'}}>
-      <section id="links">
-        <h1 style={{color: '#C1DC3A'}}>Descubre el poder sanador de la <br /> Ayahuasca en Micro dosis. </h1>
-        <p style={{opacity: '50%', color: 'white', fontSize: '20px'}}>100% ingredientes naturales</p>
-        <a class="button">Simula tu dosificación</a>
-			</section>
-      <section id='item'>
-        <img src={staticModel.src} alt="" fetchpriority="high" />
-      </section>
-		</section>
+    <section id="section" style={{flexDirection: 'row', height: '90vh'}}>
+
+      <div style={{alignContent: 'center',height: '100%', justifyContent: 'center', marginLeft: '5%'}}>
+        <div id="left">
+        <h1 id="hero">
+          Descubre el poder <br />
+          sanador de la <br />
+        <span style={{color: '#C1DC3A'}}>Ayahuasca <br/>
+            en Micro dosis.
+          </span>
+        </h1>
+          <p style={{ opacity: '50%', color: 'white', fontSize: '20px', fontWeight: 100}}>
+            100% ingredientes naturales
+          </p>
+        <input type='button' class='button' value="Simula tu dosificación" />
+        <!-- <Button label='Simula tu dosificacion'/> -->
+      </div>
+      <div style={{width: '45%', overflow: 'hidden'}}>
+        <img
+          src={staticModel.src}
+          alt=""
+          fetchpriority="high"
+          width='900'
+          height='900'
+          style={{
+          position: 'absolute',
+          width: '50%',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          right: '10%',
+          objectFit: 'cover',
+          //filter: 'blur(5px)'
+          }}
+        />
+      </div>
+
+</div>
+    </section>
 	</main>
 </div>
 
-<style>
-	#background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		filter: blur(100px);
-	}
 
-  #item{
-    overflow: hidden; 
-    width: 40%;
+
+<style>
+  *{
+    /*border: 1px solid red;*/
+  }
+  #container{
+    background: #013726;
+    height: 100%;
+    padding: 2rem;
+font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
   }
 
-	#container {
-    background: #013726;
-		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		height: 100%;
-	}
+  #section{
+    flex-direction: row;
+  }
 
-	main {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-	}
+  #hero{
+    color: white;
+    font-size: 3rem;
+    line-height: 95%;
+    font-weight:800;
+    flex-direction: row;
+  }
 
-	#hero {
-		display: flex;
-		align-items: start;
-		flex-direction: column;
-		justify-content: center;
-		padding: 16px;
-	}
-
-	h1 {
-		font-size: 50px;
-		margin-top: 0.25em;
-	}
-
-	#links a {
-		display: flex;
-		align-items: center;
-		padding: 10px 12px;
-		color: #111827;
-		text-decoration: none;
-		transition: color 0.2s;
-	}
-
-	#links a:hover {
-		color: rgb(78, 80, 86);
-	}
-
-	#links a svg {
-		height: 1em;
-	}
-
-	#links a.button {
+  .button{
     width: fit-content;
     padding: 1rem;
     background: #C1DC3A;
 		border-radius: 10px;
-	}
+  }
 
-	pre {
-		font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas,
-			'DejaVu Sans Mono', monospace;
-		font-weight: normal;
+  #left{
+    width: 50%;
+    line-height: 10%;
+  }
 
-		background-clip: text;
-		margin: 0;
-	}
-
-	h2 {
-		margin: 0 0 1em;
-		font-weight: normal;
-		color: #111827;
-		font-size: 20px;
-	}
-
-	p {
-		color: #4b5563;
-		font-size: 16px;
-		line-height: 24px;
-		letter-spacing: -0.006em;
-		margin: 0;
-	}
-
-	code {
-		display: inline-block;
-		background:
-			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
-			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
-		border-radius: 8px;
-		border: 1px solid transparent;
-		padding: 6px 8px;
-	}
-
-	.box {
-		padding: 16px;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 16px;
-		border: 1px solid white;
-	}
-
-	#news {
-		position: absolute;
-		bottom: 16px;
-		right: 16px;
-		max-width: 300px;
-		text-decoration: none;
-		transition: background 0.2s;
-		backdrop-filter: blur(50px);
-	}
-
-	#news:hover {
-		background: rgba(255, 255, 255, 0.55);
-	}
-
-	@media screen and (max-height: 368px) {
-		#news {
-			display: none;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		#container {
-			display: flex;
-			flex-direction: column;
-		}
-
-		#hero {
-			display: block;
-			padding-top: 10%;
-		}
-
-		#links {
-			flex-wrap: wrap;
-		}
-
-		#links a.button {
-			padding: 14px 18px;
-		}
-
-		#news {
-			right: 16px;
-			left: 16px;
-			bottom: 2.5rem;
-			max-width: 100%;
-		}
-
-		h1 {
-			line-height: 1.5;
-		}
-	}
 </style>
+
+<!--<style>-->
+<!--	#background {-->
+<!--		position: fixed;-->
+<!--		top: 0;-->
+<!--		left: 0;-->
+<!--		width: 100%;-->
+<!--		height: 100%;-->
+<!--		z-index: -1;-->
+<!--		filter: blur(100px);-->
+<!--	}-->
+<!---->
+<!--  #item{-->
+<!--    overflow: hidden; -->
+<!--    width: 40%;-->
+<!--  }-->
+<!---->
+<!--	#container {-->
+<!--    background: #013726;-->
+<!--		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;-->
+<!--		height: 100%;-->
+<!--	}-->
+<!---->
+<!--	main {-->
+<!--		height: 100%;-->
+<!--		display: flex;-->
+<!--		justify-content: center;-->
+<!--	}-->
+<!---->
+<!--	#hero {-->
+<!--		display: flex;-->
+<!--		align-items: start;-->
+<!--		flex-direction: column;-->
+<!--		justify-content: center;-->
+<!--		padding: 16px;-->
+<!--	}-->
+<!---->
+<!--	h1 {-->
+<!--		font-size: 50px;-->
+<!--		margin-top: 0.25em;-->
+<!--	}-->
+<!---->
+<!--	#links a {-->
+<!--		display: flex;-->
+<!--		align-items: center;-->
+<!--		padding: 10px 12px;-->
+<!--		color: #111827;-->
+<!--		text-decoration: none;-->
+<!--		transition: color 0.2s;-->
+<!--	}-->
+<!---->
+<!--	#links a:hover {-->
+<!--		color: rgb(78, 80, 86);-->
+<!--	}-->
+<!---->
+<!--	#links a svg {-->
+<!--		height: 1em;-->
+<!--	}-->
+<!---->
+<!--	#links a.button {-->
+		<!--  width: fit-content;-->
+		<!--  padding: 1rem;-->
+		<!--  background: #C1DC3A;-->
+		<!--border-radius: 10px;-->
+<!--	}-->
+<!---->
+<!--	pre {-->
+<!--		font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas,-->
+<!--			'DejaVu Sans Mono', monospace;-->
+<!--		font-weight: normal;-->
+<!---->
+<!--		background-clip: text;-->
+<!--		margin: 0;-->
+<!--	}-->
+<!---->
+<!--	h2 {-->
+<!--		margin: 0 0 1em;-->
+<!--		font-weight: normal;-->
+<!--		color: #111827;-->
+<!--		font-size: 20px;-->
+<!--	}-->
+<!---->
+<!--	p {-->
+<!--		color: #4b5563;-->
+<!--		font-size: 16px;-->
+<!--		line-height: 24px;-->
+<!--		letter-spacing: -0.006em;-->
+<!--		margin: 0;-->
+<!--	}-->
+<!---->
+<!--	code {-->
+<!--		display: inline-block;-->
+<!--		background:-->
+<!--			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,-->
+<!--			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;-->
+<!--		border-radius: 8px;-->
+<!--		border: 1px solid transparent;-->
+<!--		padding: 6px 8px;-->
+<!--	}-->
+<!---->
+<!--	.box {-->
+<!--		padding: 16px;-->
+<!--		background: rgba(255, 255, 255, 1);-->
+<!--		border-radius: 16px;-->
+<!--		border: 1px solid white;-->
+<!--	}-->
+<!---->
+<!--	#news {-->
+<!--		position: absolute;-->
+<!--		bottom: 16px;-->
+<!--		right: 16px;-->
+<!--		max-width: 300px;-->
+<!--		text-decoration: none;-->
+<!--		transition: background 0.2s;-->
+<!--		backdrop-filter: blur(50px);-->
+<!--	}-->
+<!---->
+<!--	#news:hover {-->
+<!--		background: rgba(255, 255, 255, 0.55);-->
+<!--	}-->
+<!---->
+<!--	@media screen and (max-height: 368px) {-->
+<!--		#news {-->
+<!--			display: none;-->
+<!--		}-->
+<!--	}-->
+<!---->
+<!--	@media screen and (max-width: 768px) {-->
+<!--		#container {-->
+<!--			display: flex;-->
+<!--			flex-direction: column;-->
+<!--		}-->
+<!---->
+<!--		#hero {-->
+<!--			display: block;-->
+<!--			padding-top: 10%;-->
+<!--		}-->
+<!---->
+<!--		#links {-->
+<!--			flex-wrap: wrap;-->
+<!--		}-->
+<!---->
+<!--		#links a.button {-->
+<!--			padding: 14px 18px;-->
+<!--		}-->
+<!---->
+<!--		#news {-->
+<!--			right: 16px;-->
+<!--			left: 16px;-->
+<!--			bottom: 2.5rem;-->
+<!--			max-width: 100%;-->
+<!--		}-->
+<!---->
+<!--		h1 {-->
+<!--			line-height: 1.5;-->
+<!--		}-->
+<!--	}-->
+<!--</style>-->

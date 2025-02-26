@@ -1,0 +1,82 @@
+---
+import ProductContainer from "./ReactComponents/ProductContainer";
+import Review from "./ReactComponents/Review";
+import staticModel from "../assets/model_static.png";
+---
+
+<section id="container" style={{ display: "flex", flexDirection: "column" }}>
+<!-- TODO: make a component for this -->
+  <div style={{ width: "100%", borderColor: "white", textAlign: "left" }}>
+    <h2 style={{ fontWeight: 300, fontSize: "35px", color: 'black' }}>
+      Opiniones de nuestros clientes
+    </h2>
+  </div>
+
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignContent: "center",
+      gap: '30px'
+    }}
+  >
+  <ProductContainer
+    imageUrl={staticModel.src}
+    productTitle="Suscripcion mensual"
+    productDetail="Precio Regular $160.00"
+    productPrice="130.00"
+    productDeal="(Ahorra 20%)"
+    tier={0}
+  />
+
+  <ProductContainer
+  imageUrl={staticModel.src}
+  productTitle="Suscripcion mensual"
+  purchaseType="subscription"
+  productDetail="Precio Regular $160.00"
+  productPrice="130.00"
+  productDeal="(Ahorra 20%)"
+  tier={1}
+/>
+
+<ProductContainer
+imageUrl={staticModel.src}
+productTitle="Suscripcion mensual"
+productDetail="Precio Regular $160.00"
+productPrice="130.00"
+productDeal="(Ahorra 20%)"
+tier={2}
+/>
+
+</div>
+
+
+
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignContent: "center",
+    }}
+  >
+
+  </div>
+</section>
+
+<style>
+  * {
+    /* border: 1px solid white; */
+  }
+  #container {
+    --horizontalPadding: 10rem;
+    background: white;
+   // height: 100%;
+    padding: 2rem;
+    padding-right: var(--horizontalPadding);
+    padding-left: var(--horizontalPadding);
+  }
+
+  #section {
+    border: 1px solid white;
+  }
+</style>
