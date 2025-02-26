@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-02-26T06:57:44.659Z",
+  "recordId": "rec_1740553064659_3245",
+  "data": {
+    "paymentId": "67891",
+    "status": "completed",
+    "merchantOrderId": "12345",
+    "shippingAddress": {
+      "name": "epimarket",
+      "email": "deecommerceservices@gmail.com",
+      "phone": "+54 (29) 75140205",
+      "address": "tito stelmastuk 1411",
+      "city": "comodoro rivadavia",
+      "state": "chubut",
+      "zipCode": "9000",
+      "country": "argentina"
+    }
+  }
+}

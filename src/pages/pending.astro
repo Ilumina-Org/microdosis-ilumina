@@ -1,0 +1,75 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const { searchParams } = Astro.url;
+const paymentId = searchParams.get("payment_id");
+const status = searchParams.get("status");
+const merchantOrderId = searchParams.get("merchant_order_id");
+---
+
+<Layout title="Payment Pending">
+    <main class="container">
+        <h1 class="title">Payment Pending</h1>
+        <div class="card">
+            <p class="message">
+                Your payment is currently being processed. Please check back
+                later for the status.
+            </p>
+            <ul class="details">
+                <li>Payment ID: {paymentId}</li>
+                <li>Status: {status}</li>
+                <li>Merchant Order ID: {merchantOrderId}</li>
+            </ul>
+            <a href="/" class="button primary">Return to Home</a>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #d97706;
+        margin-bottom: 1.5rem;
+    }
+
+    .card {
+        background: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 2rem;
+    }
+
+    .message {
+        margin-bottom: 1rem;
+    }
+
+    .details {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+    .button.primary {
+        background-color: #3490dc;
+        color: white;
+    }
+
+    .button.primary:hover {
+        background-color: #2779bd;
+    }
+</style>

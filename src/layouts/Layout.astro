@@ -1,22 +1,204 @@
+---
+// Layout.astro
+const { title = "Ilumina - Microdosis" } = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <title>{title}</title>
+    </head>
+    <body>
+        <slot />
+    </body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+<style is:global>
+    /* Reset */
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Variables globales */
+    :root {
+        --color-primary: #00431b;
+        --color-secondary: #b4ff4a;
+        --color-text: #ffffff;
+        --color-background: #002d1e;
+        --color-accent: #ffd700;
+
+        --container-padding: 1rem;
+        --container-max-width: 1200px;
+
+        --spacing-xs: 0.25rem;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
+
+        --border-radius: 0.5rem;
+    }
+
+    /* Base styles */
+    html {
+        font-size: 16px;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family:
+            "Inter",
+            system-ui,
+            -apple-system,
+            sans-serif;
+        background-color: var(--color-background);
+        color: var(--color-text);
+        line-height: 1.5;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Contenedor principal */
+    .container {
+        width: 100%;
+        padding: 0 var(--container-padding);
+        margin: 0 auto;
+        max-width: var(--container-max-width);
+    }
+
+    /* Utilidades de texto */
+    .text-primary {
+        color: var(--color-primary);
+    }
+
+    .text-secondary {
+        color: var(--color-secondary);
+    }
+
+    /* Media queries */
+    @media (min-width: 640px) {
+        :root {
+            --container-padding: 2rem;
+        }
+    }
+
+    @media (min-width: 768px) {
+        html {
+            font-size: 18px;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        :root {
+            --container-padding: 3rem;
+        }
+    }
+
+    /* Animaciones base */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    /* Estilos para botones */
+    .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--border-radius);
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .button-primary {
+        background-color: var(--color-secondary);
+        color: var(--color-primary);
+    }
+
+    .button-primary:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    /* Grid system simple */
+    .grid {
+        display: grid;
+        gap: var(--spacing-md);
+    }
+
+    @media (min-width: 768px) {
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    /* Utilidades de espaciado */
+    .mt-1 {
+        margin-top: var(--spacing-sm);
+    }
+    .mt-2 {
+        margin-top: var(--spacing-md);
+    }
+    .mt-3 {
+        margin-top: var(--spacing-lg);
+    }
+    .mt-4 {
+        margin-top: var(--spacing-xl);
+    }
+
+    .mb-1 {
+        margin-bottom: var(--spacing-sm);
+    }
+    .mb-2 {
+        margin-bottom: var(--spacing-md);
+    }
+    .mb-3 {
+        margin-bottom: var(--spacing-lg);
+    }
+    .mb-4 {
+        margin-bottom: var(--spacing-xl);
+    }
 </style>
