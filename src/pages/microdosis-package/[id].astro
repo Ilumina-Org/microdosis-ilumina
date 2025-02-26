@@ -1,11 +1,11 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getPackageData } from "../../utils/package";
-import PackageHeader from "../../components/package-details/PackageHeader.astro";
-import PackageDescription from "../../components/package-details/PackageDescription.astro";
+import PackageHeader from "../../components/package-details/package-header.astro";
+import PackageDescription from "../../components/package-details/package-description.astro";
 import PaymentOptions from "../../components/package-details/payment-options";
-import GuaranteeBox from "../../components/package-details/GuaranteeBox.astro";
-import OrderSummary from "../../components/package-details/OrderSummary.astro";
+import GuaranteeBox from "../../components/package-details/guarantee-box.astro";
+import OrderSummary from "../../components/package-details/order-summary.astro";
 import NotFound from "../../components/not-found.astro";
 
 const { id } = Astro.params;

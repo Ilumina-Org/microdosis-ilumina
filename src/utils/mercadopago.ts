@@ -1,4 +1,4 @@
-export async function getMercadoPagoPreference(packageData) {
+export async function getMercadoPagoPreference(packageData: any) {
   try {
     const isServer = typeof window === "undefined";
 

@@ -17,7 +17,6 @@ export const DISTRICT_SHIPPING_RATES: { [code: string]: number } = {
   BARR: 15.0,
   SURC: 15.0,
   SANI: 15.0,
-  // Puedes asignar tarifas distintas para otros distritos si es necesario
 };
 
 export const DEFAULT_SHIPPING_COST = 25.0;

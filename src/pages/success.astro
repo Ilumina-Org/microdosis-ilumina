@@ -1,12 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import PaymentInfo from "../components/payments/PaymentInfo.astro";
-import ShippingSection from "../components/payments/ShippingSection.astro";
+import PaymentInfo from "../components/payments/payment-info.astro";
+import ShippingSection from "../components/payments/shipping-section";
 
 const { searchParams } = Astro.url;
 const paymentId = searchParams.get("payment_id");
 const status = searchParams.get("status");
 const merchantOrderId = searchParams.get("merchant_order_id");
+
+if (!paymentId || !status || !merchantOrderId) {
+    return new Response(null, {
+        status: 302,
+        headers: { Location: "/failure" },
+    });
+}
 ---
 
 <Layout title="Payment Successful">
@@ -18,7 +25,9 @@ const merchantOrderId = searchParams.get("merchant_order_id");
                 status={status}
                 merchantOrderId={merchantOrderId}
             />
+
             <ShippingSection
+                client:load
                 paymentId={paymentId}
                 merchantOrderId={merchantOrderId}
             />
