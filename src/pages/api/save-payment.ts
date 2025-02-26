@@ -6,6 +6,7 @@ import fs from "fs";
 import { paymentDataSchema } from "../../utils/validation-schema";
 import { logger } from "../../utils/logger";
 import type { z } from "astro/zod";
+import { sendConfirmationEmail } from "../../utils/mailer";
 
 const SPREADSHEET_ID = "1g5rj4fIyg0DU9NQuAxN3iBedjPA5aBSgnZZCAHXJr9M";
 const SHEET_NAME = "Pagos";
@@ -111,6 +112,13 @@ export const POST: APIRoute = async ({ request }) => {
     const recordId = generateRecordId();
 
     saveLocalRecord(recordId, data);
+
+    try {
+      await sendConfirmationEmail(data.shippingAddress.email, data);
+      logger.info("Correo de confirmación enviado correctamente");
+    } catch (emailError) {
+      logger.error("Error al enviar correo de confirmación:", emailError);
+    }
 
     logger.info("Datos guardados exitosamente:", response.data);
 
