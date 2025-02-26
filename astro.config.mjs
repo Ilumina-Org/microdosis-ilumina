@@ -5,6 +5,7 @@ import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 
 export default defineConfig({
+  site: "http://localhost:4321",
   server: {
     headers:
       process.env.NODE_ENV === "production"

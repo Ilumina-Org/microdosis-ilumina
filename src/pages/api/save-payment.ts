@@ -6,7 +6,10 @@ import fs from "fs";
 import { paymentDataSchema } from "../../utils/validation-schema";
 import { logger } from "../../utils/logger";
 import type { z } from "astro/zod";
-import { sendConfirmationEmail } from "../../utils/mailer";
+import {
+  sendAdminNotification,
+  sendConfirmationEmail,
+} from "../../utils/mailer";
 
 const SPREADSHEET_ID = "1g5rj4fIyg0DU9NQuAxN3iBedjPA5aBSgnZZCAHXJr9M";
 const SHEET_NAME = "Pagos";
@@ -116,6 +119,9 @@ export const POST: APIRoute = async ({ request }) => {
     try {
       await sendConfirmationEmail(data.shippingAddress.email, data);
       logger.info("Correo de confirmación enviado correctamente");
+
+      await sendAdminNotification(data);
+      logger.info("Correo al administrador enviado correctamente");
     } catch (emailError) {
       logger.error("Error al enviar correo de confirmación:", emailError);
     }

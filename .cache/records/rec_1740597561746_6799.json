@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-02-26T19:19:21.747Z",
+  "recordId": "rec_1740597561746_6799",
+  "data": {
+    "paymentId": "103532939918",
+    "status": "completed",
+    "merchantOrderId": "28891280756",
+    "shippingAddress": {
+      "name": "John doe",
+      "email": "lucsk94@gmail.com",
+      "phone": "2975140205",
+      "address": "independencia 277",
+      "city": "comodoro medarabia",
+      "state": "chubut",
+      "zipCode": "9000",
+      "country": "peru"
+    }
+  }
+}
