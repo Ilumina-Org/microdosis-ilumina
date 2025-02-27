@@ -212,6 +212,8 @@
     border-radius: 12px;
     margin-bottom: 16px;
     border: 1px solid #bfdbfe;
+    text-align: left;
+    white-space: pre-line;
   }
 
   .restart-button {
@@ -242,191 +244,435 @@
       max-width: none;
     }
   }
+
+  .multi-select {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+  }
+
+  .checkbox-option {
+    display: flex;
+    align-items: center;
+    background: #f3f4f6;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .checkbox-option:hover {
+    background: #e5e7eb;
+  }
+
+  .checkbox-option.selected {
+    background: #dbeafe;
+    border: 1px solid #3b82f6;
+  }
+
+  .checkbox-option input {
+    margin-right: 8px;
+  }
+
+  .continue-button {
+    width: 100%;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .continue-button:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+  }
+
+  .continue-button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+  }
 </style>
 
 <script>
 const questions = [
   {
-      id: 1,
-      text: "Bienvenido a nuestro asistente de evaluación. ¿Deseas continuar con el cuestionario de aptitud?",
-      options: ["Sí, continuar", "Más información", "No, gracias"]
-    },
-    {
-      id: 2,
-      text: "¿Tienes antecedentes de condiciones cardíacas o presión arterial alta?",
-      options: ["Sí", "No", "No estoy seguro"]
-    },
-    {
-      id: 3,
-      text: "¿Estás tomando actualmente algún medicamento antidepresivo o ansiolítico?",
-      options: ["Sí", "No", "Lo dejé hace más de 2 meses"]
-    },
-    {
-      id: 4,
-      text: "¿Has experimentado episodios de ansiedad severa o ataques de pánico?",
-      options: ["Sí, recientemente", "Sí, hace tiempo", "No, nunca"]
-    },
-    {
-      id: 5,
-      text: "¿Cuál es tu nivel de experiencia con medicinas tradicionales?",
-      options: ["Primera vez", "Alguna experiencia", "Experiencia regular"]
-    },
-    {
-      id: 6,
-      text: "¿Cuál es tu peso aproximado?",
-      options: ["Menos de 60kg", "Entre 60-80kg", "Más de 80kg"]
-    }
-  ];
+    id: 1,
+    text: "Bienvenido a nuestro asistente de evaluación. ¿Deseas saber cual es tu dosis correcta de ayahuasca para sanar?",
+    options: ["Sí, continuar", "Más información", "No, gracias"]
+  },
+  {
+    id: 2,
+    text: "¿Cuántos años tienes?",
+    options: ["De 17 a 34 años", "De 35 a 54 años", "De 55 a 74 años", "De 75 a más"]
+  },
+  {
+    id: 3,
+    text: "¿Cuál es tu peso actual?",
+    options: ["De 40 a 54 kg", "De 55 a 64 kg", "De 65 a 84 kg", "De 85 kg a más"]
+  },
+  {
+    id: 4,
+    text: "¿Tienes algún diagnóstico?",
+    options: ["Sí", "No"]
+  },
+  {
+    id: 5,
+    text: "¿Qué diagnóstico tienes?",
+    options: [
+      "Ansiedad", "Depresión", "Diabetes", "Migraña", "Presión Alta", 
+      "Presión Baja", "Insomnio", "Gastritis", "Hipertiroidismo", 
+      "Hipotiroidismo", "Cáncer", "Artritis", "Artrosis", "Parkinson", 
+      "Alzheimer", "Asma", "Próstata", "Dermatitis", "Hepatitis", 
+      "Colon Irritable", "ETS", "Esquizofrenia", "Paranoia", "Demencia"
+    ]
+  },
+  {
+    id: 6,
+    text: "¿Toma algún medicamento?",
+    options: ["Sí", "No"]
+  },
+  {
+    id: 7,
+    text: "¿En qué momento del día tomas tus medicamentos?",
+    type: "multiselect",
+    options: ["Mañana", "Tarde", "Noche"]
+  },
+  {
+    id: 8,
+    text: "¿Qué estás buscando con la microdosis?",
+    options: [
+      "Despertar espiritual y meditación", 
+      "Mejorar la concentración y creatividad", 
+      "Mejorar calidad de sueño", 
+      "Más energía y productividad"
+    ]
+  }
+];
 
-const results = {
-    // No apto
-    "Sí, continuar,Sí,Sí,Sí, recientemente": 
-      "Basado en tus respuestas, no recomendamos el uso del producto en este momento. Por favor consulta con un profesional de la salud antes de considerar su uso.",
-    
-    // Precaución
-    "Sí, continuar,No,Sí,No, nunca": 
-      "Debido a tu medicación actual, recomendamos esperar al menos 2 meses después de discontinuar los medicamentos (bajo supervisión médica) antes de considerar el uso del producto.",
-    
-    // Apto con dosis mínima
-    "Sí, continuar,No,No,No, nunca,Primera vez,Menos de 60kg": 
-      "Basado en tu perfil, podrías comenzar con 2 gotas por la mañana, 3 veces por semana. Mantén este régimen por 2 semanas antes de considerar ajustes. Recuerda mantener un diario de experiencias.",
-    
-    // Apto con dosis estándar
-    "Sí, continuar,No,No,No, nunca,Alguna experiencia,Entre 60-80kg": 
-      "Tu perfil sugiere que podrías comenzar con 3 gotas por la mañana, 3 veces por semana. Evalúa los efectos durante 2 semanas antes de considerar ajustes. Mantén un registro diario de tus experiencias.",
-    
-    // Apto con dosis ajustada
-    "Sí, continuar,No,No,No, nunca,Experiencia regular,Más de 80kg": 
-      "Dado tu perfil y experiencia, podrías comenzar con 4 gotas por la mañana, 3 veces por semana. Mantén esta dosis por 2 semanas antes de considerar ajustes. Es importante llevar un registro diario.",
+const resultInfo = {
+  "Más información": 
+    "Este cuestionario evalúa la aptitud para el uso de la microdosis de ayahuasca. Es importante responder con honestidad para recibir recomendaciones apropiadas. Los resultados son orientativos y no reemplazan la consulta profesional.",
+  
+  "No, gracias": 
+    "Entendemos. Si en otro momento deseas realizar la evaluación, estaremos aquí para ayudarte."
+};
 
-    // Respuestas especiales
-    "Más información": 
-      "Este cuestionario evalúa la aptitud para el uso de la microdosis de ayahuasca. Es importante responder con honestidad para recibir recomendaciones apropiadas. Los resultados son orientativos y no reemplazan la consulta profesional.",
-    
-    "No, gracias": 
-      "Entendemos. Si en otro momento deseas realizar la evaluación, estaremos aquí para ayudarte."
-  };
+// Valores de gotas por edad
+const edadGotas = {
+  "De 17 a 34 años": 6,
+  "De 35 a 54 años": 7,
+  "De 55 a 74 años": 5,
+  "De 75 a más": 4
+};
 
-  let step = 0;
-  let answers = [];
+// Valores de gotas por peso
+const pesoGotas = {
+  "De 40 a 54 kg": 5,
+  "De 55 a 64 kg": 7,
+  "De 65 a 84 kg": 8,
+  "De 85 kg a más": 7
+};
 
-  // Elementos DOM
-  const toggleButton = document.getElementById('toggle-chat');
-  const closeButton = document.getElementById('close-chat');
-  const chatContainer = document.querySelector('.chat-container');
-  const restartButton = document.getElementById('restart-chat');
-  const resultContainer = document.getElementById('result-container');
+// Valores de ajuste por enfermedad con horas de espera
+const enfermedadData = {
+  "Ansiedad": { ajuste: 1, horas: 1 },
+  "Depresión": { ajuste: 1, horas: 1 },
+  "Diabetes": { ajuste: 2, horas: 2 },
+  "Migraña": { ajuste: 1, horas: 1 },
+  "Presión Alta": { ajuste: 2, horas: 2 },
+  "Presión Baja": { ajuste: 2, horas: 2 },
+  "Insomnio": { ajuste: 1, horas: 1 },
+  "Gastritis": { ajuste: 3, horas: 2 },
+  "Hipertiroidismo": { ajuste: 3, horas: 2 },
+  "Hipotiroidismo": { ajuste: 3, horas: 2 },
+  "Cáncer": { ajuste: 3, horas: 3 },
+  "Artritis": { ajuste: 3, horas: 2 },
+  "Artrosis": { ajuste: 3, horas: 2 },
+  "Parkinson": { ajuste: 4, horas: 1 },
+  "Alzheimer": { ajuste: 4, horas: 1 },
+  "Asma": { ajuste: 2, horas: 1 },
+  "Próstata": { ajuste: 2, horas: 1 },
+  "Dermatitis": { ajuste: 2, horas: 1 },
+  "Hepatitis": { ajuste: 3, horas: 1 },
+  "Colon Irritable": { ajuste: 3, horas: 1 },
+  "ETS": { ajuste: 4, horas: 3 },
+  "Esquizofrenia": { ajuste: -1, horas: 2 },
+  "Paranoia": { ajuste: -1, horas: 2 },
+  "Demencia": { ajuste: -2, horas: 2 }
+};
 
-  // Toggle chat
-  toggleButton.addEventListener('click', () => {
-    chatContainer.style.display = chatContainer.style.display === 'none' ? 'block' : 'none';
-  });
+let step = 0;
+let respuestas = [];
+let gotasCalculadas = 0;
+let tieneEnfermedad = false;
+let tomaMedicamentos = false;
+let momentoMedicacion = [];
+let diagnosticoSeleccionado = "";
+let horasEspera = 1;
 
-  // Close chat
-  closeButton.addEventListener('click', () => {
-    chatContainer.style.display = 'none';
-  });
+// Elementos DOM
+const toggleButton = document.getElementById('toggle-chat');
+const closeButton = document.getElementById('close-chat');
+const chatContainer = document.querySelector('.chat-container');
+const restartButton = document.getElementById('restart-chat');
+const resultContainer = document.getElementById('result-container');
 
-  // Restart chat
-  restartButton.addEventListener('click', () => {
-    step = 0;
-    answers = [];
-    resultContainer.style.display = 'none';
-    document.querySelector("#question-text").style.display = 'block';
-    document.querySelector("#options-container").style.display = 'grid';
-    updateQuestion();
-  });
+// Toggle chat
+toggleButton.addEventListener('click', () => {
+  chatContainer.style.display = chatContainer.style.display === 'none' ? 'block' : 'none';
+});
 
-  function nextQuestion(answer) {
-    answers.push(answer);
-    
-    if (answer === "Más información" || answer === "No, gracias") {
-      showSpecialResult(answer);
-      return;
-    }
-    
+// Close chat
+closeButton.addEventListener('click', () => {
+  chatContainer.style.display = 'none';
+});
+
+// Restart chat
+restartButton.addEventListener('click', () => {
+  step = 0;
+  respuestas = [];
+  gotasCalculadas = 0;
+  tieneEnfermedad = false;
+  tomaMedicamentos = false;
+  momentoMedicacion = [];
+  diagnosticoSeleccionado = "";
+  horasEspera = 1;
+  resultContainer.style.display = 'none';
+  document.querySelector("#question-text").style.display = 'block';
+  document.querySelector("#options-container").style.display = 'grid';
+  updateQuestion();
+});
+
+function handleMultiSelect() {
+  const selectedOptions = document.querySelectorAll('.checkbox-option.selected');
+  const selectedValues = Array.from(selectedOptions).map(option => option.dataset.value);
+  
+  if (selectedValues.length > 0) {
+    momentoMedicacion = selectedValues;
     step++;
-
     if (step < questions.length) {
       updateQuestion();
     } else {
       showThinkingAnimation();
     }
   }
+}
 
-  function showSpecialResult(answer) {
-    const questionText = document.querySelector("#question-text");
-    const optionsContainer = document.querySelector("#options-container");
-    resultContainer.style.display = 'block';
-    const resultText = document.querySelector("#result");
+function nextQuestion(answer) {
+  respuestas.push(answer);
+  
+  if (step === 0 && (answer === "Más información" || answer === "No, gracias")) {
+    showSpecialResult(answer);
+    return;
+  }
+  
+  // Lógica para calcular gotas
+  if (step === 1) { // Respuesta de edad
+    gotasCalculadas += edadGotas[answer] || 0;
+  }
+  else if (step === 2) { // Respuesta de peso
+    gotasCalculadas += pesoGotas[answer] || 0;
+    // Dividir por 2 para obtener promedio
+    gotasCalculadas = Math.round(gotasCalculadas / 2);
+  }
+  else if (step === 3) { // ¿Tiene diagnóstico?
+    tieneEnfermedad = (answer === "Sí");
+  }
+  else if (step === 4 && tieneEnfermedad) { // Tipo de diagnóstico
+    diagnosticoSeleccionado = answer;
+    const data = enfermedadData[answer] || { ajuste: 0, horas: 1 };
+    gotasCalculadas += data.ajuste;
+    horasEspera = data.horas;
+  }
+  else if (step === 5 && tieneEnfermedad) { // ¿Toma medicamentos?
+    tomaMedicamentos = (answer === "Sí");
+  }
+  
+  step++;
 
-    questionText.style.display = "none";
-    optionsContainer.style.display = "none";
-    resultText.textContent = results[answer];
+  // Lógica para saltar preguntas según respuestas
+  if (!tieneEnfermedad && step === 4) {
+    step = 7; // Saltar a la última pregunta
+  }
+  else if (!tomaMedicamentos && tieneEnfermedad && step === 6) {
+    step = 7; // Saltar a la última pregunta
   }
 
-  function updateQuestion() {
-    const questionText = document.querySelector("#question-text");
-    const optionsContainer = document.querySelector("#options-container");
+  if (step < questions.length) {
+    updateQuestion();
+  } else {
+    showThinkingAnimation();
+  }
+}
 
-    if (questionText && optionsContainer) {
-      questionText.textContent = questions[step].text;
-      optionsContainer.innerHTML = "";
+function showSpecialResult(answer) {
+  const questionText = document.querySelector("#question-text");
+  const optionsContainer = document.querySelector("#options-container");
+  resultContainer.style.display = 'block';
+  const resultText = document.querySelector("#result");
 
+  questionText.style.display = "none";
+  optionsContainer.style.display = "none";
+  resultText.textContent = resultInfo[answer];
+}
+
+function updateQuestion() {
+  const questionText = document.querySelector("#question-text");
+  const optionsContainer = document.querySelector("#options-container");
+
+  if (questionText && optionsContainer) {
+    questionText.textContent = questions[step].text;
+    optionsContainer.innerHTML = "";
+
+    if (questions[step].type === "multiselect") {
+      // Crear selección múltiple para horarios de medicación
+      const multiSelectContainer = document.createElement("div");
+      multiSelectContainer.className = "multi-select";
+      
+      questions[step].options.forEach((option) => {
+        const checkboxOption = document.createElement("div");
+        checkboxOption.className = "checkbox-option";
+        checkboxOption.dataset.value = option;
+        
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `option-${option}`;
+        checkbox.name = option;
+        
+        const label = document.createElement("label");
+        label.htmlFor = `option-${option}`;
+        label.textContent = option;
+        
+        checkboxOption.appendChild(checkbox);
+        checkboxOption.appendChild(label);
+        
+        checkboxOption.addEventListener("click", () => {
+          checkboxOption.classList.toggle("selected");
+          checkbox.checked = !checkbox.checked;
+        });
+        
+        multiSelectContainer.appendChild(checkboxOption);
+      });
+      
+      optionsContainer.appendChild(multiSelectContainer);
+      
+      // Botón para continuar
+      const continueButton = document.createElement("button");
+      continueButton.textContent = "Continuar";
+      continueButton.className = "continue-button";
+      continueButton.addEventListener("click", handleMultiSelect);
+      
+      optionsContainer.appendChild(continueButton);
+    } else {
+      // Opciones normales de botón único
       questions[step].options.forEach((option) => {
         const button = document.createElement("button");
         button.textContent = option;
         button.className = "button";
 
-// Estilos directamente en línea
-    button.style.background = "linear-gradient(135deg, #007bff, #0056b3)";
-    button.style.color = "white";
-    button.style.border = "none";
-    button.style.padding = "12px 24px";
-    button.style.borderRadius = "8px";
-    button.style.cursor = "pointer";
-    button.style.transition = "all 0.3s ease";
-    button.style.fontSize = "14px";
-    button.style.fontWeight = "bold";
-    button.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
-    button.style.textTransform = "uppercase";
-    button.style.letterSpacing = "0.5px";
-    button.style.minWidth = "100px";
-    button.style.outline = "none";
-
+        // Estilos directamente en línea
+        button.style.background = "linear-gradient(135deg, #007bff, #0056b3)";
+        button.style.color = "white";
+        button.style.border = "none";
+        button.style.padding = "12px 24px";
+        button.style.borderRadius = "8px";
+        button.style.cursor = "pointer";
+        button.style.transition = "all 0.3s ease";
+        button.style.fontSize = "14px";
+        button.style.fontWeight = "bold";
+        button.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
+        button.style.textTransform = "uppercase";
+        button.style.letterSpacing = "0.5px";
+        button.style.minWidth = "100px";
+        button.style.outline = "none";
 
         button.addEventListener("click", () => nextQuestion(option));
         optionsContainer.appendChild(button);
       });
     }
   }
+}
 
-  function showThinkingAnimation() {
-    const questionText = document.querySelector("#question-text");
-    const optionsContainer = document.querySelector("#options-container");
-    const thinkingElement = document.querySelector("#thinking");
+function showThinkingAnimation() {
+  const questionText = document.querySelector("#question-text");
+  const optionsContainer = document.querySelector("#options-container");
+  const thinkingElement = document.querySelector("#thinking");
 
-    questionText.style.display = "none";
-    optionsContainer.style.display = "none";
-    thinkingElement.style.display = "block";
+  questionText.style.display = "none";
+  optionsContainer.style.display = "none";
+  thinkingElement.style.display = "block";
 
-    setTimeout(() => {
-      showResult();
-    }, 1500);
+  setTimeout(() => {
+    showResult();
+  }, 1500);
+}
+
+
+// Parte modificada para usar tiempos específicos basados en el diagnóstico
+function showResult() {
+  const thinkingElement = document.querySelector("#thinking");
+  const resultText = document.querySelector("#result");
+  thinkingElement.style.display = "none";
+  resultContainer.style.display = 'block';
+  
+  // Asegurar que la dosis no sea negativa
+  if (gotasCalculadas < 0) {
+    gotasCalculadas = 0;
   }
-
-  function showResult() {
-    const key = answers.join(",");
-    const thinkingElement = document.querySelector("#thinking");
-    const resultText = document.querySelector("#result");
-
-    thinkingElement.style.display = "none";
-    resultContainer.style.display = 'block';
-    resultText.textContent = results[key] || "Basado en tus respuestas, te recomendamos consultar con un profesional de la salud para una evaluación más detallada.";
+  
+  let instrucciones = "";
+  
+  if (gotasCalculadas === 0) {
+    instrucciones = "Basado en tus respuestas, no recomendamos el uso de microdosis de ayahuasca en este momento. Por favor consulta con un profesional de la salud.";
+  } else {
+    // Instrucciones para la mañana
+    let instruccionesMañana = `☑ Tu dosis recomendada es de ${gotasCalculadas} gotas, dos veces al día.\n\n`;
+    
+    instruccionesMañana += `☑ Por la mañana: Apenas te despiertas y en ayunas, antes de lavarte los dientes y antes de tomar agua, se echan ${gotasCalculadas} gotas bajo la lengua; dejan que pase un minuto bajo la lengua y luego pasan lo que resta; luego de media hora ya te puedes lavar los dientes y tomar agua, luego de media hora más ya puedes tomar tu desayuno`;
+    
+    if (tomaMedicamentos && momentoMedicacion.includes("Mañana")) {
+      instruccionesMañana += ` y medicamentos.\n`;
+    } else {
+      instruccionesMañana += `.\n`;
+    }
+    
+    // Instrucciones para la noche - MODIFICADO para usar el tiempo específico de espera
+    let instruccionesNoche = `\n☑ Por la noche: Tener en cuenta que tu última comida debe ser máximo a las 8 pm (luego de esa hora el estómago ya no hace digestión). Después de hora y media de haber cenado`;
+    
+    if (tomaMedicamentos && momentoMedicacion.includes("Noche")) {
+      instruccionesNoche += `, tomas los medicamentos de noche y pasados ${horasEspera} ${horasEspera === 1 ? 'hora' : 'horas'} después las ${gotasCalculadas} gotas de microdosis de ayahuasca.\n`;
+    } else {
+      instruccionesNoche += `, tomas las ${gotasCalculadas} gotas de microdosis de ayahuasca.\n`;
+    }
+    
+    // Instrucciones específicas para medicamentos en la tarde - MODIFICADO
+    let instruccionesTarde = "";
+    if (tomaMedicamentos && momentoMedicacion.includes("Tarde")) {
+      instruccionesTarde = `\n☑ Si tomas medicamentos en la tarde, debes esperar ${horasEspera} ${horasEspera === 1 ? 'hora' : 'horas'} después de tomarlos antes de usar la microdosis.\n`;
+    }
+    
+    // Instrucciones específicas para el diagnóstico
+    let instruccionesDiagnostico = "";
+    if (tieneEnfermedad && diagnosticoSeleccionado) {
+      instruccionesDiagnostico = `\n☑ Nota para tu diagnóstico de ${diagnosticoSeleccionado}: Se ha ajustado tu dosis considerando esta condición. Recuerda mantener un seguimiento de cómo te sientes durante el tratamiento.\n`;
+    }
+    
+    instrucciones = instruccionesMañana + instruccionesNoche + instruccionesTarde + instruccionesDiagnostico;
   }
-
-  // Inicializar el chat
-  document.addEventListener("DOMContentLoaded", () => {
-    updateQuestion();
-  });
+  
+  resultText.textContent = instrucciones;
+}
+// Inicializar el chat
+document.addEventListener("DOMContentLoaded", () => {
+  updateQuestion();
+});
 </script>
