@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-02-26T19:54:58.553Z",
+  "recordId": "rec_1740599698553_9040",
+  "data": {
+    "paymentId": "103535941912",
+    "status": "completed",
+    "merchantOrderId": "28892418958",
+    "shippingAddress": {
+      "name": "Ever Francisco Ponce Lara",
+      "email": "ever864@gmail.com",
+      "phone": "984794603",
+      "address": "Lima10",
+      "city": "Lima",
+      "state": "Lima (departamento)",
+      "zipCode": "15487",
+      "country": "Peru"
+    }
+  }
+}
