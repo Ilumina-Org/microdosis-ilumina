@@ -6,8 +6,20 @@ export interface Props {
     savings: string;
     features: string[];
     link: string;
+    productId: string;
+    initialStock?: number;
 }
-const { title, price, originalPrice, savings, features, link } = Astro.props;
+
+const {
+    title,
+    price,
+    originalPrice,
+    savings,
+    features,
+    link,
+    productId,
+    initialStock = -1,
+} = Astro.props;
 ---
 
 <div class="pricing-card">
@@ -18,14 +30,71 @@ const { title, price, originalPrice, savings, features, link } = Astro.props;
             <span class="original-price">Precio Regular {originalPrice}</span>
             <span class="savings">({savings})</span>
         </div>
+        {
+            initialStock >= 0 && (
+                <div class="stock-indicator">
+                    {initialStock > 0
+                        ? `🟢 ${initialStock} disponibles`
+                        : "🔴 Agotado"}
+                </div>
+            )
+        }
         <ul class="features">
             {features.map((feature) => <li>{feature}</li>)}
         </ul>
     </div>
-    <button class="buy-button" onclick={`window.location.href='${link}'`}>
-        Comprar Ahora
+    <button
+        class:list={{
+            "buy-button": true,
+            disabled: initialStock <= 0,
+        }}
+        data-purchase-button
+        data-product={productId}
+        data-link={link}
+        data-stock={initialStock}
+        disabled={initialStock <= 0}
+    >
+        {initialStock > 0 ? "Comprar Ahora" : "Agotado"}
     </button>
 </div>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        document
+            .querySelectorAll("[data-purchase-button]")
+            .forEach((button) => {
+                button.addEventListener("click", async (event) => {
+                    const target = event.currentTarget;
+                    const productId = target.dataset.product;
+                    const link = target.dataset.link;
+                    const currentStock = parseInt(target.dataset.stock);
+
+                    if (target.disabled) return;
+
+                    try {
+                        const response = await fetch(
+                            `/api/check-stock?productId=${productId}`,
+                        );
+                        const data = await response.json();
+
+                        if (!response.ok) throw new Error(data.error);
+
+                        if (data.available) {
+                            window.location.href = link;
+                        } else {
+                            alert(
+                                "Stock agotado, actualizando disponibilidad...",
+                            );
+                            location.reload();
+                        }
+                    } catch (error) {
+                        console.error("Error:", error);
+                        window.location.href = `/error?code=stock_check&message=${encodeURIComponent(error.message)}`;
+                    }
+                });
+            });
+    });
+</script>
 
 <style>
     .pricing-card {
@@ -124,7 +193,21 @@ const { title, price, originalPrice, savings, features, link } = Astro.props;
         text-transform: uppercase;
     }
 
-    .buy-button:hover {
+    .buy-button:hover:not(.disabled) {
         background: #3d9970;
+    }
+
+    .buy-button.disabled {
+        background: #bdc3c7 !important;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    .stock-indicator {
+        text-align: center;
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #7f8c8d;
     }
 </style>

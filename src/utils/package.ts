@@ -1,3 +1,5 @@
+import { getProducts } from "./stock";
+
 interface PackageData {
   id: string;
   title: string;
@@ -5,36 +7,56 @@ interface PackageData {
   originalPrice: number;
   savings: string;
   description: string;
-  quantity: number;
+  imageUrl: string;
+  tier: number;
+  link: string;
+  stock: boolean;
 }
 
-export async function getPackageData(
-  id: string | undefined,
-): Promise<PackageData> {
-  const packages: { [key: string]: PackageData } = {
-    "1": {
-      id: "1",
-      title: "1 Mes de Suministro",
-      price: 160.0,
-      originalPrice: 480.0,
-      savings: "67%",
-      description: "Incluye envío estándar gratuito...",
-      quantity: 1,
-    },
-    "2": {
-      id: "2",
-      title: "Paquete de 3 Meses",
-      price: 390.0,
-      originalPrice: 480.0,
-      savings: "19%",
-      description: "Incluye envío prioritario gratuito...",
-      quantity: 1,
-    },
-  };
+export const getPackageData = async (sku: string): Promise<PackageData> => {
+  try {
+    // Obtener todos los productos con validación de stock
+    //
+    console.log("sku", sku);
+    const products = await getProducts();
+    console.log("products", products);
+    // Buscar el producto por SKU
+    const product = products.find((p) => p.sku === sku);
 
-  if (!id || !packages[id]) {
-    throw new Error("NOT_FOUND");
+    if (!product) {
+      throw new Error("NOT_FOUND");
+    }
+
+    // Validar que el producto tenga stock disponible
+    if (!product.stock) {
+      throw new Error("OUT_OF_STOCK");
+    }
+
+    // Devolver los datos del paquete
+    return {
+      id: product.sku,
+      title: product.title,
+      price: parseFloat(product.productPrice.replace("$", "")),
+      originalPrice: parseFloat(
+        product.productDetail.replace("Precio Regular $", ""),
+      ),
+      savings: product.productDeal.replace("(Ahorra ", "").replace(")", ""),
+      description: "Incluye envío estándar gratuito...", // Puedes personalizar esto
+      imageUrl: product.imageUrl,
+      tier: product.tier,
+      link: product.link,
+      stock: product.stock,
+    };
+  } catch (error) {
+    console.error("Error fetching package data:", error);
+    if (error instanceof Error) {
+      if (error.message === "NOT_FOUND") {
+        throw new Error("El paquete no existe.");
+      }
+      if (error.message === "OUT_OF_STOCK") {
+        throw new Error("El paquete no tiene stock disponible.");
+      }
+    }
+    throw new Error("Error inesperado al obtener los datos del paquete.");
   }
-
-  return packages[id];
-}
+};
