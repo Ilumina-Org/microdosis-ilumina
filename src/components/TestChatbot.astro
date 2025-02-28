@@ -62,21 +62,23 @@
 </div>
 
 <style>
+  /* Estilos base del chatbot */
   .chat-wrapper {
     position: fixed;
     bottom: 20px;
     right: 20px;
     z-index: 1000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
   .chat-toggle {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, yellow, orange);
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
@@ -86,6 +88,7 @@
 
   .chat-toggle:hover {
     transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   }
 
   .robot-icon {
@@ -94,89 +97,120 @@
     color: white;
   }
 
-  .robot-svg {
-    width: 100%;
-    height: 100%;
-  }
-
+  /* Contenedor principal del chat */
   .chat-container {
     position: fixed;
     bottom: 90px;
     right: 20px;
     z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
   }
 
   .chat-box {
     background: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 20px;
     width: 100%;
-    max-width: 480px;
+    max-height: 80vh;
+    overflow-y: auto;
     position: relative;
     margin-bottom: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: #4CAF50 #f5f5f5;
   }
 
+  .chat-box::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .chat-box::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 10px;
+  }
+
+  .chat-box::-webkit-scrollbar-thumb {
+    background-color: #4CAF50;
+    border-radius: 10px;
+  }
+
+  /* Botón de cerrar */
   .close-button {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: none;
+    background: #f5f5f5;
     border: none;
-    font-size: 24px;
-    color: #6b7280;
+    font-size: 16px;
+    color: #333;
     cursor: pointer;
-    padding: 5px 5px;
+    padding: 5px 10px;
     border-radius: 50%;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
   }
 
   .close-button:hover {
-    background: #f3f4f6;
-    color: #374151;
+    background: #e0e0e0;
+    color: #000;
   }
 
+  /* Mensajes del chatbot */
   .chat-message {
-    background: #eef2ff;
+    background: #e8f5e9;
     padding: 16px;
     border-radius: 12px;
     margin-bottom: 20px;
+    border-left: 4px solid #4CAF50;
   }
 
   .chat-message p {
-    color: #1f2937;
-    font-size: 1.125rem;
+    color: #333;
+    font-size: 16px;
     line-height: 1.5;
     margin: 0;
   }
 
+  /* Contenedor de opciones */
   .options {
     display: grid;
     gap: 12px;
     margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
   }
 
+  /* Estilos para botones normales */
   .button {
     width: 100%;
     text-align: left;
     padding: 12px 16px;
     background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    color: #374151;
-    font-size: 0.975rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    color: #333;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   }
 
   .button:hover {
     background: #f9fafb;
-    border-color: #3b82f6;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-color: #4CAF50;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
+  /* Animación de carga */
   .thinking {
     display: none;
     text-align: center;
@@ -186,7 +220,7 @@
   .loading-spinner {
     border: 3px solid #f3f3f3;
     border-radius: 50%;
-    border-top: 3px solid #3b82f6;
+    border-top: 3px solid #4CAF50;
     width: 40px;
     height: 40px;
     animation: spin 1s linear infinite;
@@ -198,58 +232,119 @@
     100% { transform: rotate(360deg); }
   }
 
+  /* Contenedor de resultados */
   .result-container {
     display: none;
     text-align: center;
   }
 
   .result {
-    font-size: 1.125rem;
-    font-weight: 500;
-    color: #1f2937;
-    background: #f0f9ff;
-    padding: 16px;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: normal;
+    color: #333;
+    background: #e8f5e9;
+    padding: 20px;
     border-radius: 12px;
-    margin-bottom: 16px;
-    border: 1px solid #bfdbfe;
+    margin-bottom: 20px;
+    border-left: 4px solid #4CAF50;
     text-align: left;
     white-space: pre-line;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   }
 
+  /* Botón de reinicio */
   .restart-button {
-    background: #3b82f6;
+    background: #4CAF50;
     color: white;
     border: none;
     padding: 12px 24px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 500;
+    font-size: 15px;
     cursor: pointer;
     transition: all 0.2s ease;
     margin-top: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   .restart-button:hover {
-    background: #2563eb;
-    transform: translateY(-1px);
+    background: #388E3C;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
 
-  @media (max-width: 640px) {
+  /* Estilos responsivos */
+  @media (max-width: 768px) {
     .chat-container {
       bottom: 80px;
       right: 10px;
       left: 10px;
+      width: auto;
+      max-width: none;
     }
     
     .chat-box {
-      max-width: none;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    
+    .chat-message p {
+      font-size: 15px;
+    }
+    
+    .button {
+      font-size: 14px;
+      padding: 10px 14px;
+    }
+    
+    .result {
+      font-size: 15px;
+      padding: 16px;
     }
   }
 
+  @media (max-width: 480px) {
+    .chat-toggle {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .robot-icon {
+      width: 25px;
+      height: 25px;
+    }
+    
+    .close-button {
+      font-size: 14px;
+      width: 26px;
+      height: 26px;
+    }
+    
+    .options {
+      max-height: 250px;
+    }
+  }
+
+  /* Selección múltiple mejorada */
   .multi-select {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     width: 100%;
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: 600px) {
+    .multi-select {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 400px) {
+    .multi-select {
+      grid-template-columns: 1fr;
+    }
   }
 
   .checkbox-option {
@@ -260,24 +355,27 @@
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
+    font-size: 14px;
   }
 
   .checkbox-option:hover {
     background: #e5e7eb;
+    transform: translateY(-2px);
   }
 
   .checkbox-option.selected {
-    background: #dbeafe;
-    border: 1px solid #3b82f6;
+    background: #dcfce7;
+    border: 1px solid #4CAF50;
   }
 
   .checkbox-option input {
     margin-right: 8px;
   }
 
+  /* Botón continuar mejorado */
   .continue-button {
     width: 100%;
-    background: #3b82f6;
+    background: #4CAF50;
     color: white;
     border: none;
     padding: 12px 24px;
@@ -288,20 +386,39 @@
     margin-top: 16px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   .continue-button:hover {
-    background: #2563eb;
-    transform: translateY(-1px);
+    background: #388E3C;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
 
   .continue-button:disabled {
     background: #9ca3af;
     cursor: not-allowed;
     transform: none;
+    box-shadow: none;
+  }
+
+  /* Mejoras para la lista de diagnósticos */
+  /* Este estilo se aplicará específicamente a la pregunta de diagnósticos */
+  .options.diagnosis-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  @media (max-width: 600px) {
+    .options.diagnosis-options {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
-
 <script>
 const questions = [
   {
@@ -452,18 +569,27 @@ restartButton.addEventListener('click', () => {
   updateQuestion();
 });
 
+// Remove the TypeScript annotation and fix the function
 function handleMultiSelect() {
+  // Get all selected checkbox options
   const selectedOptions = document.querySelectorAll('.checkbox-option.selected');
-  const selectedValues = Array.from(selectedOptions).map(option => option.dataset.value);
+
+  console.log("Selected options:", selectedOptions); // Debug
+  momentoMedicacion = [];
+  // Extract the values from selected options
+  selectedOptions.forEach(option => {
+    console.log("Processing option:", option, "with value:", option.dataset.value);
+    momentoMedicacion.push(option.dataset.value);
+  });
   
-  if (selectedValues.length > 0) {
-    momentoMedicacion = selectedValues;
-    step++;
-    if (step < questions.length) {
-      updateQuestion();
-    } else {
-      showThinkingAnimation();
-    }
+  console.log("Selected medication times:", momentoMedicacion);
+  
+  // Advance to the next step
+  step++;
+  if (step < questions.length) {
+    updateQuestion();
+  } else {
+    showThinkingAnimation();
   }
 }
 
@@ -618,6 +744,9 @@ function showThinkingAnimation() {
 
 
 // Parte modificada para usar tiempos específicos basados en el diagnóstico
+
+// En la función showResult(), modifica la parte donde se generan las instrucciones:
+
 function showResult() {
   const thinkingElement = document.querySelector("#thinking");
   const resultText = document.querySelector("#result");
@@ -634,39 +763,51 @@ function showResult() {
   if (gotasCalculadas === 0) {
     instrucciones = "Basado en tus respuestas, no recomendamos el uso de microdosis de ayahuasca en este momento. Por favor consulta con un profesional de la salud.";
   } else {
-    // Instrucciones para la mañana
-    let instruccionesMañana = `☑ Tu dosis recomendada es de ${gotasCalculadas} gotas, dos veces al día.\n\n`;
+    // Instrucciones básicas
+    let instruccionesBasicas = `✨ Tu dosis recomendada es de ${gotasCalculadas} gotas, dos veces al día.\n\n`;
     
-    instruccionesMañana += `☑ Por la mañana: Apenas te despiertas y en ayunas, antes de lavarte los dientes y antes de tomar agua, se echan ${gotasCalculadas} gotas bajo la lengua; dejan que pase un minuto bajo la lengua y luego pasan lo que resta; luego de media hora ya te puedes lavar los dientes y tomar agua, luego de media hora más ya puedes tomar tu desayuno`;
+    // Instrucciones para la mañana - CORREGIDA con instrucciones de medicamentos
+    let instruccionesMañana = `✨ Por la mañana: Apenas te despiertas y en ayunas, antes de lavarte los dientes y antes de tomar agua, se echan ${gotasCalculadas} gotas bajo la lengua; dejan que pase un minuto bajo la lengua y luego pasan lo que resta; luego de media hora ya te puedes lavar los dientes y tomar agua, luego de media hora más ya puedes tomar tu desayuno`;
     
     if (tomaMedicamentos && momentoMedicacion.includes("Mañana")) {
-      instruccionesMañana += ` y medicamentos.\n`;
+      instruccionesMañana += ` y después de una hora de la microdosis ya puedes tomar tus medicamentos.\n`;
     } else {
       instruccionesMañana += `.\n`;
     }
     
-    // Instrucciones para la noche - MODIFICADO para usar el tiempo específico de espera
-    let instruccionesNoche = `\n☑ Por la noche: Tener en cuenta que tu última comida debe ser máximo a las 8 pm (luego de esa hora el estómago ya no hace digestión). Después de hora y media de haber cenado`;
+    // Instrucciones para la noche - CORREGIDA para tomar medicamentos ANTES de la microdosis
+    let instruccionesNoche = `\n✨ Por la noche: Tener en cuenta que tu última comida debe ser máximo a las 8 pm (luego de esa hora el estómago ya no hace digestión). `;
     
     if (tomaMedicamentos && momentoMedicacion.includes("Noche")) {
-      instruccionesNoche += `, tomas los medicamentos de noche y pasados ${horasEspera} ${horasEspera === 1 ? 'hora' : 'horas'} después las ${gotasCalculadas} gotas de microdosis de ayahuasca.\n`;
+      instruccionesNoche += `Toma tus medicamentos inmediatamente después de la cena y después de hora y media tomas las ${gotasCalculadas} gotas de microdosis de ayahuasca.\n`;
     } else {
-      instruccionesNoche += `, tomas las ${gotasCalculadas} gotas de microdosis de ayahuasca.\n`;
+      instruccionesNoche += `Después de hora y media de haber cenado, tomas las ${gotasCalculadas} gotas de microdosis de ayahuasca.\n`;
     }
     
-    // Instrucciones específicas para medicamentos en la tarde - MODIFICADO
-    let instruccionesTarde = "";
-    if (tomaMedicamentos && momentoMedicacion.includes("Tarde")) {
-      instruccionesTarde = `\n☑ Si tomas medicamentos en la tarde, debes esperar ${horasEspera} ${horasEspera === 1 ? 'hora' : 'horas'} después de tomarlos antes de usar la microdosis.\n`;
+    // Añadir nota específica sobre medicamentos si seleccionó ambos momentos
+    let notaMedicamentos = "";
+    if (tomaMedicamentos && momentoMedicacion.includes("Mañana") && momentoMedicacion.includes("Noche")) {
+      notaMedicamentos = `\n🚫 IMPORTANTE: Recuerda que el orden es diferente: en la mañana primero tomas la microdosis y DESPUÉS los medicamentos (1 hora después), mientras que en la noche primero tomas los medicamentos y DESPUÉS la microdosis (1.5 horas después).\n`;
     }
+    
+    // Instrucciones de calendario
+    let instruccionesCalendario = `\n✨ Se toma dos días sí y uno no; por ejemplo, empiezas martes y miércoles y descansas de la medicina el jueves, vuelves a tomar viernes y sábado y descansas domingo.\n`;
+    
+    // Restricciones y cuidados
+    let restricciones = `\n🚫 Si tomas alcohol no tomar ayahuasca. Se deja ese día la medicina y se empieza al siguiente día como día uno.\n`;
     
     // Instrucciones específicas para el diagnóstico
     let instruccionesDiagnostico = "";
     if (tieneEnfermedad && diagnosticoSeleccionado) {
-      instruccionesDiagnostico = `\n☑ Nota para tu diagnóstico de ${diagnosticoSeleccionado}: Se ha ajustado tu dosis considerando esta condición. Recuerda mantener un seguimiento de cómo te sientes durante el tratamiento.\n`;
+      instruccionesDiagnostico = `\n✨ Nota para tu diagnóstico de ${diagnosticoSeleccionado}: Se ha ajustado tu dosis considerando esta condición. Recuerda mantener un seguimiento de cómo te sientes durante el tratamiento.\n`;
     }
     
-    instrucciones = instruccionesMañana + instruccionesNoche + instruccionesTarde + instruccionesDiagnostico;
+    // Instrucciones de conservación y dieta
+    let conservacion = `\n🌿 Mantener la microdosis en un lugar fresco. El frasco abierto tiene vencimiento en 6 meses.\n`;
+    
+    let dieta = `\n🌿 Durante la toma de las microdosis hay que tener coherencia en la alimentación, evitar en lo máximo la carne de res y chancho, no café, no gaseosas, no comida chatarra, comidas bajas en azúcar y harinas.\n`;
+    
+    instrucciones = instruccionesBasicas + instruccionesMañana + instruccionesNoche + notaMedicamentos + instruccionesCalendario + restricciones + instruccionesDiagnostico + conservacion + dieta;
   }
   
   resultText.textContent = instrucciones;
