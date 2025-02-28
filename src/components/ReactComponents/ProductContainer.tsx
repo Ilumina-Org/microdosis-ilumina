@@ -84,14 +84,15 @@ export default function ProductContainer({
         background: tierHandler(tier),
         padding: ".5rem",
         borderRadius: "30px",
-        boxShadow: "0px 10px 40px rgb(0, 0, 0, 0.2)",
+        boxShadow: "0px 15px 40px rgb(0, 0, 0, 0.2)",
       }}
     >
       <div
         style={{
           backgroundColor: "white",
           width: "16rem",
-          height: "26rem",
+          height: "27rem",
+          maxHeight: "27rem",
           display: "flex",
           padding: ".75rem",
           flexDirection: "column",
@@ -109,7 +110,7 @@ export default function ProductContainer({
         />
         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
-            <h3 style={{ fontSize: "25px", margin: 0 }}>{productTitle}</h3>
+            <h3 style={{ fontSize: "23px", margin: 0 }}>{productTitle}</h3>
             <p style={{ fontSize: "15px", margin: 0 }}>{productDetail}</p>
             <p style={{ fontSize: "30px", margin: 0 }}>{productPrice}</p>
             <p style={{ fontSize: "15px", margin: 0 }}>{productDeal}</p>

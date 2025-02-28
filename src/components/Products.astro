@@ -7,7 +7,16 @@ const products = (await getProducts()).slice(0, 3);
 ---
 
 <Layout>
-  <section id="container" style={{ display: "flex", flexDirection: "column" }}>
+  <section
+    id="products"
+    class="container"
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      height: "70%",
+      justifyContent: "center",
+    }}
+  >
     <!-- Sección de Título -->
     <div style={{ width: "100%", textAlign: "left" }}>
       <h2 style={{ fontWeight: 300, fontSize: "35px", color: "black" }}>
@@ -50,12 +59,13 @@ const products = (await getProducts()).slice(0, 3);
 </Layout>
 
 <style>
-  #container {
+  .container {
     --horizontalPadding: 10rem;
     background: white;
     padding: 2rem;
     padding-right: var(--horizontalPadding);
     padding-left: var(--horizontalPadding);
+    scroll-snap-align: start;
   }
 
   @media (max-width: 768px) {

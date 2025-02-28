@@ -5,7 +5,7 @@ import staticModel from "../assets/model_static.png";
 import Review from "./ReactComponents/Review";
 ---
 
-<section id="container" style={{ display: "flex", flexDirection: "column" }}>
+<section id="testimonios" class="container" style={{ display: "flex", flexDirection: "column" }}>
 
   <div
     style={{
@@ -44,10 +44,11 @@ import Review from "./ReactComponents/Review";
   * {
     /* border: 1px solid white; */
   }
-  #container {
+  .container {
     background: #013726;
    // height: 100%;
     padding: 2rem;
+    scroll-snap-align: start;
   }
 
   #section {

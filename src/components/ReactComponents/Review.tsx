@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-export default function Review({imageUrl}:any) {
+export default function Review({ imageUrl }: any) {
   return (
     <div
       style={{
@@ -9,9 +9,12 @@ export default function Review({imageUrl}:any) {
         flexDirection: "row",
         width: "550px",
         padding: "1rem",
-        paddingRight: '1.5rem',
-        borderRadius: '15px',
-        boxShadow: '0px 5px 20px rgb(0, 0, 0, 0.25)'
+        paddingRight: "1.5rem",
+        borderRadius: "15px",
+        boxShadow: "0px 5px 20px rgb(0, 0, 0, 0.25)",
+        alignContent: "center",
+        alignItems: "center",
+        gap: "15px",
       }}
     >
       <img
@@ -20,18 +23,19 @@ export default function Review({imageUrl}:any) {
         fetchPriority="high"
         width="125"
         height="125"
+        style={{ border: "1px solid red" }}
       />
       <div style={{ flexDirection: "column" }}>
-        <p>
-          <i>
+        <p style={{ marginTop: 0 }}>
+          <i style={{ marginTop: 0, lineBreak: 4 }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non
-          odio quis elit sagittis luctus eget ac metus. Fusce finibus nec risus
-          vitae facilisis. Morbi sit amet tempor arcu. Nullam eget velit
-          venenatis, tincidunt sapien ac,
+            odio quis elit sagittis luctus eget ac metus. Fusce finibus nec
+            risus vitae facilisis. Morbi sit amet tempor arcu. Nullam eget velit
+            venenatis, tincidunt sapien ac,
           </i>
         </p>
-        <p style={{ textAlign: "right" }}>Carla Maurice R.</p>
+        <p style={{ textAlign: "right", marginBottom: 0 }}>Carla Maurice R.</p>
       </div>
     </div>
-  )
+  );
 }
