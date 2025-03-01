@@ -10,8 +10,6 @@ export const GET: APIRoute = async ({ request }) => {
 
   const shippingCost = calculateShippingCost(district, packageId);
 
-  console.log("Shipping cost:", shippingCost);
-
   return new Response(
     JSON.stringify({
       success: true,

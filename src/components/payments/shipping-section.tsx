@@ -56,7 +56,6 @@ const ShippingSection: React.FC<ShippingProps> = ({
   useEffect(() => {
     if (localStorage.getItem(STORAGE_KEY) === "completed") {
       setFormStatus("success");
-      // Intentamos recuperar los datos guardados para mostrarlos en la pantalla de éxito
       try {
         const savedData = localStorage.getItem(`${STORAGE_KEY}_data`);
         if (savedData) {
@@ -71,7 +70,6 @@ const ShippingSection: React.FC<ShippingProps> = ({
       return;
     }
 
-    // Si no está completado, cargamos los datos guardados en el formulario
     try {
       const savedData = localStorage.getItem(`${STORAGE_KEY}_data`);
       if (savedData) {

@@ -5,11 +5,12 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import { paymentDataSchema } from "../../utils/validation-schema";
 import { logger } from "../../utils/logger";
-import type { z } from "astro/zod";
+import { z } from "astro/zod";
 import {
   sendAdminNotification,
   sendConfirmationEmail,
 } from "../../utils/mailer";
+import { updateInventory } from "../../utils/stock";
 
 const SPREADSHEET_ID = "1g5rj4fIyg0DU9NQuAxN3iBedjPA5aBSgnZZCAHXJr9M";
 const SHEET_NAME = "Pagos";
@@ -26,6 +27,7 @@ const HEADERS = [
   "Estado/Provincia",
   "Código Postal",
   "País",
+  "SKU",
 ];
 
 const __filename = fileURLToPath(import.meta.url);
@@ -39,6 +41,10 @@ export const POST: APIRoute = async ({ request }) => {
     try {
       const rawData = await request.json();
       logger.debug("Datos recibidos:", rawData);
+
+      const extendedSchema = paymentDataSchema.extend({
+        sku: z.string().min(1, "SKU es requerido"),
+      });
 
       const parsedData = paymentDataSchema.safeParse(rawData);
 
@@ -89,9 +95,9 @@ export const POST: APIRoute = async ({ request }) => {
     await ensureSheetWithHeaders(sheets, SPREADSHEET_ID, SHEET_NAME, HEADERS);
 
     const values = [
+      new Date().toISOString(),
+      sanitizeInput(data.paymentId),
       [
-        new Date().toISOString(),
-        sanitizeInput(data.paymentId),
         sanitizeInput(data.status),
         sanitizeInput(data.merchantOrderId),
         sanitizeInput(data.shippingAddress.name),
@@ -102,6 +108,7 @@ export const POST: APIRoute = async ({ request }) => {
         sanitizeInput(data.shippingAddress.state),
         sanitizeInput(data.shippingAddress.zipCode),
         sanitizeInput(data.shippingAddress.country),
+        sanitizeInput(data.sku),
       ],
     ];
 
@@ -115,6 +122,21 @@ export const POST: APIRoute = async ({ request }) => {
     const recordId = generateRecordId();
 
     saveLocalRecord(recordId, data);
+
+    try {
+      if (data.status === "completed") {
+        await updateInventory(data.sku, 1);
+        logger.info(`Inventario actualizado para SKU: ${data.sku}`);
+      }
+    } catch (inventoryError) {
+      logger.error("Error actualizando inventario:", inventoryError);
+      await sendAdminNotification({
+        type: "INVENTORY_ERROR",
+        sku: data.sku,
+        paymentId: data.paymentId,
+        error: (inventoryError as Error).message,
+      });
+    }
 
     try {
       await sendConfirmationEmail(data.shippingAddress.email, data);

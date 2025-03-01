@@ -28,17 +28,17 @@ const products = (await getProducts()).slice(0, 3);
         products.map((product) => (
           <ProductContainer
             client:load
-            key={product.sku}
-            sku={product.sku}
-            link={product.link}
-            imageUrl={product.imageUrl}
-            productTitle={product.title}
-            productDetail={product.productDetail}
-            productPrice={product.productPrice}
-            productDeal={product.productDeal}
-            tier={product.tier}
+            key={product?.sku}
+            sku={product?.sku}
+            link={product?.link}
+            imageUrl={product?.imageUrl}
+            productTitle={product?.title}
+            productDetail={product?.productDetail!}
+            productPrice={product?.productPrice!}
+            productDeal={product?.productDeal!}
+            tier={product?.tier!}
             purchaseType={
-              product.sku.includes("subscription") ? "subscription" : undefined
+              product?.sku.includes("subscription") ? "subscription" : undefined
             }
           />
         ))

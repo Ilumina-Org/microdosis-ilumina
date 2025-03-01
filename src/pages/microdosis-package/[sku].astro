@@ -11,20 +11,24 @@ import NotFound from "../../components/not-found.astro";
 const { sku } = Astro.params;
 let packageData = null;
 
-try {
-  packageData = await getPackageData(sku);
-  console.log(packageData);
-} catch (error: unknown) {
-  if (error instanceof Error) {
-    if (error.message === "El paquete no existe.") {
-      console.warn(`Paquete con SKU ${sku} no encontrado.`);
-      Astro.response.status = 404;
-    } else if (error.message === "El paquete no tiene stock disponible.") {
-      console.warn(`Paquete con SKU ${sku} sin stock.`);
-      Astro.response.status = 404;
-    } else {
-      console.error("Error inesperado:", error);
-      Astro.response.status = 500;
+if (!sku) {
+  console.warn("SKU no definido en los parámetros.");
+  Astro.response.status = 400;
+} else {
+  try {
+    packageData = await getPackageData(sku);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === "El paquete no existe.") {
+        console.warn(`Paquete con SKU ${sku} no encontrado.`);
+        Astro.response.status = 404;
+      } else if (error.message === "El paquete no tiene stock disponible.") {
+        console.warn(`Paquete con SKU ${sku} sin stock.`);
+        Astro.response.status = 404;
+      } else {
+        console.error("Error inesperado:", error);
+        Astro.response.status = 500;
+      }
     }
   }
 }
@@ -44,9 +48,10 @@ try {
           <PackageDescription description={packageData.description} />
           <PaymentOptions
             client:load
+            sku={sku!}
             basePrice={packageData.price}
             title={packageData.title}
-            packageId={sku}
+            packageId={sku ?? ""}
           />
           <GuaranteeBox />
         </div>

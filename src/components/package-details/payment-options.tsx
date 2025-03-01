@@ -2,17 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import MercadoPagoCheckoutPro from "../mercadopago-checkoutpro";
 import "./payment-options.css";
 import type { JSX } from "astro/jsx-runtime";
+import { getStock } from "../../utils/stock";
 
 interface PaymentOptionsProps {
   basePrice: number;
   title: string;
   packageId: string;
+  sku: string;
 }
 
 const PaymentOptions = ({
   basePrice,
   title,
   packageId,
+  sku,
 }: PaymentOptionsProps) => {
   const [districts, setDistricts] = useState<
     Array<{ code: string; name: string }>
@@ -22,6 +25,8 @@ const PaymentOptions = ({
   const [loadingShipping, setLoadingShipping] = useState(false);
   const [shippingCost, setShippingCost] = useState(0);
   const [error, setError] = useState("");
+  const [inStock, setInStock] = useState(true);
+  const [stockLoading, setStockLoading] = useState(true);
 
   const [activeOption, setActiveOption] = useState<string | null>(
     "mercadopago-option",
@@ -33,6 +38,23 @@ const PaymentOptions = ({
     district: string;
     instance: JSX.Element | null;
   }>({ price: 0, district: "", instance: null });
+
+  useEffect(() => {
+    const checkStock = async () => {
+      try {
+        const stockData = await getStock();
+        const productStock = stockData[sku]?.disponible || 0;
+        setInStock(productStock > 0);
+      } catch (error) {
+        console.error("Error checking stock:", error);
+        setError("Error verificando disponibilidad");
+      } finally {
+        setStockLoading(false);
+      }
+    };
+
+    checkStock();
+  }, [sku]);
 
   useEffect(() => {
     if (!selectedDistrict) setMercadoPagoKey((prev) => prev + 1);
@@ -50,11 +72,12 @@ const PaymentOptions = ({
     };
     fetchDistricts();
   }, []);
+
   useEffect(() => {
     const controller = new AbortController();
 
     const calculateShipping = async () => {
-      if (!selectedDistrict) return;
+      if (!selectedDistrict || !inStock) return;
 
       setLoadingShipping(true);
       try {
@@ -84,6 +107,7 @@ const PaymentOptions = ({
                     name: title,
                     quantity: 1,
                     district: selectedDistrict,
+                    sku: sku,
                   }}
                 />
               ),
@@ -103,23 +127,36 @@ const PaymentOptions = ({
 
     calculateShipping();
     return () => controller.abort();
-  }, [selectedDistrict, packageId, basePrice, title]);
+  }, [selectedDistrict, packageId, basePrice, title, sku, inStock]);
 
   const toggleAccordion = (optionId: string) => {
+    if (!inStock) return;
     setActiveOption((prev) => (prev === optionId ? null : optionId));
   };
+
+  if (stockLoading) {
+    return <div className="loading">Verificando disponibilidad...</div>;
+  }
+
+  if (!inStock) {
+    return (
+      <div className="out-of-stock-banner">
+        <h3>Producto Agotado</h3>
+        <p>Lo sentimos, este producto no está disponible actualmente.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="payment-section">
       <h2>Método de Pago</h2>
 
-      {/* Selector de distrito */}
       <div className="shipping-selector">
         <label>Distrito de entrega:</label>
         <select
           value={selectedDistrict}
           onChange={(e) => setSelectedDistrict(e.target.value)}
-          disabled={loadingShipping}
+          disabled={loadingShipping || !inStock}
         >
           <option value="">Seleccione su distrito</option>
           {districts.map((district) => (
