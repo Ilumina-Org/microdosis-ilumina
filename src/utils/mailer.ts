@@ -36,7 +36,7 @@ export async function sendConfirmationEmail(
 export async function sendAdminNotification(data: any): Promise<void> {
   const mailOptions = {
     from: '"Sistema de Órdenes" <lucasan.videla@gmail.com>',
-    to: "lucasan.videla@gmail.com", // O una lista de correos de administradores
+    to: "lucasan.videla@gmail.com",
     subject: `Nueva Orden Recibida - ${data.merchantOrderId}`,
     html: `
       <h1 style="color: #ff5722;">¡Nueva orden requiere atención!</h1>

@@ -12,33 +12,27 @@ interface ShippingProps {
 const shippingSchema = z.object({
   name: z
     .string()
-    .nonempty("Este campo es obligatorio")
-    .min(2, { message: "El nombre debe tener al menos 2 caracteres" })
+    .nonempty("Obligatorio")
+    .min(2, { message: "Mín. 2 caracteres" })
     .max(100),
   email: z.string().email({ message: "Email inválido" }).max(100),
   phone: z
     .string()
-    .min(7, { message: "Número de teléfono demasiado corto" })
+    .min(7, { message: "Mín. 7 dígitos" })
     .max(20)
     .regex(/^[+]?[\d\s()-]{7,20}$/, {
-      message: "Formato de teléfono inválido",
+      message: "Formato inválido",
     }),
-  address: z
-    .string()
-    .min(5, { message: "La dirección es demasiado corta" })
-    .max(200),
-  city: z.string().min(2, { message: "La ciudad es demasiado corta" }).max(100),
-  state: z
-    .string()
-    .min(2, { message: "La provincia/estado es demasiado corta" })
-    .max(100),
-  zipCode: z.string().min(3, { message: "Código postal inválido" }).max(20),
-  country: z.string().min(2, { message: "País inválido" }).max(100),
+  address: z.string().min(5, { message: "Mín. 5 caracteres" }).max(200),
+  city: z.string().min(2, { message: "Mín. 2 caracteres" }).max(100),
+  state: z.string().min(2, { message: "Mín. 2 caracteres" }).max(100),
+  zipCode: z.string().min(3, { message: "Mín. 3 caracteres" }).max(20),
+  country: z.string().min(2, { message: "Mín. 2 caracteres" }).max(100),
 });
 
 type ShippingFormData = z.infer<typeof shippingSchema>;
 
-type FormStatus = "editing" | "submitting" | "success" | "error";
+type FormStatus = "editing" | "submitting" | "success" | "error" | "confirming";
 
 const ShippingSection: React.FC<ShippingProps> = ({
   paymentId,
@@ -46,6 +40,7 @@ const ShippingSection: React.FC<ShippingProps> = ({
 }) => {
   const [formStatus, setFormStatus] = useState<FormStatus>("editing");
   const [errorMessage, setErrorMessage] = useState("");
+  const [formData, setFormData] = useState<ShippingFormData | null>(null);
   const STORAGE_KEY = `shipping_${paymentId}`;
 
   const {
@@ -61,14 +56,28 @@ const ShippingSection: React.FC<ShippingProps> = ({
   useEffect(() => {
     if (localStorage.getItem(STORAGE_KEY) === "completed") {
       setFormStatus("success");
+      // Intentamos recuperar los datos guardados para mostrarlos en la pantalla de éxito
+      try {
+        const savedData = localStorage.getItem(`${STORAGE_KEY}_data`);
+        if (savedData) {
+          const data = JSON.parse(savedData);
+          if (data.shippingAddress) {
+            setFormData(data.shippingAddress);
+          }
+        }
+      } catch (e) {
+        console.error("Error al recuperar datos guardados:", e);
+      }
       return;
     }
+
+    // Si no está completado, cargamos los datos guardados en el formulario
     try {
       const savedData = localStorage.getItem(`${STORAGE_KEY}_data`);
       if (savedData) {
         const data = JSON.parse(savedData);
         if (data.shippingAddress) {
-          reset(data.shippingAddress); // Cargar datos en el formulario
+          reset(data.shippingAddress);
         }
       }
     } catch (e) {
@@ -76,8 +85,14 @@ const ShippingSection: React.FC<ShippingProps> = ({
     }
   }, [STORAGE_KEY, reset]);
 
-  const onSubmit = async (formData: ShippingFormData) => {
-    console.log("Submit ejecutado", formData);
+  const onPreSubmit = (data: ShippingFormData) => {
+    setFormData(data);
+    setFormStatus("confirming");
+  };
+
+  const onConfirmSubmit = async () => {
+    if (!formData) return;
+
     setFormStatus("submitting");
 
     const backupData = {
@@ -113,14 +128,13 @@ const ShippingSection: React.FC<ShippingProps> = ({
     } catch (error) {
       console.error("Error al enviar los datos:", error);
       setErrorMessage(
-        "Error de conexión. Por favor, verifica tu conexión a internet e intenta nuevamente.",
+        "Error de conexión. Verifica tu conexión e intenta nuevamente.",
       );
       setFormStatus("error");
     }
   };
 
-  const handleEditInfo = () => {
-    localStorage.removeItem(STORAGE_KEY);
+  const handleCancelConfirm = () => {
     setFormStatus("editing");
   };
 
@@ -141,55 +155,67 @@ const ShippingSection: React.FC<ShippingProps> = ({
       )}
 
       {formStatus === "editing" && (
-        <form onSubmit={handleSubmit(onSubmit)} className="shipping-form">
-          <div className="form-group">
-            <label htmlFor="name">Nombre completo *</label>
-            <input
-              id="name"
-              className={errors.name ? "input-error" : ""}
-              {...register("name")}
-            />
-            {errors.name && (
-              <div className="error-message">{errors.name.message}</div>
-            )}
+        <form onSubmit={handleSubmit(onPreSubmit)} className="shipping-form">
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="name">Nombre completo *</label>
+              <input
+                id="name"
+                placeholder="Tu nombre completo"
+                className={errors.name ? "input-error" : ""}
+                {...register("name")}
+              />
+              {errors.name && (
+                <span className="error-tooltip">{errors.name.message}</span>
+              )}
+            </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="email">Email *</label>
-            <input
-              id="email"
-              type="email"
-              className={errors.email ? "input-error" : ""}
-              {...register("email")}
-            />
-            {errors.email && (
-              <div className="error-message">{errors.email.message}</div>
-            )}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="email">Email *</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="ejemplo@correo.com"
+                className={errors.email ? "input-error" : ""}
+                {...register("email")}
+              />
+              {errors.email && (
+                <span className="error-tooltip">{errors.email.message}</span>
+              )}
+            </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="phone">Teléfono *</label>
-            <input
-              id="phone"
-              type="tel"
-              className={errors.phone ? "input-error" : ""}
-              {...register("phone")}
-            />
-            {errors.phone && (
-              <div className="error-message">{errors.phone.message}</div>
-            )}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="phone">Teléfono *</label>
+              <input
+                id="phone"
+                type="tel"
+                placeholder="+XX XXXX XXXX"
+                className={errors.phone ? "input-error" : ""}
+                {...register("phone")}
+              />
+              {errors.phone && (
+                <span className="error-tooltip">{errors.phone.message}</span>
+              )}
+            </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="address">Dirección *</label>
-            <input
-              id="address"
-              className={errors.address ? "input-error" : ""}
-              {...register("address")}
-            />
-            {errors.address && (
-              <div className="error-message">{errors.address.message}</div>
-            )}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="address">Dirección *</label>
+              <input
+                id="address"
+                placeholder="Calle, número, piso, depto."
+                className={errors.address ? "input-error" : ""}
+                {...register("address")}
+              />
+              {errors.address && (
+                <span className="error-tooltip">{errors.address.message}</span>
+              )}
+            </div>
           </div>
 
           <div className="form-row">
@@ -197,22 +223,24 @@ const ShippingSection: React.FC<ShippingProps> = ({
               <label htmlFor="city">Ciudad *</label>
               <input
                 id="city"
+                placeholder="Ciudad"
                 className={errors.city ? "input-error" : ""}
                 {...register("city")}
               />
               {errors.city && (
-                <div className="error-message">{errors.city.message}</div>
+                <span className="error-tooltip">{errors.city.message}</span>
               )}
             </div>
             <div className="form-group half">
               <label htmlFor="state">Estado/Provincia *</label>
               <input
                 id="state"
+                placeholder="Provincia"
                 className={errors.state ? "input-error" : ""}
                 {...register("state")}
               />
               {errors.state && (
-                <div className="error-message">{errors.state.message}</div>
+                <span className="error-tooltip">{errors.state.message}</span>
               )}
             </div>
           </div>
@@ -222,29 +250,31 @@ const ShippingSection: React.FC<ShippingProps> = ({
               <label htmlFor="zipCode">Código Postal *</label>
               <input
                 id="zipCode"
+                placeholder="CP"
                 className={errors.zipCode ? "input-error" : ""}
                 {...register("zipCode")}
               />
               {errors.zipCode && (
-                <div className="error-message">{errors.zipCode.message}</div>
+                <span className="error-tooltip">{errors.zipCode.message}</span>
               )}
             </div>
             <div className="form-group half">
               <label htmlFor="country">País *</label>
               <input
                 id="country"
+                placeholder="País"
                 className={errors.country ? "input-error" : ""}
                 {...register("country")}
               />
               {errors.country && (
-                <div className="error-message">{errors.country.message}</div>
+                <span className="error-tooltip">{errors.country.message}</span>
               )}
             </div>
           </div>
 
           <div className="form-controls">
             <button type="submit" className="btn-primary">
-              Confirmar dirección de envío
+              Confirmar dirección
             </button>
           </div>
 
@@ -254,15 +284,88 @@ const ShippingSection: React.FC<ShippingProps> = ({
         </form>
       )}
 
+      {formStatus === "confirming" && formData && (
+        <div className="confirmation-modal">
+          <div className="confirmation-content">
+            <h3>Confirma tus datos</h3>
+            <p className="confirmation-warning">
+              <span className="warning-icon">⚠️</span> Esta información se
+              enviará a nuestro sistema y{" "}
+              <strong>no podrá ser modificada después</strong>.
+            </p>
+
+            <div className="confirmation-data">
+              <div className="data-row">
+                <strong>Nombre:</strong> {formData.name}
+              </div>
+              <div className="data-row">
+                <strong>Email:</strong> {formData.email}
+              </div>
+              <div className="data-row">
+                <strong>Teléfono:</strong> {formData.phone}
+              </div>
+              <div className="data-row">
+                <strong>Dirección:</strong> {formData.address}
+              </div>
+              <div className="data-row">
+                <strong>Ciudad:</strong> {formData.city}
+              </div>
+              <div className="data-row">
+                <strong>Estado/Provincia:</strong> {formData.state}
+              </div>
+              <div className="data-row">
+                <strong>Código Postal:</strong> {formData.zipCode}
+              </div>
+              <div className="data-row">
+                <strong>País:</strong> {formData.country}
+              </div>
+            </div>
+
+            <div className="confirmation-actions">
+              <button onClick={handleCancelConfirm} className="btn-secondary">
+                Editar
+              </button>
+              <button onClick={onConfirmSubmit} className="btn-primary">
+                Confirmar y enviar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {formStatus === "success" && (
         <div className="shipping-success">
           <div className="success-icon">✓</div>
           <h3>¡Datos registrados con éxito!</h3>
-          <p>Hemos guardado tu información de envío correctamente.</p>
+          <p>Tu información de envío ha sido procesada correctamente.</p>
+
+          {formData && (
+            <div className="success-data">
+              <div className="data-summary">
+                <div>
+                  <strong>Nombre:</strong> {formData.name}
+                </div>
+                <div>
+                  <strong>Email:</strong> {formData.email}
+                </div>
+                <div>
+                  <strong>Dirección:</strong> {formData.address}
+                </div>
+                <div>
+                  <strong>Ciudad:</strong> {formData.city}, {formData.state}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="payment-info">ID de Pago: {paymentId}</div>
-          <button onClick={handleEditInfo} className="btn-secondary">
-            Editar información
-          </button>
+          <div className="form-note">
+            <div className="note-icon">ℹ️</div>
+            <p>
+              La información enviada no puede ser modificada, pues ya ha sido
+              registrada en nuestro sistema.
+            </p>
+          </div>
         </div>
       )}
 

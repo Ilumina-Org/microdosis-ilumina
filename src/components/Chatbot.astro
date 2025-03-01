@@ -3,45 +3,6 @@
 ---
 
 <div class="chat-wrapper">
-  <button id="toggle-chat" class="chat-toggle">
-    <div class="robot-icon">
-<svg viewBox="0 0 142 86" xmlns="http://www.w3.org/2000/svg">
-  <g transform="translate(-31 -7)">
-    <g transform="translate(-1.7 -160)" style="opacity:1">
-      <path 
-        d="m94.5 242.2s-30.7 22-59-8.6c0 0 23.1-28.5 68 0 0 0-2.1-40.6-48-46.4 0 0-2.4 16.5 8.3 28.2" 
-        fill="none" 
-        stroke="#09250d" 
-        stroke-width="4.231" 
-        stroke-linecap="round"
-      />
-      <path 
-        d="m89.7 194.1s1.7-14.8 13.1-24.4c0 0 31.7 27.1 1.4 63.9" 
-        fill="none" 
-        stroke="#09250d" 
-        stroke-width="4.231" 
-        stroke-linecap="round"
-      />
-      <path 
-        d="m122.8 196.5s13.8-13.1 27.9-11.3c0 0 0.3 47.1-46.6 48.5" 
-        fill="none" 
-        stroke="#09250d" 
-        stroke-width="4.231" 
-        stroke-linecap="round"
-      />
-      <path 
-        d="m144.9 219.2s14.1-1 26.9 10.7c0 0-30 38.5-68 3.8" 
-        fill="none" 
-        stroke="#09250d" 
-        stroke-width="4.231" 
-        stroke-linecap="round"
-      />
-    </g>
-  </g>
-</svg>
-    </div>
-  </button>
-
   <div class="chat-container" style="display: none;">
     <div class="chat-box">
       <button id="close-chat" class="close-button">×</button>
@@ -64,10 +25,8 @@
 <style>
   /* Estilos base del chatbot */
   .chat-wrapper {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
+    position: relative; /* Contenedor base */
+    min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
@@ -99,14 +58,13 @@
 
   /* Contenedor principal del chat */
   .chat-container {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    z-index: 1000;
-    width: 90%;
-    max-width: 400px;
-    max-height: 80vh;
-  }
+  position: fixed;  /* Fija el elemento en la pantalla */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
 
   .chat-box {
     background: #ffffff;
@@ -357,6 +315,24 @@
     transition: all 0.2s ease;
     font-size: 14px;
   }
+
+  .checkbox-option
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+        
+        .option.selected {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        
 
   .checkbox-option:hover {
     background: #e5e7eb;
@@ -668,22 +644,35 @@ function updateQuestion() {
         const checkboxOption = document.createElement("div");
         checkboxOption.className = "checkbox-option";
         checkboxOption.dataset.value = option;
+        checkboxOption.textContent = option;
+
+
+        checkboxOption.style.marginBottom = "10px";
+        checkboxOption.style.padding = "10px";
+        checkboxOption.style.backgroundColor = "#fff";
+        checkboxOption.style.border = "1px solid #ddd";
+        checkboxOption.style.borderRadius = "4px";
+        checkboxOption.style.cursor = "pointer";
+        checkboxOption.style.userSelect = "none";
+        checkboxOption.style.transition = "background-color 0.3s";
         
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.id = `option-${option}`;
-        checkbox.name = option;
-        
-        const label = document.createElement("label");
-        label.htmlFor = `option-${option}`;
-        label.textContent = option;
-        
-        checkboxOption.appendChild(checkbox);
-        checkboxOption.appendChild(label);
-        
-        checkboxOption.addEventListener("click", () => {
+        checkboxOption.addEventListener("click", function()  {
           checkboxOption.classList.toggle("selected");
-          checkbox.checked = !checkbox.checked;
+            const isCurrentlySelected = this.style.backgroundColor === "rgb(76, 175, 80)";
+                    
+                    // Cambiar estilos según el estado de selección
+                    if (isCurrentlySelected) {
+                        // Deseleccionar
+                        this.style.backgroundColor = "#fff";
+                        this.style.color = "";
+                        this.style.borderColor = "#ddd";
+                    } else {
+                        // Seleccionar
+                        this.style.backgroundColor = "#4CAF50";
+                        this.style.color = "white";
+                        this.style.borderColor = "#4CAF50";
+                    }
+          console.log(checkboxOption.classList);
         });
         
         multiSelectContainer.appendChild(checkboxOption);
@@ -720,6 +709,7 @@ function updateQuestion() {
         button.style.letterSpacing = "0.5px";
         button.style.minWidth = "100px";
         button.style.outline = "none";
+
 
         button.addEventListener("click", () => nextQuestion(option));
         optionsContainer.appendChild(button);
