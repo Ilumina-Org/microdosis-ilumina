@@ -3,10 +3,16 @@ import astroLogo from "../assets/astro.svg";
 import background from "../assets/background.svg";
 import staticModel from "../assets/model_static.png";
 import Button from "./ReactComponents/Button";
+import { SectionLayout } from "./ReactComponents/SectionLayout";
 const centeringConst = "38%";
 ---
 
-<section id="inicio" class="container">
+<SectionLayout id="inicio">
+  <div
+    style={{ height: "auto", position: "absolute", left: "4rem", top: "2rem" }}
+  >
+    <p style={{ color: "white", fontSize: "50px" }}>ILUMINA</p>
+  </div>
   <div class="content">
     <h1>
       Descubre el poder <br /> sanador de la <br />
@@ -20,91 +26,94 @@ const centeringConst = "38%";
     />
   </div>
   <div class="image-container">
-    <img src={staticModel.src} alt="" class="model-image" />
+    <!--disabled for testing -->
+    <!-- <canvas id="model-image"></canvas> -->
+    <!-- <script src="../../public/animation.js" type="module"></script> -->
   </div>
-</section>
 
-<style>
-  :root {
-    --centering-width: 38%;
-  }
-
-  .container {
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-    justify-content: center;
-    background:
-      radial-gradient(
-        41.74% 98.84% at 61.04% 47.01%,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.2) 100%
-      ),
-      linear-gradient(68.99deg, #003325 10.95%, #013726 60.57%, #013520 103.7%),
-      #013726;
-  }
-
-  .content {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    width: var(--centering-width);
-    gap: 30px;
-    justify-content: center;
-    scroll-snap-align: start;
-    scroll-behavior: smooth;
-  }
-
-  h1 {
-    font-size: 70px;
-    color: white;
-    line-height: 98%;
-    margin: 0;
-  }
-
-  h1 .highlight {
-    color: #c1dc3a;
-  }
-
-  h3 {
-    margin: 0;
-    font-size: 35px;
-    font-weight: 300;
-    color: white;
-    opacity: 0.5;
-  }
-
-  .image-container {
-    width: var(--centering-width);
-    position: relative;
-  }
-
-  .model-image {
-    height: 100%;
-    position: absolute;
-    right: 20%;
-    top: 10%;
-  }
-
-  /* Media Queries (already defined) */
-  @media only screen and (min-width: 2560px) {
+  <style>
     :root {
-      --centering-width: 25%;
+      --centering-width: 38%;
     }
-  }
 
-  @media only screen and (min-width: 1920px) and (max-width: 2559px) {
-    :root {
-      --centering-width: 35%;
+    canvas {
+      position: absolute;
+      /* NOTE: here ill check the responsiveness for the animation */
+      bottom: 3rem;
+      right: 5rem;
+      max-height: 90vh;
+      max-width: 99vw;
+      transform: scale(2.25);
+      z-index: 1;
     }
-  }
 
-  @media only screen and (max-width: 768px) and (min-width: 768px) {
-    :root {
-      --centering-width: 40%;
+    .content {
+      display: flex;
+      position: relative;
+      flex-direction: column;
+      width: var(--centering-width);
+      gap: 30px;
+      justify-content: center;
+      scroll-snap-align: start;
+      scroll-behavior: smooth;
+      overflow: hidden !important;
     }
-  }
 
-  @media only screen and (max-width: 767px) {
-  }
-</style>
+    h1 {
+      font-size: 70px;
+      color: white;
+      line-height: 98%;
+      margin: 0;
+    }
+
+    h1 .highlight {
+      color: #c1dc3a;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 35px;
+      font-weight: 300;
+      color: white;
+      opacity: 0.5;
+    }
+
+    .image-container {
+      width: var(--centering-width);
+      right: 0;
+      overflow: hidden;
+    }
+
+    .model-image {
+      border: 1px solid white;
+      height: 90%;
+      /* //height: 1000px; */
+
+      position: absolute;
+      right: 0%;
+      top: 10% !important;
+    }
+
+    /* Media Queries (already defined) */
+    @media only screen and (min-width: 2560px) {
+      :root {
+        --centering-width: 25%;
+      }
+    }
+
+    @media only screen and (min-width: 1920px) and (max-width: 2559px) {
+      :root {
+        --centering-width: 35%;
+      }
+    }
+
+    @media only screen and (max-width: 768px) and (min-width: 768px) {
+      :root {
+        --centering-width: 40%;
+      }
+    }
+
+    @media only screen and (max-width: 767px) {
+    }
+  </style>
+</SectionLayout>

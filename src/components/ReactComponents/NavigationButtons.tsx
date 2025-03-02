@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const NavigationButtons = () => {
   const [active, setActive] = useState<string | null>();
@@ -34,8 +34,10 @@ const NavigationButtons = () => {
         backgroundColor: "transparent",
         color: "white",
         gap: "20px",
-        right: "2rem",
-        top: "2rem",
+
+        right: "4rem",
+        top: "5rem",
+
         fontSize: "30px",
         fontFamily: "Inter",
         fontWeight: "200",

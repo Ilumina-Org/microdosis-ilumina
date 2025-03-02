@@ -10,7 +10,7 @@ export default defineConfig({
     headers:
       process.env.NODE_ENV === "production"
         ? {
-            "Content-Security-Policy": `
+          "Content-Security-Policy": `
         default-src 'self';
         script-src 'self' https://sdk.mercadopago.com https://http2.mlstatic.com https://www.mercadopago.com https://storage.googleapis.com;
         style-src 'self' 'unsafe-inline';
@@ -19,12 +19,13 @@ export default defineConfig({
         frame-src 'self' https://www.mercadopago.com https://www.mercadolibre.com;
         font-src 'self' https://http2.mlstatic.com;
       `
-              .replace(/\s{2,}/g, " ")
-              .trim(),
-          }
+            .replace(/\s{2,}/g, " ")
+            .trim(),
+        }
         : {},
   },
   output: "server",
   adapter: cloudflare(),
   integrations: [react()],
+  devToolbar: { enabled: false },
 });
