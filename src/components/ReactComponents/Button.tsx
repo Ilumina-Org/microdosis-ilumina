@@ -1,9 +1,10 @@
 import React from "react";
 
-function Button({ label, onClick = () => alert("click") }: any) {
+function Button({ id, label, onClick = () => alert("click") }: any) {
   return (
     <>
       <input
+        id={id}
         type="button"
         value={label}
         onClick={onClick}
@@ -18,6 +19,7 @@ function Button({ label, onClick = () => alert("click") }: any) {
           fontSize: "30px",
           fontFamily: "Inter",
           fontWeight: "200",
+          cursor: "pointer",
         }}
       />
     </>
