@@ -1,28 +1,39 @@
 import React from "react";
 
-function Button({ id, label, onClick = () => alert("click") }: any) {
+function Button({ id, fontSize = 30, label, onClick = () => alert("click"), icon }: any) {
   return (
-    <>
+    <div 
+    onClick={onClick}
+    style={{
+      display: "flex",
+      gap: "1rem",
+      width: "fit-content",
+      borderRadius: "10px",
+      overflow: "hidden",
+      background: "#C1DC3A",
+      cursor: "pointer",
+      padding: "1.5rem",
+      paddingTop: "1rem",
+      paddingBottom: "1rem",
+      alignContent: "center",
+      alignItems: 'center',
+    }}>
       <input
         id={id}
         type="button"
         value={label}
-        onClick={onClick}
         style={{
           width: "fit-content",
-          padding: "1.5rem",
-          paddingTop: "1rem",
-          paddingBottom: "1rem",
           background: "#C1DC3A",
-          borderRadius: "10px",
           border: "none",
-          fontSize: "30px",
+          fontSize: `${fontSize}px`,
           fontFamily: "Inter",
           fontWeight: "200",
           cursor: "pointer",
         }}
       />
-    </>
+      {icon}
+    </div>
   );
 }
 

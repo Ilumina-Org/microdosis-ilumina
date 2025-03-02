@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const NavigationButtons = () => {
+// section={visibleSection} sectionRefs={sectionRefs}
+
+const NavigationButtons = ({section = 'yea', sectionRefs, color = 'white'}) => {
   const [active, setActive] = useState<string | null>();
 
   const handleClick = (e: any, target: string) => {
@@ -14,7 +16,7 @@ const NavigationButtons = () => {
 
   const aStyling = {
     textDecoration: "none",
-    color: "white",
+    color: color, 
   };
 
   const handleSelect = (value: string) => {
@@ -44,6 +46,17 @@ const NavigationButtons = () => {
         textAlign: "right",
       }}
     >
+      <a
+        href="#no"
+        onClick={(e) => handleClick(e, "inicio")}
+        style={{
+          ...aStyling,
+          textShadow: handleSelect("inicio"),
+          opacity: active == "inicio" ? 1 : 0.5,
+        }}
+      >
+        {section}
+      </a>
       <a
         href="#inicio"
         onClick={(e) => handleClick(e, "inicio")}

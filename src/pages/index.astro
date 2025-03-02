@@ -5,13 +5,19 @@ import About from "../components/About.astro";
 import Testimonials from "../components/Testimonials.astro";
 import Products from "../components/Products.astro";
 import Landing from "../components/Landing.astro";
+import NavigationButtons from "../components/ReactComponents/NavigationButtons";
+import ObserverLayout from "../components/ObserverLayout";
+import type { loadApp } from "astro/app/node";
+
 ---
 <Layout>
+  <ObserverLayout client:load />
+  <!-- <NavigationButtons client:load />
   <Landing id="inicio" />
   <About id="about" />
   <Testimonials id="testimonios" />
   <Products id="products" />
   <Testimonials id="testimonios" />
-  <!-- <Products id="faqs" /> -->
-  <Chatbot />
+  // <Products id="faqs" />
+  <Chatbot /> -->
 </Layout>

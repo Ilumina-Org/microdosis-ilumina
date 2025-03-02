@@ -1,6 +1,7 @@
 const canvas = document.getElementById('model-image');
 if (!canvas) {
-  console.error('not found, load static image instead');
+  console.error('not found, load static image instead'
+  );
 }
 const ctx = canvas?.getContext('2d');
 
@@ -28,7 +29,7 @@ function preloadFrames() {
 }
 
 //delay
-let frameDelay = 4;
+let frameDelay = 1;
 let frameDelayCounter = 0;
 
 function drawFrame() {

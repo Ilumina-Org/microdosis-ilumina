@@ -6,7 +6,7 @@ export const SectionLayout = ({ id, children }: any) => {
     display: "flex",
     height: "100vh",
     justifyContent: "center",
-
+    border: "1px solid white",
     background: `
       radial-gradient(
         41.74% 98.84% at 61.04% 47.01%,
