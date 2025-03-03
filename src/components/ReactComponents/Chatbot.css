@@ -1,0 +1,346 @@
+/* Estilos base del chatbot */
+.chat-wrapper {
+  position: relative;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.chat-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 1000;
+}
+
+.chat-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.robot-icon {
+  width: 30px;
+  height: 30px;
+  color: white;
+}
+
+/* Contenedor principal del chat */
+.chat-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  width: 90%;
+  max-width: 500px;
+}
+
+.chat-box {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  margin-bottom: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: #4caf50 #f5f5f5;
+}
+
+.chat-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background-color: #4caf50;
+  border-radius: 10px;
+}
+
+/* Botón de cerrar */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #f5f5f5;
+  border: none;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+}
+
+.close-button:hover {
+  background: #e0e0e0;
+  color: #000;
+}
+
+/* Mensajes del chatbot */
+.chat-message {
+  background: #e8f5e9;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border-left: 4px solid #4caf50;
+}
+
+.chat-message p {
+  color: #333;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Contenedor de opciones */
+.options {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Estilos para botones normales */
+.button {
+  width: 100%;
+  text-align: left;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 100px;
+  outline: none;
+}
+
+.button:hover {
+  background: linear-gradient(135deg, #0069d9, #0049b3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Animación de carga */
+.thinking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.loading-spinner {
+  border: 3px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 3px solid #4caf50;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 12px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Contenedor de resultados */
+.result-container {
+  text-align: center;
+}
+
+.result {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: normal;
+  color: #333;
+  background: #e8f5e9;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border-left: 4px solid #4caf50;
+  text-align: left;
+  white-space: pre-line;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Botón de reinicio */
+.restart-button {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.restart-button:hover {
+  background: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Selección múltiple mejorada */
+.multi-select {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 600px) {
+  .multi-select {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .multi-select {
+    grid-template-columns: 1fr;
+  }
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  background: #f3f4f6;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  user-select: none;
+}
+
+.checkbox-option:hover {
+  background: #e5e7eb;
+  transform: translateY(-2px);
+}
+
+.checkbox-option.selected {
+  background-color: #4caf50;
+  color: white;
+  border-color: #4caf50;
+}
+
+/* Botón continuar mejorado */
+.continue-button {
+  width: 100%;
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.continue-button:hover {
+  background: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.continue-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .chat-container {
+    width: 90%;
+  }
+
+  .chat-box {
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .chat-message p {
+    font-size: 15px;
+  }
+
+  .button {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .result {
+    font-size: 15px;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-toggle {
+    width: 50px;
+    height: 50px;
+  }
+
+  .robot-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .close-button {
+    font-size: 14px;
+    width: 26px;
+    height: 26px;
+  }
+
+  .options {
+    max-height: 250px;
+  }
+}
