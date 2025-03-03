@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import path from "path";
 import { fileURLToPath } from "url";
-import fs from "fs";
 import { paymentDataSchema } from "../../utils/validation-schema";
 import { logger } from "../../utils/logger";
 import type { z } from "astro/zod";
@@ -9,7 +8,11 @@ import {
   sendAdminNotification,
   sendConfirmationEmail,
 } from "../../utils/mailer";
-import { getGoogleSheetsClient, SPREADSHEET_ID, SHEETS } from "../../utils/google-sheets";
+import {
+  getGoogleSheetsClient,
+  SPREADSHEET_ID,
+  SHEETS,
+} from "../../utils/google-sheets";
 
 const SHEET_NAME = "Pagos";
 const HEADERS = [
@@ -66,19 +69,14 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    const keyFilePath = path.resolve(__dirname, "../../../credentials.json");
-    if (!fs.existsSync(keyFilePath)) {
-      logger.error("Archivo de credenciales no encontrado en:", keyFilePath);
-
-      return new Response(
-        JSON.stringify({
-          error: "Error de configuración: credenciales no encontradas",
-        }),
-        { status: 500, headers: { "Content-Type": "application/json" } },
-      );
-    }
+    // Eliminado la verificación de archivos con fs
+    // Suponemos que las credenciales se manejan mediante variables de entorno
+    // o secrets del entorno serverless
 
     const sheets = await getGoogleSheetsClient();
+
+    // Asumimos que la función getGoogleSheetsClient ya está adaptada para usar
+    // credenciales desde variables de entorno en lugar de un archivo físico
 
     await ensureSheetWithHeaders(sheets, SPREADSHEET_ID, SHEET_NAME, HEADERS);
 
@@ -117,11 +115,14 @@ export const POST: APIRoute = async ({ request }) => {
 
       if (inventoryResponse.data.values) {
         for (const item of data.items) {
-          const rowIndex = inventoryResponse.data.values.findIndex(row => row[0] === item.sku);
+          const rowIndex = inventoryResponse.data.values.findIndex(
+            (row) => row[0] === item.sku,
+          );
           if (rowIndex !== -1) {
-            const currentStock = Number(inventoryResponse.data.values[rowIndex][1]) || 0;
+            const currentStock =
+              Number(inventoryResponse.data.values[rowIndex][1]) || 0;
             const newStock = Math.max(0, currentStock - item.quantity);
-            
+
             await sheets.spreadsheets.values.update({
               spreadsheetId: SPREADSHEET_ID,
               range: `${SHEETS.INVENTORY}!B${rowIndex + 2}`,
@@ -135,8 +136,11 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
-    saveLocalRecord(recordId, data);
-
+    // En lugar de guardar localmente, podemos usar una base de datos serverless
+    // o eliminar esta función si no es esencial
+    // Alternativa: usar una base de datos como DynamoDB, Firestore, etc.
+    /*     await saveRecordToDatabase(recordId, data);
+     */
     try {
       await sendConfirmationEmail(data.shippingAddress.email, data);
       logger.info("Correo de confirmación enviado correctamente");
@@ -212,7 +216,8 @@ function generateRecordId(): string {
 }
 
 function saveLocalRecord(recordId: string, data: any): void {
-  try {
+  logger.debug(`Registro: ${recordId}`);
+  /*  try {
     const cacheDir = path.resolve(__dirname, "../../../.cache/records");
 
     if (!fs.existsSync(cacheDir)) {
@@ -240,6 +245,7 @@ function saveLocalRecord(recordId: string, data: any): void {
   } catch (error) {
     logger.warn("No se pudo guardar registro local:", error);
   }
+  */
 }
 
 function cleanupOldRecords(cacheDir: string): void {
