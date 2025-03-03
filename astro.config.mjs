@@ -1,30 +1,68 @@
 // @ts-check
 import { defineConfig } from "astro/config";
-
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 
 export default defineConfig({
-  site: "http://localhost:4321",
-  server: {
-    headers:
-      process.env.NODE_ENV === "production"
-        ? {
-            "Content-Security-Policy": `
-        default-src 'self';
-        script-src 'self' https://sdk.mercadopago.com https://http2.mlstatic.com https://www.mercadopago.com https://storage.googleapis.com;
-        style-src 'self' 'unsafe-inline';
-        img-src 'self' data: https:;
-        connect-src 'self' https://api.mercadopago.com https://api.mercadolibre.com https://events.mercadopago.com;
-        frame-src 'self' https://www.mercadopago.com https://www.mercadolibre.com;
-        font-src 'self' https://http2.mlstatic.com;
-      `
-              .replace(/\s{2,}/g, " ")
-              .trim(),
-          }
-        : {},
-  },
   output: "server",
-  adapter: cloudflare(),
-  integrations: [react()],
+  adapter: cloudflare({
+    mode: 'directory',
+    runtime: {
+      type: 'pages',
+      bindings: {
+        PAYMENTS_KV: { type: 'kv', id: '75b3196d7e6d4bef93a5354e961e890d' },
+        STOCK_KV: { type: 'kv', id: '7ce3af83eb374f109ffb1a78a9035164' }
+      }
+    }
+  }),
+  integrations: [
+    react({
+      include: ['**/react/*', '**/ReactComponents/*', '**/package-details/*', '**/payments/*', '**/pricing/*'],
+      ssr: false
+    })
+  ],
+  vite: {
+    build: {
+      rollupOptions: {
+        external: [
+          'nodemailer',
+          'googleapis',
+          'google-auth-library',
+          'stream',
+          'fs',
+          'events',
+          'child_process',
+          'os',
+          'querystring',
+          'url',
+          'http2',
+          'assert',
+          'buffer',
+          'tls',
+          'net',
+          'http',
+          'https',
+          'zlib',
+          'crypto'
+        ]
+      }
+    },
+    ssr: {
+      noExternal: ['react-responsive-carousel']
+    },
+    plugins: [
+      {
+        name: 'inject-polyfills',
+        enforce: 'pre',
+        transform(code, id) {
+          if (id.includes('_@astro-renderers')) {
+            return {
+              code: `import '/src/polyfills.js';\n${code}`,
+              map: null
+            };
+          }
+        }
+      }
+    ]
+  }
 });

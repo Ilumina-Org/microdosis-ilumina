@@ -1,0 +1,15 @@
+name = "microdosis-web"
+pages_build_output_dir = "./dist"
+
+[vars]
+SPREADSHEET_ID = "1g5rj4fIyg0DU9NQuAxN3iBedjPA5aBSgnZZCAHXJr9M"
+GOOGLE_CLIENT_EMAIL = "tu-service-account@project.iam.gserviceaccount.com"
+GOOGLE_PRIVATE_KEY = "-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----"
+
+[[kv_namespaces]]
+binding = "PAYMENTS_KV"
+id = "75b3196d7e6d4bef93a5354e961e890d"
+
+[[kv_namespaces]]
+binding = "STOCK_KV"
+id = "7ce3af83eb374f109ffb1a78a9035164"

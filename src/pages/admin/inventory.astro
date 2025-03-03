@@ -1,7 +1,8 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getStock } from "../../utils/stock";
-const stockData = await getStock();
+
+const stockData = Astro.locals.runtime ? await getStock(Astro.locals.runtime.env) : {};
 ---
 
 <Layout title="Admin - Inventario">

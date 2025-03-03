@@ -1,15 +1,10 @@
 // utils/logger.ts
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-// Niveles de log
 type LogLevel = "debug" | "info" | "warn" | "error";
 
-// Configuración del logger
-const LOG_LEVEL: LogLevel = (process.env.LOG_LEVEL as LogLevel) || "info";
-const LOG_TO_FILE = process.env.LOG_TO_FILE === "true";
-const LOG_DIR = process.env.LOG_DIR || "../logs";
+// Configuración desde variables de entorno
+const LOG_LEVEL: LogLevel = (import.meta.env.LOG_LEVEL as LogLevel) || "info";
+const LOG_TO_EXTERNAL = import.meta.env.LOG_TO_EXTERNAL === "true";
+const LOG_SERVICE_URL = import.meta.env.LOG_SERVICE_URL || "";
 
 // Mapa de prioridad de niveles de log
 const LOG_LEVEL_PRIORITY: Record<LogLevel, number> = {
@@ -19,7 +14,7 @@ const LOG_LEVEL_PRIORITY: Record<LogLevel, number> = {
   error: 3,
 };
 
-// Colores para consola
+// Colores ANSI para consola
 const COLORS = {
   reset: "\x1b[0m",
   debug: "\x1b[36m", // Cyan
@@ -28,59 +23,56 @@ const COLORS = {
   error: "\x1b[31m", // Rojo
 };
 
-// Clase Logger
+// Formateador de objetos para strings
+const formatObject = (obj: unknown): string => {
+  return typeof obj === "object" ? JSON.stringify(obj, null, 2) : String(obj);
+};
+
 class Logger {
-  private logDirectory: string;
-
-  constructor() {
-    // Configurar directorio de logs
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    this.logDirectory = path.resolve(__dirname, LOG_DIR);
-
-    // Crear directorio de logs si no existe y LOG_TO_FILE está activado
-    if (LOG_TO_FILE && !fs.existsSync(this.logDirectory)) {
-      fs.mkdirSync(this.logDirectory, { recursive: true });
-    }
-  }
-
   // Método principal de log
   private log(level: LogLevel, message: string, ...args: any[]): void {
-    // Solo registrar si el nivel es igual o mayor al configurado
     if (LOG_LEVEL_PRIORITY[level] >= LOG_LEVEL_PRIORITY[LOG_LEVEL]) {
       const timestamp = new Date().toISOString();
-      const logMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+      const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+      const formattedArgs = args.map(formatObject).join(" ");
 
-      // Formatear objetos para log
-      const formattedArgs = args.map((arg) =>
-        typeof arg === "object" ? JSON.stringify(arg, null, 2) : arg,
-      );
-
-      // Log a consola con colores
+      // Log a consola
       console.log(
-        `${COLORS[level]}${logMessage}${COLORS.reset}`,
-        ...formattedArgs,
+        `${COLORS[level]}${formattedMessage}${COLORS.reset}`,
+        formattedArgs,
       );
 
-      // Log a archivo si está activado
-      if (LOG_TO_FILE) {
-        const logFile = path.join(this.logDirectory, `${level}.log`);
-        const logEntry = `${logMessage} ${formattedArgs.join(" ")}\n`;
-
-        fs.appendFile(logFile, logEntry, (err) => {
-          if (err) console.error("Error escribiendo al archivo de log:", err);
-        });
-
-        // Para errores, guardar también en un log general
-        if (level === "error") {
-          const allLogsFile = path.join(this.logDirectory, "all.log");
-          fs.appendFile(allLogsFile, logEntry, () => {});
-        }
+      // Envío a servicio externo (opcional)
+      if (LOG_TO_EXTERNAL && LOG_SERVICE_URL) {
+        this.sendToLogService(level, formattedMessage, formattedArgs);
       }
     }
   }
 
-  // Métodos públicos para cada nivel de log
+  // Método para enviar logs a servicio externo
+  private async sendToLogService(
+    level: LogLevel,
+    message: string,
+    args: string,
+  ): Promise<void> {
+    try {
+      await fetch(LOG_SERVICE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          level,
+          message,
+          args,
+          timestamp: new Date().toISOString(),
+          environment: import.meta.env.ENVIRONMENT || "development",
+        }),
+      });
+    } catch (error) {
+      console.error("Error enviando log a servicio externo:", error);
+    }
+  }
+
+  // Métodos públicos
   debug(message: string, ...args: any[]): void {
     this.log("debug", message, ...args);
   }
@@ -98,5 +90,5 @@ class Logger {
   }
 }
 
-// Exportar una única instancia
+// Exportar instancia única
 export const logger = new Logger();
