@@ -6,6 +6,7 @@ import NavigationButtons from './ReactComponents/NavigationButtons';
 import Landing from './ReactPages/Landing';
 import About from './ReactPages/About';
 import Testimonials from './ReactPages/Testimonials';
+import Products from './ReactPages/Products';
 
 
 const ObserverLayout = () => {
@@ -21,7 +22,7 @@ const ObserverLayout = () => {
       <Landing horizontalPadding={horizontalPadding} id="inicio" />
       <About horizontalPadding={horizontalPadding} id="about" />
       <Testimonials horizontalPadding={horizontalPadding} id="testimonios"  />
-      {/* <Products id="products" ref={(el:never) => (sectionRefs.current[3] = el)} /> */} 
+      <Products horizontalPadding={horizontalPadding} id="products"  />
       {/* <Chatbot /> */}
     </>
   );

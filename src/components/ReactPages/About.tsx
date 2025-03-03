@@ -27,7 +27,11 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           <div style={{
             width: '60%'
           }}>
-            <h2 style={{ fontSize: '2.5rem', marginTop: 0, color: '#013022' }}>Che cos'è la Microdose di Ayahuasca?</h2>
+            <h2 style={{ 
+              fontSize: '2.5rem',
+               marginTop: 0, 
+              color: '#013022' }}>
+              Che cos'è la Microdose di Ayahuasca?</h2>
             <p style={{ fontSize: '1.25rem', color: "#000" }}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non odio
               quis elit sagittis luctus eget ac metus. Fusce finibus nec risus vitae
@@ -52,20 +56,28 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           <img src={image2} alt='' width={'35%'} height={'auto'} />
           <div style={{ width: '60%' }}>
             <h2 style={{ fontSize: '2.5rem', marginTop: 0, color: '#013022' }}>Che cos'è la Microdose di Ayahuasca?</h2>
-            <ul style={{ listStyleType: 'none', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <li style={{ fontSize: '1.25rem', color: "#000" }}>
+            <ul style={{ 
+              listStyleType: 'none', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: '20px', 
+              lineHeight: '1.4rem',
+              color:'#4C4E4E',
+              //#013424
+            }}>
+              <li style={{ fontSize: '1.25rem' }}>
                 <span style={{ color: 'yellow', fontSize: '1.5rem', marginRight: '1rem' }}>✓</span>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non odio.
               </li>
-              <li style={{ fontSize: '1.25rem', color: "#000" }}>
+              <li style={{ fontSize: '1.25rem' }}>
                 <span style={{ color: 'yellow', fontSize: '1.5rem', marginRight: '1rem' }}>✓</span>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non odio.
               </li>
-              <li style={{ fontSize: '1.25rem', color: "#000" }}>
+              <li style={{ fontSize: '1.25rem' }}>
                 <span style={{ color: 'yellow', fontSize: '1.5rem', marginRight: '1rem' }}>✓</span>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non odio.
               </li>
-              <li style={{ fontSize: '1.25rem', color: "#000" }}>
+              <li style={{ fontSize: '1.25rem' }}>
                 <span style={{ color: 'yellow', fontSize: '1.5rem', marginRight: '1rem' }}>✓</span>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non odio.
               </li>

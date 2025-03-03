@@ -5,7 +5,7 @@ interface propTypes{
 }
 
 const NavigationButtons = ({color = 'white'}:propTypes) => {
-  const [active, setActive] = useState<string | null>();
+  const [active, setActive] = useState<string | null>('inicio');
 
   const handleClick = (e: any, target: string) => {
     let value = e.target.getAttribute("href");
@@ -38,7 +38,7 @@ const NavigationButtons = ({color = 'white'}:propTypes) => {
         flexDirection: "column",
         backgroundColor: "transparent",
         color: "white",
-        gap: "20px",
+        gap: "10px",
         zIndex: 100,
 
         right: "4rem",
@@ -50,16 +50,6 @@ const NavigationButtons = ({color = 'white'}:propTypes) => {
         textAlign: "right",
       }}
     >
-      <a
-        href="#no"
-        onClick={(e) => handleClick(e, "inicio")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("inicio"),
-          opacity: active == "inicio" ? 1 : 0.5,
-        }}
-      >
-      </a>
       <a
         href="#inicio"
         onClick={(e) => handleClick(e, "inicio")}

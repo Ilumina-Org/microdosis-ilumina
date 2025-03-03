@@ -23,7 +23,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   }, []);
 
   return (
-    <SectionLayout id={props.id} ref={ref} horizontalPadding={props.horizontalPadding - 7}>
+    <SectionLayout id={props.id} ref={ref} horizontalPadding={props.horizontalPadding}>
       <div style={{ height: 'auto', position: 'absolute', left: '4rem', top: '2rem' }}>
         <p style={{ color: 'white', fontSize: '50px' }}>ILUMINA</p>
       </div>
@@ -44,7 +44,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         <canvas id="model-image" ref={canvasRef}></canvas>
       </div>
       <div className='bottom-action'>
-        <p>¿Cuál es mi dosis correcta de ayahuasca para sanar?</p>
+        <p>Conoce mas sobre la Ayahuasca</p>
         <ArrowDown2 size={30} color='white' style={{ opacity: '50%' }} />
       </div>
 
@@ -88,7 +88,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             display: flex;
             position: relative;
             flex-direction: column;
-            flex: 1;
+            flex:2/3;
             flexGrow: 1;
             gap: 20px;
             justify-content: center;

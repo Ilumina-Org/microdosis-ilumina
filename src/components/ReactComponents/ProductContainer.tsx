@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
+import Button from "./Button";
+import { ArrowRight } from "iconsax-react";
 
 interface ProductContainerProps {
-  sku: string;
+  sku: string | undefined;
   link: string;
-  imageUrl: string;
-  productTitle: string;
-  productDetail: string;
-  productPrice: string;
-  productDeal: string;
+  imageUrl: string | undefined;
+  productTitle: string | undefined;
+  productDetail: string | undefined;
+  productPrice: string | undefined;
+  productDeal: string | undefined;
   tier: number;
-  purchaseType?: string;
-  initialStock?: boolean;
+  purchaseType?: string | undefined;
+  initialStock?: boolean | undefined;
 }
 
 export default function ProductContainer({
@@ -43,17 +45,6 @@ export default function ProductContainer({
     }
   };
 
-  const buttonStyle = {
-    width: "fit-content",
-    padding: "1rem",
-    paddingTop: ".75rem",
-    paddingBottom: ".75rem",
-    background: "#C1DC3A",
-    borderRadius: "10px",
-    border: "none",
-    cursor: "pointer",
-  };
-
   useEffect(() => {
     const checkRealTimeStock = async () => {
       try {
@@ -83,21 +74,21 @@ export default function ProductContainer({
       style={{
         background: tierHandler(tier),
         padding: ".5rem",
-        borderRadius: "30px",
+        borderRadius: "40px",
         boxShadow: "0px 15px 40px rgb(0, 0, 0, 0.2)",
       }}
     >
       <div
         style={{
           backgroundColor: "white",
-          width: "16rem",
-          height: "27rem",
-          maxHeight: "27rem",
+          width: "22rem",
+          height: "40rem",
+          maxHeight: "35rem",
           display: "flex",
-          padding: ".75rem",
+          padding: "1rem",
           flexDirection: "column",
           justifyContent: "space-between",
-          borderRadius: "20px",
+          borderRadius: "35px",
         }}
       >
         <img
@@ -110,31 +101,21 @@ export default function ProductContainer({
         />
         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
-            <h3 style={{ fontSize: "23px", margin: 0 }}>{productTitle}</h3>
-            <p style={{ fontSize: "15px", margin: 0 }}>{productDetail}</p>
-            <p style={{ fontSize: "30px", margin: 0 }}>{productPrice}</p>
-            <p style={{ fontSize: "15px", margin: 0 }}>{productDeal}</p>
+            <h3 style={{ fontSize: "30px", margin: 0, color:'black', fontWeight: '600' }}>{productTitle}</h3>
+            <p style={{ fontSize: "20px",  margin: 0, color:'black', fontWeight: '300' }}>{productDetail}</p>
+            <p style={{ fontSize: "30px",  margin: 0, color:'black', fontWeight: '600' }}>{productPrice}</p>
+            <p style={{ fontSize: "15px",  margin: 0, color:'black', fontWeight: '300' }}>{productDeal}</p>
           </div>
-          <button
-            style={{
-              ...buttonStyle,
-              opacity: stockInfo.loading ? 0.7 : 1,
-              cursor: !stockInfo.canPurchase ? "not-allowed" : "pointer",
-              backgroundColor: !stockInfo.canPurchase
-                ? "#ccc"
-                : buttonStyle.background,
-            }}
-            onClick={handleClick}
-            disabled={stockInfo.loading || !stockInfo.canPurchase}
-          >
-            {stockInfo.loading
-              ? "Verificando..."
-              : purchaseType === "subscription"
-                ? "Suscripción mensual"
-                : stockInfo.canPurchase
-                  ? "Comprar ahora"
-                  : "AGOTADO"}
-          </button>
+
+          <Button 
+          disabled={stockInfo.loading || !stockInfo.canPurchase}
+          onClick={handleClick}
+          radius={'20px'}
+          size={'.5rem'}
+          gap={".5rem"}
+          label={stockInfo.loading? "Cargando...": purchaseType === "subscription"? "Suscripción mensual": stockInfo.canPurchase? "Comprar ahora": "AGOTADO"}
+          icon={<ArrowRight size={30} color='black' />}
+          />
         </div>
       </div>
     </div>

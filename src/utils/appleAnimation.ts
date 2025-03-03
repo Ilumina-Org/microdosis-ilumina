@@ -12,11 +12,11 @@ export function initializeAnimation(canvas: HTMLCanvasElement) {
   
     const frameCount = 71;
     const frames: HTMLImageElement[] = [];
-    let currentFrame = 0;
+    let currentFrame =1;
   
     function resizeCanvas() {
       const img = new Image();
-      img.src = '/frames/0001.png';
+      img.src = '/frames/0010.png';
       img.onload = () => {
         canvas.width = img.naturalWidth;
         canvas.height = img.naturalHeight;
@@ -24,7 +24,7 @@ export function initializeAnimation(canvas: HTMLCanvasElement) {
     }
   
     function preloadFrames() {
-      for (let i = 10; i < frameCount; i++) {
+      for (let i = 1; i < frameCount; i++) {
         const img = new Image();
         const frameNumber = String(i).padStart(4, '0');
         img.src = `/frames/${frameNumber}.png`;
