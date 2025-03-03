@@ -1,8 +1,8 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 
-import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
+import vercel from "@astrojs/vercel";
 
 export default defineConfig({
   site: "http://localhost:4321",
@@ -25,7 +25,7 @@ export default defineConfig({
         : {},
   },
   output: "server",
-  adapter: cloudflare(),
+  adapter: vercel(),
   integrations: [react()],
   devToolbar: { enabled: false },
 });
