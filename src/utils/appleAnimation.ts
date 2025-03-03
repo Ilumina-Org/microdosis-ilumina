@@ -24,7 +24,7 @@ export function initializeAnimation(canvas: HTMLCanvasElement) {
     }
   
     function preloadFrames() {
-      for (let i = 1; i < frameCount; i++) {
+      for (let i = 10; i < frameCount; i++) {
         const img = new Image();
         const frameNumber = String(i).padStart(4, '0');
         img.src = `/frames/${frameNumber}.png`;
@@ -51,7 +51,7 @@ export function initializeAnimation(canvas: HTMLCanvasElement) {
         return;
       }
   
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx?.clearRect(0, 0, canvas.width, canvas.height);
   
       const aspectRatio = img.width / img.height;
       let drawWidth = canvas.width;
@@ -65,7 +65,7 @@ export function initializeAnimation(canvas: HTMLCanvasElement) {
       const xOffset = (canvas.width - drawWidth) / 2;
       const yOffset = (canvas.height - drawHeight) / 2;
   
-      ctx.drawImage(img, xOffset, yOffset, drawWidth, drawHeight);
+      ctx?.drawImage(img, xOffset, yOffset, drawWidth, drawHeight);
   
       // Slow down animation
       frameDelayCounter++;

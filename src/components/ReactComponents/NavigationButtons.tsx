@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
-// section={visibleSection} sectionRefs={sectionRefs}
+interface propTypes{
+  color?: string;
+}
 
-const NavigationButtons = ({section = 'yea', sectionRefs, color = 'white'}) => {
+const NavigationButtons = ({color = 'white'}:propTypes) => {
   const [active, setActive] = useState<string | null>();
 
   const handleClick = (e: any, target: string) => {
@@ -29,6 +31,7 @@ const NavigationButtons = ({section = 'yea', sectionRefs, color = 'white'}) => {
 
   return (
     <div
+    className="nv"
       style={{
         position: "fixed",
         display: "flex",
@@ -36,6 +39,7 @@ const NavigationButtons = ({section = 'yea', sectionRefs, color = 'white'}) => {
         backgroundColor: "transparent",
         color: "white",
         gap: "20px",
+        zIndex: 100,
 
         right: "4rem",
         top: "5rem",
@@ -55,7 +59,6 @@ const NavigationButtons = ({section = 'yea', sectionRefs, color = 'white'}) => {
           opacity: active == "inicio" ? 1 : 0.5,
         }}
       >
-        {section}
       </a>
       <a
         href="#inicio"
@@ -112,6 +115,14 @@ const NavigationButtons = ({section = 'yea', sectionRefs, color = 'white'}) => {
       >
         Preguntas <br /> frecuentes
       </a>
+      <style>
+      {`
+      .nv > a:hover{
+        opacity: 1 !important;
+        transition: .25s ease-in-out;
+      }
+      `}
+      </style>
     </div>
   );
 };
