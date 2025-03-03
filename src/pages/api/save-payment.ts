@@ -1,6 +1,5 @@
 import type { APIRoute } from "astro";
 import path from "path";
-import { fileURLToPath } from "url";
 import { paymentDataSchema } from "../../utils/validation-schema";
 import { logger } from "../../utils/logger";
 import type { z } from "astro/zod";
@@ -29,9 +28,6 @@ const HEADERS = [
   "Código Postal",
   "País",
 ];
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -69,16 +65,11 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Eliminado la verificación de archivos con fs
-    // Suponemos que las credenciales se manejan mediante variables de entorno
-    // o secrets del entorno serverless
-
+    // Obtener el cliente de Google Sheets usando la función proporcionada
     const sheets = await getGoogleSheetsClient();
 
-    // Asumimos que la función getGoogleSheetsClient ya está adaptada para usar
-    // credenciales desde variables de entorno en lugar de un archivo físico
-
-    await ensureSheetWithHeaders(sheets, SPREADSHEET_ID, SHEET_NAME, HEADERS);
+    // Asegurar que la hoja existe con los encabezados correctos
+    await ensureSheetExists(sheets, SHEET_NAME, HEADERS);
 
     const values = [
       [
@@ -136,11 +127,7 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
-    // En lugar de guardar localmente, podemos usar una base de datos serverless
-    // o eliminar esta función si no es esencial
-    // Alternativa: usar una base de datos como DynamoDB, Firestore, etc.
-    /*     await saveRecordToDatabase(recordId, data);
-     */
+    // Enviar correos de confirmación
     try {
       await sendConfirmationEmail(data.shippingAddress.email, data);
       logger.info("Correo de confirmación enviado correctamente");
