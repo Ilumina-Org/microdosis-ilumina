@@ -1,12 +1,22 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import AdminLayout from "../../layouts/AdminLayout.astro";
 import { getStock } from "../../utils/stock";
 const stockData = await getStock();
 ---
 
-<Layout title="Admin - Inventario">
-    <section class="admin-section">
-        <div class="container">
+<AdminLayout title="Inventario">
+    <div class="inventory-header">
+        <h1>Gestión de Inventario</h1>
+        <button id="addProductBtn" class="btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Añadir Producto
+        </button>
+    </div>
+
+    <div class="inventory-container">
             <h1>Gestión de Inventario</h1>
 
             {
