@@ -16,10 +16,11 @@ const { title = "Ilumina - Microdosis" } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
-    <title>Astro Basics</title>
+    <title>{title}</title>
   </head>
   <body>
     <input
+      id="toggle-chat"
       type="button"
       value={""}
       style={{
@@ -37,6 +38,7 @@ const { title = "Ilumina - Microdosis" } = Astro.props;
         fontSize: "30px",
         fontFamily: "Inter",
         fontWeight: "200",
+        cursor: "pointer",
       }}
     />
     <slot />
