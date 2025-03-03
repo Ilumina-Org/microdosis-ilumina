@@ -1,0 +1,78 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getProducts } from "../utils/stock";
+import ProductContainer from "./ReactComponents/ProductContainer";
+
+const products = await getProducts();
+console.log("products", products);
+---
+
+<Layout>
+  <section
+    id="products"
+    class="container"
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      height: "70%",
+      justifyContent: "center",
+    }}
+  >
+    <!-- Sección de Título -->
+    <div style={{ width: "100%", textAlign: "left" }}>
+      <h2 style={{ fontWeight: 300, fontSize: "35px", color: "black" }}>
+        Paquetes Disponibles
+      </h2>
+    </div>
+
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignContent: "center",
+        gap: "30px",
+        flexWrap: "wrap",
+      }}
+    >
+      {
+        products.map((product) => (
+          <ProductContainer
+            client:load
+            key={product.sku}
+            sku={product.sku}
+            link={product.link}
+            imageUrl={product.imageUrl}
+            productTitle={product.title}
+            productDetail={product.productDetail}
+            productPrice={product.productPrice}
+            productDeal={product.productDeal}
+            tier={product.tier}
+            purchaseType={
+              product.sku.includes("subscription") ? "subscription" : undefined
+            }
+          />
+        ))
+      }
+    </div>
+
+    <!-- <ReviewComponent /> -->
+  </section>
+</Layout>
+
+<style>
+  .container {
+    --horizontalPadding: 10rem;
+    background: white;
+    padding: 2rem;
+    padding-right: var(--horizontalPadding);
+    padding-left: var(--horizontalPadding);
+    scroll-snap-align: start;
+  }
+
+  @media (max-width: 768px) {
+    #container {
+      --horizontalPadding: 2rem;
+      padding: 1rem;
+    }
+  }
+</style>
