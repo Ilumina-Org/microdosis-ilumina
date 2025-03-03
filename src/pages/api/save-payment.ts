@@ -1,5 +1,4 @@
 import type { APIRoute } from "astro";
-import { google } from "googleapis";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
@@ -10,8 +9,8 @@ import {
   sendAdminNotification,
   sendConfirmationEmail,
 } from "../../utils/mailer";
+import { getGoogleSheetsClient, SPREADSHEET_ID, SHEETS } from "../../utils/google-sheets";
 
-const SPREADSHEET_ID = "1g5rj4fIyg0DU9NQuAxN3iBedjPA5aBSgnZZCAHXJr9M";
 const SHEET_NAME = "Pagos";
 const HEADERS = [
   "Fecha",
@@ -79,12 +78,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    const auth = new google.auth.GoogleAuth({
-      keyFile: keyFilePath,
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-    });
-
-    const sheets = google.sheets({ version: "v4", auth });
+    const sheets = await getGoogleSheetsClient();
 
     await ensureSheetWithHeaders(sheets, SPREADSHEET_ID, SHEET_NAME, HEADERS);
 
@@ -113,6 +107,33 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
     const recordId = generateRecordId();
+
+    // Actualizar inventario
+    if (data.items && Array.isArray(data.items)) {
+      const inventoryResponse = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${SHEETS.INVENTORY}!A2:E`,
+      });
+
+      if (inventoryResponse.data.values) {
+        for (const item of data.items) {
+          const rowIndex = inventoryResponse.data.values.findIndex(row => row[0] === item.sku);
+          if (rowIndex !== -1) {
+            const currentStock = Number(inventoryResponse.data.values[rowIndex][1]) || 0;
+            const newStock = Math.max(0, currentStock - item.quantity);
+            
+            await sheets.spreadsheets.values.update({
+              spreadsheetId: SPREADSHEET_ID,
+              range: `${SHEETS.INVENTORY}!B${rowIndex + 2}`,
+              valueInputOption: "USER_ENTERED",
+              requestBody: {
+                values: [[newStock]],
+              },
+            });
+          }
+        }
+      }
+    }
 
     saveLocalRecord(recordId, data);
 

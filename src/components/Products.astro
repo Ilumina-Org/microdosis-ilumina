@@ -3,7 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import { getProducts } from "../utils/stock";
 import ProductContainer from "./ReactComponents/ProductContainer";
 
-const products = (await getProducts()).slice(0, 3);
+const products = await getProducts();
+console.log("products", products);
 ---
 
 <Layout>
