@@ -1,4 +1,4 @@
-import { g as getGoogleSheetsClient, S as SHEETS, a as SPREADSHEET_ID } from './google-sheets_DG2NWZlR.mjs';
+import { g as getGoogleSheetsClient, S as SHEETS, a as SPREADSHEET_ID } from './google-sheets_TmfKgee1.mjs';
 
 let cache = null;
 const CACHE_TTL = 6e4;
@@ -83,10 +83,6 @@ const getStock = async () => {
     return {};
   }
 };
-const invalidateCache = () => {
-  cache = null;
-  console.log("Caché invalidado.");
-};
 const getProducts = async () => {
   try {
     const stockData = await getStock();
@@ -108,4 +104,4 @@ const getProducts = async () => {
   }
 };
 
-export { getProducts as a, getStock as g, invalidateCache as i };
+export { getProducts as a, getStock as g };

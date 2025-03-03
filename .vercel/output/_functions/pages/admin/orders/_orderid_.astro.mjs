@@ -1,7 +1,7 @@
 import { c as createAstro, a as createComponent, r as renderComponent, e as renderScript, b as renderTemplate, m as maybeRenderHead, f as addAttribute } from '../../../chunks/astro/server_CQ3Hs6UC.mjs';
 import 'kleur/colors';
 import { $ as $$AdminLayout } from '../../../chunks/AdminLayout_CmNwAmQL.mjs';
-import { g as getGoogleSheetsClient, S as SHEETS, a as SPREADSHEET_ID } from '../../../chunks/google-sheets_DG2NWZlR.mjs';
+import { g as getGoogleSheetsClient, S as SHEETS, a as SPREADSHEET_ID } from '../../../chunks/google-sheets_TmfKgee1.mjs';
 /* empty css                                           */
 export { renderers } from '../../../renderers.mjs';
 

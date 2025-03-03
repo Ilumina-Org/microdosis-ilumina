@@ -64,14 +64,6 @@
 			"dest": "_render"
 		},
 		{
-			"src": "^/api/inventory/([^/]+?)/?$",
-			"dest": "_render"
-		},
-		{
-			"src": "^/api/inventory/?$",
-			"dest": "_render"
-		},
-		{
 			"src": "^/api/orders/([^/]+?)/?$",
 			"dest": "_render"
 		},

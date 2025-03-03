@@ -5,7 +5,7 @@ import 'clsx';
 /* empty css                                 */
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 import { useState, useEffect } from 'react';
-import { a as getProducts } from '../chunks/stock_CyV-sWuA.mjs';
+import { a as getProducts } from '../chunks/stock_Dxk2z7az.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Chatbot = createComponent(($$result, $$props, $$slots) => {

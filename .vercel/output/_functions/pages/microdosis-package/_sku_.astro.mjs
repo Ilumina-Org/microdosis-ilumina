@@ -1,7 +1,7 @@
 import { c as createAstro, a as createComponent, m as maybeRenderHead, b as renderTemplate, r as renderComponent } from '../../chunks/astro/server_CQ3Hs6UC.mjs';
 import 'kleur/colors';
 import { $ as $$Layout } from '../../chunks/Layout_D3zStpAR.mjs';
-import { a as getProducts } from '../../chunks/stock_CyV-sWuA.mjs';
+import { a as getProducts } from '../../chunks/stock_Dxk2z7az.mjs';
 import 'clsx';
 /* empty css                                    */
 import { jsx, jsxs } from 'react/jsx-runtime';

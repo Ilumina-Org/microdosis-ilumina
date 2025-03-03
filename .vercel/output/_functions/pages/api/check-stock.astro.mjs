@@ -1,4 +1,4 @@
-import { g as getStock } from '../../chunks/stock_CyV-sWuA.mjs';
+import { g as getStock } from '../../chunks/stock_Dxk2z7az.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const GET = async ({ request }) => {
