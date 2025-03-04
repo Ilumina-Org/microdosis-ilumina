@@ -89,27 +89,27 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
               }}
             >
               <FAQ
-                title={"¿Hay efectos secundarios?"}
+                title={"¿Qué es una microdosis de ayahuasca?"}
                 answer={
-                  "Lorem ipsum dolor sit amet consectetur. Mi viverra tristique tristique massa mauris. Iaculis ut mauris posuere netus eu turpis dolor aliquet. Pharetra odio etiam congue pellentesque porta augue in mi."
+                  "Es una pequeña cantidad de ayahuasca administrada en forma de gotas sublinguales, diseñada para ofrecer los beneficios terapéuticos de la planta sin los efectos psicoactivos intensos de una dosis completa."
                 }
               />
               <FAQ
                 title={"¿Hay efectos secundarios?"}
                 answer={
-                  "Lorem ipsum dolor sit amet consectetur. Mi viverra tristique tristique massa mauris. Iaculis ut mauris posuere netus eu turpis dolor aliquet. Pharetra odio etiam congue pellentesque porta augue in mi."
+                  "Las microdosis están diseñadas para minimizar los efectos secundarios, pero como con cualquier suplemento, algunas personas pueden experimentar sensibilidad o reacciones alérgicas. Es importante comenzar con una dosis baja y ajustar según la respuesta del cuerpo."
                 }
               />
               <FAQ
-                title={"¿Hay efectos secundarios?"}
+                title={"¿Cuánto tiempo tarda en notarse los efectos?"}
                 answer={
-                  "Lorem ipsum dolor sit amet consectetur. Mi viverra tristique tristique massa mauris. Iaculis ut mauris posuere netus eu turpis dolor aliquet. Pharetra odio etiam congue pellentesque porta augue in mi."
+                  "Los efectos pueden variar según el individuo, pero generalmente se comienzan a notar mejoras en el estado de ánimo y la claridad mental después de algunas semanas de uso regular."
                 }
               />
               <FAQ
-                title={"¿Hay efectos secundarios?"}
+                title={"¿Necesito una receta médica para adquirirlas?"}
                 answer={
-                  "Lorem ipsum dolor sit amet consectetur. Mi viverra tristique tristique massa mauris. Iaculis ut mauris posuere netus eu turpis dolor aliquet. Pharetra odio etiam congue pellentesque porta augue in mi."
+                  "No se requiere receta médica para adquirir microdosis de ayahuasca en muchas regiones, pero siempre es recomendable consultar la legislación local y buscar productos de proveedores confiables y regulados."
                 }
               />
             </div>
