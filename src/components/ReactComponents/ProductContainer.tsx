@@ -40,9 +40,7 @@ export default function ProductContainer({
   };
 
   const handleClick = () => {
-    if (stock) {
-      window.location.href = link;
-    }
+    window.location.href = link;
   };
 
   const getButtonText = () => {
