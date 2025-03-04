@@ -30,19 +30,8 @@ export default function ProductContainer({
     loading: true,
   });
 
-  // Estilo para el botón
-  const buttonStyle = {
-    width: "fit-content",
-    padding: "1rem",
-    paddingTop: ".75rem",
-    paddingBottom: ".75rem",
-    background: "#C1DC3A",
-    borderRadius: "10px",
-    border: "none",
-    cursor: "pointer",
-  };
-
   const tierHandler = (tier: number) => {
+    console.log(`Applying tier style for tier: ${tier}`);
     switch (tier) {
       case 0:
         return "radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%), radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%)";
@@ -55,15 +44,41 @@ export default function ProductContainer({
     }
   };
 
+  const buttonStyle = {
+    width: "fit-content",
+    padding: "1rem",
+    paddingTop: ".75rem",
+    paddingBottom: ".75rem",
+    background: "#C1DC3A",
+    borderRadius: "10px",
+    border: "none",
+    cursor: "pointer",
+  };
+
   useEffect(() => {
+    console.log(`Fetching stock info for product SKU: ${sku}`);
+
     const checkRealTimeStock = async () => {
       try {
+        console.log(`Checking stock for product SKU: ${sku}`);
         const response = await fetch(`/api/check-stock?productId=${sku}`);
         const data = await response.json();
-        setStockInfo({
-          canPurchase: data.canPurchase,
-          loading: false,
-        });
+        console.log(`Stock response for SKU ${sku}:`, data);
+
+        if (data && data.canPurchase !== undefined) {
+          // Verificar si el setStockInfo está siendo ejecutado
+          console.log("Updating stock info...");
+          setStockInfo({
+            canPurchase: data.canPurchase,
+            loading: false,
+          });
+          console.log("Stock updated:", {
+            canPurchase: data.canPurchase,
+            loading: false,
+          });
+        } else {
+          console.error("Error: Invalid stock data:", data);
+        }
       } catch (error) {
         console.error("Error checking stock:", error);
         setStockInfo((prev) => ({ ...prev, loading: false }));
@@ -74,10 +89,13 @@ export default function ProductContainer({
   }, [sku]);
 
   const handleClick = () => {
+    console.log(`Button clicked for product SKU: ${sku}`);
     if (!stockInfo.loading && stockInfo.canPurchase) {
       window.location.href = link;
     }
   };
+
+  console.log("Render ProductContainer:", { stockInfo });
 
   return (
     <div
