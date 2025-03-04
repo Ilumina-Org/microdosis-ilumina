@@ -8,6 +8,7 @@ export interface StockItem {
   notas: string;
   featured: boolean;
   tipo: "package" | "subscription";
+  tier: number;
 }
 
 export interface Order {

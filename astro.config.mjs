@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 
 export default defineConfig({
   site: "http://localhost:4321",
@@ -29,12 +29,4 @@ export default defineConfig({
     includeFiles: ["./credentials.json"],
   }),
   integrations: [react()],
-  devToolbar: { enabled: false },
-  vite: {
-    build: {
-      rollupOptions: {
-        external: ["react", "react-dom", "react/jsx-runtime"],
-      },
-    },
-  },
 });
