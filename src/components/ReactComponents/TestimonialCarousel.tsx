@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import imageUrl from "../../assets/user1.png?url";
-
+import PlaceHolder from "./PlaceHolder";
 const TestimonialCarousel = () => {
   const [opacityIndex, setOpacityIndex] = useState(0);
   const handleChange = (index: number) => {
@@ -50,6 +50,7 @@ const TestimonialCarousel = () => {
           transform: `scale(${opacityIndex === index ? 1 : 0.9})`,
         }}
       >
+        {/*
         <img
           src={imageUrl}
           alt=""
@@ -61,6 +62,8 @@ const TestimonialCarousel = () => {
             maxWidth: "150px",
           }}
         />
+        */}
+        <PlaceHolder />
         <div
           style={{
             flexDirection: "column",
@@ -79,7 +82,7 @@ const TestimonialCarousel = () => {
           >
             {formatText(
               review,
-              500
+              200
             )}
           </p>
           <p
@@ -118,7 +121,7 @@ const TestimonialCarousel = () => {
       <Carousel
         autoPlay={true}
         infiniteLoop={true}
-        interval={2500}
+        interval={2000}
         centerSlidePercentage={50}
         showThumbs={false}
         showArrows={false}
