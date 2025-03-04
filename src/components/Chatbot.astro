@@ -25,8 +25,12 @@
 <style>
   /* Estilos base del chatbot */
   .chat-wrapper {
-    position: relative; /* Contenedor base */
-    min-height: 100vh;
+    position: absolute; /* Contenedor base */
+    min-height: '10rem',
+    min-width: '10rem',
+    border:'1px solid white',
+    right: '2rem',
+    bottom: '2rem',
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
@@ -241,21 +245,21 @@
       width: auto;
       max-width: none;
     }
-    
+
     .chat-box {
       border-radius: 12px;
       padding: 16px;
     }
-    
+
     .chat-message p {
       font-size: 15px;
     }
-    
+
     .button {
       font-size: 14px;
       padding: 10px 14px;
     }
-    
+
     .result {
       font-size: 15px;
       padding: 16px;
@@ -267,18 +271,18 @@
       width: 50px;
       height: 50px;
     }
-    
+
     .robot-icon {
       width: 25px;
       height: 25px;
     }
-    
+
     .close-button {
       font-size: 14px;
       width: 26px;
       height: 26px;
     }
-    
+
     .options {
       max-height: 250px;
     }
@@ -326,13 +330,13 @@
             user-select: none;
             transition: background-color 0.3s;
         }
-        
+
         .option.selected {
             background-color: #4CAF50;
             color: white;
             border-color: #4CAF50;
         }
-        
+
 
   .checkbox-option:hover {
     background: #e5e7eb;
@@ -421,10 +425,10 @@ const questions = [
     id: 5,
     text: "¿Qué diagnóstico tienes?",
     options: [
-      "Ansiedad", "Depresión", "Diabetes", "Migraña", "Presión Alta", 
-      "Presión Baja", "Insomnio", "Gastritis", "Hipertiroidismo", 
-      "Hipotiroidismo", "Cáncer", "Artritis", "Artrosis", "Parkinson", 
-      "Alzheimer", "Asma", "Próstata", "Dermatitis", "Hepatitis", 
+      "Ansiedad", "Depresión", "Diabetes", "Migraña", "Presión Alta",
+      "Presión Baja", "Insomnio", "Gastritis", "Hipertiroidismo",
+      "Hipotiroidismo", "Cáncer", "Artritis", "Artrosis", "Parkinson",
+      "Alzheimer", "Asma", "Próstata", "Dermatitis", "Hepatitis",
       "Colon Irritable", "ETS", "Esquizofrenia", "Paranoia", "Demencia"
     ]
   },
@@ -443,19 +447,19 @@ const questions = [
     id: 8,
     text: "¿Qué estás buscando con la microdosis?",
     options: [
-      "Despertar espiritual y meditación", 
-      "Mejorar la concentración y creatividad", 
-      "Mejorar calidad de sueño", 
+      "Despertar espiritual y meditación",
+      "Mejorar la concentración y creatividad",
+      "Mejorar calidad de sueño",
       "Más energía y productividad"
     ]
   }
 ];
 
 const resultInfo = {
-  "Más información": 
+  "Más información":
     "Este cuestionario evalúa la aptitud para el uso de la microdosis de ayahuasca. Es importante responder con honestidad para recibir recomendaciones apropiadas. Los resultados son orientativos y no reemplazan la consulta profesional.",
-  
-  "No, gracias": 
+
+  "No, gracias":
     "Entendemos. Si en otro momento deseas realizar la evaluación, estaremos aquí para ayudarte."
 };
 
@@ -557,9 +561,9 @@ function handleMultiSelect() {
     console.log("Processing option:", option, "with value:", option.dataset.value);
     momentoMedicacion.push(option.dataset.value);
   });
-  
+
   console.log("Selected medication times:", momentoMedicacion);
-  
+
   // Advance to the next step
   step++;
   if (step < questions.length) {
@@ -571,12 +575,12 @@ function handleMultiSelect() {
 
 function nextQuestion(answer) {
   respuestas.push(answer);
-  
+
   if (step === 0 && (answer === "Más información" || answer === "No, gracias")) {
     showSpecialResult(answer);
     return;
   }
-  
+
   // Lógica para calcular gotas
   if (step === 1) { // Respuesta de edad
     gotasCalculadas += edadGotas[answer] || 0;
@@ -598,7 +602,7 @@ function nextQuestion(answer) {
   else if (step === 5 && tieneEnfermedad) { // ¿Toma medicamentos?
     tomaMedicamentos = (answer === "Sí");
   }
-  
+
   step++;
 
   // Lógica para saltar preguntas según respuestas
@@ -639,7 +643,7 @@ function updateQuestion() {
       // Crear selección múltiple para horarios de medicación
       const multiSelectContainer = document.createElement("div");
       multiSelectContainer.className = "multi-select";
-      
+
       questions[step].options.forEach((option) => {
         const checkboxOption = document.createElement("div");
         checkboxOption.className = "checkbox-option";
@@ -655,11 +659,11 @@ function updateQuestion() {
         checkboxOption.style.cursor = "pointer";
         checkboxOption.style.userSelect = "none";
         checkboxOption.style.transition = "background-color 0.3s";
-        
+
         checkboxOption.addEventListener("click", function()  {
           checkboxOption.classList.toggle("selected");
             const isCurrentlySelected = this.style.backgroundColor === "rgb(76, 175, 80)";
-                    
+
                     // Cambiar estilos según el estado de selección
                     if (isCurrentlySelected) {
                         // Deseleccionar
@@ -674,18 +678,18 @@ function updateQuestion() {
                     }
           console.log(checkboxOption.classList);
         });
-        
+
         multiSelectContainer.appendChild(checkboxOption);
       });
-      
+
       optionsContainer.appendChild(multiSelectContainer);
-      
+
       // Botón para continuar
       const continueButton = document.createElement("button");
       continueButton.textContent = "Continuar";
       continueButton.className = "continue-button";
       continueButton.addEventListener("click", handleMultiSelect);
-      
+
       optionsContainer.appendChild(continueButton);
     } else {
       // Opciones normales de botón único
@@ -742,64 +746,64 @@ function showResult() {
   const resultText = document.querySelector("#result");
   thinkingElement.style.display = "none";
   resultContainer.style.display = 'block';
-  
+
   // Asegurar que la dosis no sea negativa
   if (gotasCalculadas < 0) {
     gotasCalculadas = 0;
   }
-  
+
   let instrucciones = "";
-  
+
   if (gotasCalculadas === 0) {
     instrucciones = "Basado en tus respuestas, no recomendamos el uso de microdosis de ayahuasca en este momento. Por favor consulta con un profesional de la salud.";
   } else {
     // Instrucciones básicas
     let instruccionesBasicas = `✨ Tu dosis recomendada es de ${gotasCalculadas} gotas, dos veces al día.\n\n`;
-    
+
     // Instrucciones para la mañana - CORREGIDA con instrucciones de medicamentos
     let instruccionesMañana = `✨ Por la mañana: Apenas te despiertas y en ayunas, antes de lavarte los dientes y antes de tomar agua, se echan ${gotasCalculadas} gotas bajo la lengua; dejan que pase un minuto bajo la lengua y luego pasan lo que resta; luego de media hora ya te puedes lavar los dientes y tomar agua, luego de media hora más ya puedes tomar tu desayuno`;
-    
+
     if (tomaMedicamentos && momentoMedicacion.includes("Mañana")) {
       instruccionesMañana += ` y después de una hora de la microdosis ya puedes tomar tus medicamentos.\n`;
     } else {
       instruccionesMañana += `.\n`;
     }
-    
+
     // Instrucciones para la noche - CORREGIDA para tomar medicamentos ANTES de la microdosis
     let instruccionesNoche = `\n✨ Por la noche: Tener en cuenta que tu última comida debe ser máximo a las 8 pm (luego de esa hora el estómago ya no hace digestión). `;
-    
+
     if (tomaMedicamentos && momentoMedicacion.includes("Noche")) {
       instruccionesNoche += `Toma tus medicamentos inmediatamente después de la cena y después de hora y media tomas las ${gotasCalculadas} gotas de microdosis de ayahuasca.\n`;
     } else {
       instruccionesNoche += `Después de hora y media de haber cenado, tomas las ${gotasCalculadas} gotas de microdosis de ayahuasca.\n`;
     }
-    
+
     // Añadir nota específica sobre medicamentos si seleccionó ambos momentos
     let notaMedicamentos = "";
     if (tomaMedicamentos && momentoMedicacion.includes("Mañana") && momentoMedicacion.includes("Noche")) {
       notaMedicamentos = `\n🚫 IMPORTANTE: Recuerda que el orden es diferente: en la mañana primero tomas la microdosis y DESPUÉS los medicamentos (1 hora después), mientras que en la noche primero tomas los medicamentos y DESPUÉS la microdosis (1.5 horas después).\n`;
     }
-    
+
     // Instrucciones de calendario
     let instruccionesCalendario = `\n✨ Se toma dos días sí y uno no; por ejemplo, empiezas martes y miércoles y descansas de la medicina el jueves, vuelves a tomar viernes y sábado y descansas domingo.\n`;
-    
+
     // Restricciones y cuidados
     let restricciones = `\n🚫 Si tomas alcohol no tomar ayahuasca. Se deja ese día la medicina y se empieza al siguiente día como día uno.\n`;
-    
+
     // Instrucciones específicas para el diagnóstico
     let instruccionesDiagnostico = "";
     if (tieneEnfermedad && diagnosticoSeleccionado) {
       instruccionesDiagnostico = `\n✨ Nota para tu diagnóstico de ${diagnosticoSeleccionado}: Se ha ajustado tu dosis considerando esta condición. Recuerda mantener un seguimiento de cómo te sientes durante el tratamiento.\n`;
     }
-    
+
     // Instrucciones de conservación y dieta
     let conservacion = `\n🌿 Mantener la microdosis en un lugar fresco. El frasco abierto tiene vencimiento en 6 meses.\n`;
-    
+
     let dieta = `\n🌿 Durante la toma de las microdosis hay que tener coherencia en la alimentación, evitar en lo máximo la carne de res y chancho, no café, no gaseosas, no comida chatarra, comidas bajas en azúcar y harinas.\n`;
-    
+
     instrucciones = instruccionesBasicas + instruccionesMañana + instruccionesNoche + notaMedicamentos + instruccionesCalendario + restricciones + instruccionesDiagnostico + conservacion + dieta;
   }
-  
+
   resultText.textContent = instrucciones;
 }
 // Inicializar el chat

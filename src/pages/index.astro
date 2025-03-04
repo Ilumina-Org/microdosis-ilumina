@@ -1,17 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Chatbot from "../components/Chatbot.astro";
-import About from "../components/About.astro";
-import Testimonials from "../components/Testimonials.astro";
+// import About from "../components/About.astro";
 import Products from "../components/Products.astro";
-import Landing from "../components/Landing.astro";
+import Landing from "../components/ReactPages/Landing";
+import Testimonials from "../components/ReactPages/Testimonials";
+import About from "../components/ReactPages/About";
+import FAQs from "../components/ReactPages/FAQs";
+
+//import Landing from "../components/Landing.astro";
 ---
+
 <Layout>
-  <Landing id="inicio" />
+  <Landing id="inicio" client:load />
   <About id="about" />
-  <Testimonials id="testimonios" />
+  <!-- <About id="about" /> -->
+  <Testimonials id="testimonios" client:load />
   <Products id="products" />
-  <Testimonials id="testimonios" />
+  <FAQs id="faqs" client:load />
   <!-- <Products id="faqs" /> -->
   <Chatbot />
 </Layout>

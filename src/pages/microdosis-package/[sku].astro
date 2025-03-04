@@ -1,26 +1,43 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getPackageData } from "../../utils/package";
-import PackageHeader from "../../components/package-details/package-header.astro";
-import PackageDescription from "../../components/package-details/package-description.astro";
-import PaymentOptions from "../../components/package-details/payment-options";
-import GuaranteeBox from "../../components/package-details/guarantee-box.astro";
-import OrderSummary from "../../components/package-details/order-summary.astro";
-import NotFound from "../../components/not-found.astro";
+import PackageHeader from "../../components/PackageHeader.astro";
+import PackageDescription from "../../components/PackageDescription.astro";
+import PaymentOptions from "../../components/ReactComponents/PaymentOptions";
+import GuaranteeBox from "../../components/GuaranteeBox.astro";
+import OrderSummary from "../../components/OrderSummary.astro";
+import NotFound from "../../components/ReactComponents/NotFound";
 
 const { sku } = Astro.params;
 let packageData = null;
+let stockInfo = null;
 
 try {
-  packageData = await getPackageData(sku);
-  console.log(packageData);
+  const response = await fetch(
+    `http://localhost:4321/api/check-stock?productId=${sku}`,
+  );
+  stockInfo = await response.json();
+
+  if (
+    !stockInfo ||
+    stockInfo.code === "PRODUCT_NOT_FOUND" ||
+    stockInfo.code === "MISSING_PRODUCT_ID"
+  ) {
+    throw new Error("Producto no encontrado o no tiene stock disponible.");
+  }
+  packageData = {
+    title: `Paquete ${sku}`,
+    price: 100,
+    originalPrice: 120,
+    savings: 20,
+    description: `Descripción para el paquete ${sku}`,
+  };
+  console.log("Stock Info", stockInfo);
 } catch (error: unknown) {
   if (error instanceof Error) {
-    if (error.message === "El paquete no existe.") {
-      console.warn(`Paquete con SKU ${sku} no encontrado.`);
-      Astro.response.status = 404;
-    } else if (error.message === "El paquete no tiene stock disponible.") {
-      console.warn(`Paquete con SKU ${sku} sin stock.`);
+    if (
+      error.message === "Producto no encontrado o no tiene stock disponible."
+    ) {
+      console.warn(`Paquete con SKU ${sku} no encontrado o sin stock.`);
       Astro.response.status = 404;
     } else {
       console.error("Error inesperado:", error);
@@ -59,6 +76,7 @@ try {
     </Layout>
   )
 }
+
 <style>
   html {
     font-size: 14px;

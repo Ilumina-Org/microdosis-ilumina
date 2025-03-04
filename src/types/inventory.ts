@@ -3,15 +3,11 @@ export interface StockItem {
   title: string;
   price: number;
   regularPrice: number;
-  imageUrl: string;
-  tier: number;
-  link: string;
   disponible: number;
-  reservado: number;
   total: number;
   notas: string;
   featured: boolean;
-  tipo: 'package' | 'subscription';
+  tipo: "package" | "subscription";
 }
 
 export interface Order {
