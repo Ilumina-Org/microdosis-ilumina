@@ -1,6 +1,8 @@
 import React from "react";
+import useResponsiveness from "../../utils/useResponsiveness";
 
 function Button({ id, label, onClick = () => alert("click") }: any) {
+  const { handleResponsiveness } = useResponsiveness();
   return (
     <>
       <input
@@ -14,9 +16,10 @@ function Button({ id, label, onClick = () => alert("click") }: any) {
           paddingTop: "1rem",
           paddingBottom: "1rem",
           background: "#C1DC3A",
-          borderRadius: "10px",
           border: "none",
-          fontSize: "30px",
+          fontSize: handleResponsiveness(["35px", "30px", "30px", "20px"]),
+          boxShadow: "2px 4px 7.7px rgba(0, 0, 0, 0.13)",
+          borderRadius: handleResponsiveness(["20px", "20px", "30px", "20px"]),
           fontFamily: "Inter",
           fontWeight: "200",
           cursor: "pointer",
