@@ -25,7 +25,7 @@ export function initializeAnimation(canvas: HTMLCanvasElement) {
 
   function preloadFrames() {
     //           1
-    for (let i = 64; i < frameCount; i++) {
+    for (let i = 1; i < frameCount; i++) {
       const img = new Image();
       const frameNumber = String(i).padStart(4, '0');
       img.src = `/frames/${frameNumber}.png`;

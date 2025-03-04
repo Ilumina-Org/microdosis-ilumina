@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Button from "../ReactComponents/Button";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
-import { ShoppingCart, ArrowDown2 } from "iconsax-react";
+import { ShoppingCart, ArrowDown2, Whatsapp, Facebook } from "iconsax-react";
 import { initializeAnimation } from "../../utils/appleAnimation";
 import useResponsiveness from "../../utils/useResponsiveness";
 
@@ -51,15 +51,50 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           id="toggle-chat"
           label="Comprar ahora"
           fontSize={30}
-          icon={<ShoppingCart size={35} color="black" />}
+          padding={15}
+          styles={{
+            backgroundColor: "#C1DC3A",
+            paddingLeft: "1.5rem",
+            paddingRight: "1.5rem",
+            alignItems: "center",
+            borderRadius: "15px",
+            gap: "15px",
+          }}
+          icon={<ShoppingCart size={30} color="black" />}
         />
       </div>
       <div className="image-container">
         <canvas id="model-image" ref={canvasRef}></canvas>
       </div>
-      <div className="bottom-action">
+      <a
+        className="bottom-action"
+        href="#about"
+        style={{ textDecoration: "none" }}
+      >
         <p>Conoce mas sobre la Ayahuasca</p>
         <ArrowDown2 size={30} color="white" style={{ opacity: "50%" }} />
+      </a>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: "2rem",
+          left: "4rem",
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px",
+        }}
+      >
+        <Button
+          styles={{ backgroundColor: "white" }}
+          icon={<Whatsapp size="40" color="#013726" variant="Bold" />}
+          padding={10}
+        />
+        <Button
+          styles={{ backgroundColor: "white" }}
+          icon={<Facebook size="40" color="#013726" variant="Bold" />}
+          padding={10}
+        />
       </div>
 
       <style>
