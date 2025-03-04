@@ -2,45 +2,44 @@ import React, { useEffect, useState } from "react";
 
 interface ProductContainerProps {
   sku: string;
-  link: string;
-  imageUrl: string;
+  link?: string;
+  imageUrl?: string;
   productTitle: string;
   productDetail: string;
   productPrice: string;
-  productDeal: string;
+  productDeal?: string;
   tier: number;
-  purchaseType?: string;
-  initialStock?: boolean;
+  stock: boolean;
+  tipo?: "package" | "subscription";
 }
 
 export default function ProductContainer({
   sku,
-  link,
-  imageUrl,
+  link = `/microdosis-package/${sku}`, // Default link generation
+  imageUrl = `/src/assets/products/${sku}-card.svg`, // Default image path
   productTitle,
   productDetail,
   productPrice,
-  productDeal,
-  tier,
-  purchaseType,
-  initialStock = true,
+  productDeal = "",
+  tier = 0,
+  stock = true,
+  tipo = "package",
 }: ProductContainerProps) {
   const [stockInfo, setStockInfo] = useState({
-    canPurchase: initialStock,
+    canPurchase: stock,
     loading: true,
   });
 
   const tierHandler = (tier: number) => {
-    console.log(`Applying tier style for tier: ${tier}`);
     switch (tier) {
-      case 0:
+      case 0: // Gold/Premium
         return "radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%), radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%)";
-      case 1:
+      case 1: // Silver
         return "linear-gradient(-40deg,#dedede,#ffffff 16%,#dedede 21%,#ffffff 24%,#454545 27%,#dedede 36%,#ffffff 45%,#ffffff 60%,#dedede 72%,#ffffff 80%,#dedede 84%,#a1a1a1)";
-      case 2:
+      case 2: // Bronze
         return "linear-gradient(-72deg, #ca7345, #ffdeca 16%, #ca7345 21%, #ffdeca 24%, #a14521 27%, #ca7345 36%, #ffdeca 45%, #ffdeca 60%, #ca7345 72%, #ffdeca 80%, #ca7345 84%, #732100)";
       default:
-        return "";
+        return "linear-gradient(to right, #f0f0f0, #ffffff)"; // Neutral fallback
     }
   };
 
@@ -56,37 +55,12 @@ export default function ProductContainer({
   };
 
   useEffect(() => {
-    console.log(`Fetching stock info for product SKU: ${sku}`);
-
-    const checkRealTimeStock = async () => {
-      try {
-        console.log(`Checking stock for product SKU: ${sku}`);
-        const response = await fetch(`/api/check-stock?productId=${sku}`);
-        const data = await response.json();
-        console.log(`Stock response for SKU ${sku}:`, data);
-
-        if (data && data.canPurchase !== undefined) {
-          // Verificar si el setStockInfo está siendo ejecutado
-          console.log("Updating stock info...");
-          setStockInfo({
-            canPurchase: data.canPurchase,
-            loading: false,
-          });
-          console.log("Stock updated:", {
-            canPurchase: data.canPurchase,
-            loading: false,
-          });
-        } else {
-          console.error("Error: Invalid stock data:", data);
-        }
-      } catch (error) {
-        console.error("Error checking stock:", error);
-        setStockInfo((prev) => ({ ...prev, loading: false }));
-      }
-    };
-
-    checkRealTimeStock();
-  }, [sku]);
+    // Initial stock state setup
+    setStockInfo({
+      canPurchase: stock,
+      loading: false,
+    });
+  }, [stock]);
 
   const handleClick = () => {
     console.log(`Button clicked for product SKU: ${sku}`);
@@ -95,7 +69,12 @@ export default function ProductContainer({
     }
   };
 
-  console.log("Render ProductContainer:", { stockInfo });
+  // Determine button text based on stock and type
+  const getButtonText = () => {
+    if (stockInfo.loading) return "Verificando...";
+    if (!stockInfo.canPurchase) return "AGOTADO";
+    return tipo === "subscription" ? "Suscripción mensual" : "Comprar ahora";
+  };
 
   return (
     <div
@@ -132,7 +111,11 @@ export default function ProductContainer({
             <h3 style={{ fontSize: "23px", margin: 0 }}>{productTitle}</h3>
             <p style={{ fontSize: "15px", margin: 0 }}>{productDetail}</p>
             <p style={{ fontSize: "30px", margin: 0 }}>{productPrice}</p>
-            <p style={{ fontSize: "15px", margin: 0 }}>{productDeal}</p>
+            {productDeal && (
+              <p style={{ fontSize: "15px", margin: 0, color: "green" }}>
+                {productDeal}
+              </p>
+            )}
           </div>
           <button
             style={{
@@ -146,13 +129,7 @@ export default function ProductContainer({
             onClick={handleClick}
             disabled={stockInfo.loading || !stockInfo.canPurchase}
           >
-            {stockInfo.loading
-              ? "Verificando..."
-              : purchaseType === "subscription"
-                ? "Suscripción mensual"
-                : stockInfo.canPurchase
-                  ? "Comprar ahora"
-                  : "AGOTADO"}
+            {getButtonText()}
           </button>
         </div>
       </div>

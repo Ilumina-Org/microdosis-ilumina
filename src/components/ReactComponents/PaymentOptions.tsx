@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import MercadoPagoCheckoutPro from "../mercadopago-checkoutpro";
+import MercadoPagoCheckoutPro from "./MercadopagoCheckoutPro";
 import "./PaymentOptions.css";
 import type { JSX } from "astro/jsx-runtime";
 

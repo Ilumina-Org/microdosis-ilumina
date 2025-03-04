@@ -12,6 +12,8 @@ try {
 } catch (error) {
   errorMessage = "Hubo un problema al cargar los productos. Intenta más tarde.";
 }
+
+console.log("productos", products);
 ---
 
 <Layout>
@@ -58,16 +60,13 @@ try {
             client:load
             key={product.sku}
             sku={product.sku}
-            link={`/microdosis-package/${product.sku}`}
-            imageUrl={`/assets/${product.sku}`}
             productTitle={product.title}
             productDetail={product.productDetail}
             productPrice={product.productPrice}
             productDeal={product.productDeal}
             tier={product.tier}
-            purchaseType={
-              product.sku.includes("subscription") ? "subscription" : undefined
-            }
+            stock={product.stock}
+            tipo={product.tipo}
           />
         ))
       }
