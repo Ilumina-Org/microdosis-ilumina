@@ -1,3 +1,4 @@
+import { Home3 } from "iconsax-react";
 import React, { useEffect, useState } from "react";
 
 interface ProductContainerProps {
@@ -46,9 +47,9 @@ export default function ProductContainer({
   const buttonStyle = {
     width: "fit-content",
     padding: "1rem",
-    paddingTop: ".75rem",
     paddingBottom: ".75rem",
     background: "#C1DC3A",
+    paddingTop: ".75rem",
     borderRadius: "10px",
     border: "none",
     cursor: "pointer",
@@ -76,6 +77,7 @@ export default function ProductContainer({
     return tipo === "subscription" ? "Suscripción mensual" : "Comprar ahora";
   };
 
+  console.log("debugging", stockInfo);
   return (
     <div
       style={{
@@ -116,6 +118,9 @@ export default function ProductContainer({
                 {productDeal}
               </p>
             )}
+            <h3 style={{ color: "black" }}>
+              debug info: {JSON.stringify(stockInfo)}
+            </h3>
           </div>
           <button
             style={{
