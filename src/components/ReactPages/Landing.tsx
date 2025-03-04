@@ -89,6 +89,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           styles={{ backgroundColor: "white" }}
           icon={<Whatsapp size="40" color="#013726" variant="Bold" />}
           padding={10}
+          onClick={() => alert("Whatsapp")}
         />
         <Button
           styles={{ backgroundColor: "white" }}

@@ -13,7 +13,7 @@ interface EnfermedadData {
   horas: number;
 }
 
-const ChatBot: React.FC = () => {
+const ChatBot = () => {
   // Constantes
   const questions: Question[] = [
     {
@@ -123,7 +123,7 @@ const ChatBot: React.FC = () => {
   };
 
   // Estados
-  const [chatVisible, setChatVisible] = useState<boolean>(true);
+  const [chatVisible, setChatVisible] = useState<boolean>(false);
   const [step, setStep] = useState<number>(0);
   const [respuestas, setRespuestas] = useState<string[]>([]);
   const [gotasCalculadas, setGotasCalculadas] = useState<number>(0);
@@ -305,8 +305,8 @@ const ChatBot: React.FC = () => {
   };
 
   return (
-    <div className="chat-wrapper">
-      <button onClick={toggleChat} className="chat-toggle">
+    <>
+      <button onClick={() => toggleChat()} className="chat-toggle">
         <svg className="robot-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="11" width="18" height="10" rx="2" />
           <circle cx="12" cy="5" r="2" />
@@ -316,74 +316,75 @@ const ChatBot: React.FC = () => {
         </svg>
       </button>
 
-
-      <div className="chat-container">
-        <div className="chat-box">
-          <button onClick={closeChat} className="close-button">×</button>
-
-          {showQuestionSection && (
-            <>
-              <div className="chat-message bot">
-                <p>{questions[step].text}</p>
-              </div>
-              <div className="options">
-                {questions[step].type === "multiselect" ? (
+      {
+        chatVisible && (
+          <div className="chat-wrapper">
+            <div className="chat-container">
+              <div className="chat-box">
+                <button onClick={closeChat} className="close-button">×</button>
+                {showQuestionSection && (
                   <>
-                    <div className="multi-select">
-                      {questions[step].options.map((option, index) => (
-                        <div
-                          key={index}
-                          className={`checkbox-option ${momentoMedicacion.includes(option) ? 'selected' : ''}`}
-                          onClick={() => handleOptionToggle(option)}
-                          data-value={option}
-                        >
-                          {option}
-                        </div>
-                      ))}
+                    <div className="chat-message bot">
+                      <p>{questions[step].text}</p>
                     </div>
-                    <button
-                      className="continue-button"
-                      onClick={handleMultiSelect}
-                    >
-                      Continuar
-                    </button>
+                    <div className="options">
+                      {questions[step].type === "multiselect" ? (
+                        <>
+                          <div className="multi-select">
+                            {questions[step].options.map((option, index) => (
+                              <div
+                                key={index}
+                                className={`checkbox-option ${momentoMedicacion.includes(option) ? 'selected' : ''}`}
+                                onClick={() => handleOptionToggle(option)}
+                                data-value={option}
+                              >
+                                {option}
+                              </div>
+                            ))}
+                          </div>
+                          <button
+                            className="continue-button"
+                            onClick={handleMultiSelect}
+                          >
+                            Continuar
+                          </button>
+                        </>
+                      ) : (
+                        questions[step].options.map((option, index) => (
+                          <button
+                            key={index}
+                            className="button"
+                            onClick={() => nextQuestion(option)}
+                          >
+                            {option}
+                          </button>
+                        ))
+                      )}
+                    </div>
                   </>
-                ) : (
-                  questions[step].options.map((option, index) => (
-                    <button
-                      key={index}
-                      className="button"
-                      onClick={() => nextQuestion(option)}
-                    >
-                      {option}
+                )}
+
+                {showThinking && (
+                  <div className="thinking">
+                    <div className="loading-spinner"></div>
+                    <p>Analizando tus respuestas...</p>
+                  </div>
+                )}
+
+                {showResult && (
+                  <div className="result-container">
+                    <p className="result">{resultado}</p>
+                    <button onClick={restartChat} className="restart-button">
+                      Realizar otra consulta
                     </button>
-                  ))
+                  </div>
                 )}
               </div>
-            </>
-          )}
-
-          {showThinking && (
-            <div className="thinking">
-              <div className="loading-spinner"></div>
-              <p>Analizando tus respuestas...</p>
             </div>
-          )}
-
-          {showResult && (
-            <div className="result-container">
-              <p className="result">{resultado}</p>
-              <button onClick={restartChat} className="restart-button">
-                Realizar otra consulta
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
-    </div>
+          </div>
+        )}
+    </>
   );
 };
-
 export default ChatBot;
 
