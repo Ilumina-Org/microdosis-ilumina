@@ -1,6 +1,5 @@
 "use client";
-import { Home3 } from "iconsax-react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 interface ProductContainerProps {
   sku: string;
@@ -18,7 +17,7 @@ interface ProductContainerProps {
 export default function ProductContainer({
   sku,
   link = `/microdosis-package/${sku}`,
-  imageUrl = `/src/assets/products/${sku}-card.svg`,
+  imageUrl = `/products/${sku}-card.svg`,
   productTitle,
   productDetail,
   productPrice,
@@ -27,22 +26,6 @@ export default function ProductContainer({
   stock = true,
   tipo = "package",
 }: ProductContainerProps) {
-  const [stockInfo, setStockInfo] = useState({
-    canPurchase: stock,
-    loading: false,
-  });
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setStockInfo({
-        canPurchase: stock,
-        loading: false,
-      });
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
-  }, [stock]);
-
   const tierHandler = (tier: number) => {
     switch (tier) {
       case 0: // Gold/Premium
@@ -56,27 +39,14 @@ export default function ProductContainer({
     }
   };
 
-  const buttonStyle = {
-    width: "fit-content",
-    padding: "1rem",
-    paddingBottom: ".75rem",
-    background: "#C1DC3A",
-    paddingTop: ".75rem",
-    borderRadius: "10px",
-    border: "none",
-    cursor: "pointer",
-  };
-
   const handleClick = () => {
-    if (stock && !stockInfo.loading) {
-      const targetUrl = `/microdosis-package/${sku}`;
-      window.location.assign(targetUrl);
+    if (stock) {
+      window.location.href = link;
     }
   };
 
   const getButtonText = () => {
-    if (stockInfo.loading) return "Verificando...";
-    if (!stockInfo.canPurchase) return "AGOTADO";
+    if (!stock) return "AGOTADO";
     return tipo === "subscription" ? "Suscripción mensual" : "Comprar ahora";
   };
 
@@ -121,47 +91,20 @@ export default function ProductContainer({
               </p>
             )}
           </div>
-          <div
-            style={{
-              position: "fixed",
-              top: "10px",
-              left: "10px",
-              backgroundColor: "red",
-              color: "white",
-              padding: "10px",
-              zIndex: 9999,
-            }}
-          >
-            Debug Info:
-            <pre>
-              {JSON.stringify(
-                {
-                  stock,
-                  stockInfo,
-                  link,
-                  sku,
-                  windowLocation: window.location.href,
-                },
-                null,
-                2,
-              )}
-            </pre>
-          </div>
           <button
-            onClick={handleClick}
             style={{
-              ...buttonStyle,
-              opacity: stockInfo.loading ? 0.7 : 1,
-              cursor:
-                stockInfo.loading || !stockInfo.canPurchase
-                  ? "not-allowed"
-                  : "pointer",
-              backgroundColor: !stockInfo.canPurchase
-                ? "#ccc"
-                : buttonStyle.background,
-              pointerEvents:
-                stockInfo.loading || !stockInfo.canPurchase ? "none" : "auto",
+              width: "fit-content",
+              padding: "1rem",
+              paddingBottom: ".75rem",
+              background: stock ? "#C1DC3A" : "#ccc",
+              paddingTop: ".75rem",
+              borderRadius: "10px",
+              border: "none",
+              cursor: stock ? "pointer" : "not-allowed",
+              opacity: stock ? 1 : 0.7,
             }}
+            onClick={handleClick}
+            disabled={!stock}
           >
             {getButtonText()}
           </button>
