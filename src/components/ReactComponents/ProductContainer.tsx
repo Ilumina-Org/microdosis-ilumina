@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 
 interface ProductContainerProps {
@@ -12,6 +11,7 @@ interface ProductContainerProps {
   tier: number;
   stock: boolean;
   tipo?: "package" | "subscription";
+  onClickHandler?: (link: string) => void; // Agregamos prop opcional
 }
 
 export default function ProductContainer({
@@ -25,6 +25,7 @@ export default function ProductContainer({
   tier = 0,
   stock = true,
   tipo = "package",
+  onClickHandler, // Nuevo prop
 }: ProductContainerProps) {
   const [clicks, setClicks] = useState(0);
   const [lastEvent, setLastEvent] = useState<string>("Ninguno");
@@ -35,19 +36,20 @@ export default function ProductContainer({
       return;
     }
 
-    console.log("✅ Botón clickeado");
+    // Incrementamos clicks local
+    setClicks((prev) => prev + 1);
 
-    setClicks((prev) => {
-      console.log(`Clicks antes: ${prev}, después: ${prev + 1}`);
-      return prev + 1;
-    });
-
+    // Establecemos último evento
     setLastEvent(`Clicked SKU: ${sku} - Link: ${link}`);
-    console.log(`🔗 Redirigiendo a: ${link}`);
 
-    setTimeout(() => {
+    // Si se provee un handler personalizado, lo usamos
+    if (onClickHandler) {
+      onClickHandler(link);
+    } else {
+      // Comportamiento por defecto
+      console.log(`🔗 Redirigiendo a: ${link}`);
       window.location.href = link;
-    }, 300); // Simula la redirección
+    }
   };
 
   return (
@@ -77,8 +79,6 @@ export default function ProductContainer({
           <p>{productDetail}</p>
           <p style={{ fontSize: "30px" }}>{productPrice}</p>
           {productDeal && <p style={{ color: "green" }}>{productDeal}</p>}
-
-          {/* 🔘 Aseguramos que el botón sea interactivo */}
           <button
             style={{
               background: stock ? "#C1DC3A" : "#ccc",
@@ -89,18 +89,13 @@ export default function ProductContainer({
               padding: "1rem",
               fontWeight: "bold",
             }}
-            onClick={() => {
-              console.log("🎯 Click detectado en el botón");
-              handleClick();
-            }}
+            onClick={handleClick}
             disabled={!stock}
           >
             {stock ? "Comprar ahora" : "AGOTADO"}
           </button>
         </div>
       </div>
-
-      {/* 🛠 Debug Info (fuera del contenedor del botón) */}
       <div
         style={{
           marginTop: "1rem",

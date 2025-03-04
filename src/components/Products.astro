@@ -33,7 +33,6 @@ console.log("productos", products);
         Paquetes Disponibles
       </h2>
     </div>
-
     <div
       style={{
         display: "flex",
@@ -48,13 +47,11 @@ console.log("productos", products);
           <p style={{ color: "red", fontSize: "18px" }}>{errorMessage}</p>
         )
       }
-
       {
         !errorMessage && products.length === 0 && (
           <p style={{ fontSize: "18px" }}>No hay productos disponibles.</p>
         )
       }
-
       {
         products.map((product) => (
           <ProductContainer
@@ -70,6 +67,10 @@ console.log("productos", products);
             tier={product.tier}
             stock={product.stock}
             tipo={product.tipo}
+            onClickHandler={(link) => {
+              console.log("Navegando a:", link);
+              window.location.href = link;
+            }}
           />
         ))
       }
