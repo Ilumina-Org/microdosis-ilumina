@@ -31,10 +31,11 @@ export default defineConfig({
   integrations: [react()],
   devToolbar: { enabled: false },
   vite: {
-    build: {
-      rollupOptions: {
-        external: ["react", "react-dom", "react/jsx-runtime"],
-      },
+    optimizeDeps: {
+      include: ["react", "react-dom", "react/jsx-runtime"],
+    },
+    ssr: {
+      noExternal: ["react", "react-dom"],
     },
   },
 });
