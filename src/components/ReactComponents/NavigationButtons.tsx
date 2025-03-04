@@ -102,6 +102,7 @@ const NavigationButtons = () => {
       >
         Preguntas <br /> frecuentes
       </a>
+      {/* 
       <div
         style={{
           position: "fixed",
@@ -119,17 +120,19 @@ const NavigationButtons = () => {
             paddingRight: ".85rem",
             backgroundColor: "#B5BC94",
             color: "black",
-            width: 280,
+            width: 140,
           }}
         >
           Simula tu dosificación
         </span>
         <Button
+          bacgrkoundColor="red"
           styles={{ backgroundColor: "white" }}
           icon={<Whatsapp size="40" color="#013726" variant="Bold" />}
           padding={10}
         />
       </div>
+      */}
     </div>
   );
 };
