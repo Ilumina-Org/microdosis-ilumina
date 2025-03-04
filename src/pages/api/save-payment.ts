@@ -1,16 +1,11 @@
 import type { APIRoute } from "astro";
-import path from "path";
 import { paymentDataSchema } from "../../utils/validation-schema";
-import { logger } from "../../utils/logger";
 import type { z } from "astro/zod";
-import {
-  sendAdminNotification,
-  sendConfirmationEmail,
-} from "../../utils/mailer";
 import {
   getGoogleSheetsClient,
   SPREADSHEET_ID,
   SHEETS,
+  ensureSheetExists,
 } from "../../utils/google-sheets";
 
 const SHEET_NAME = "Pagos";
@@ -31,19 +26,14 @@ const HEADERS = [
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    logger.info("Iniciando endpoint POST /api/save-payment");
-
     let data;
     try {
       const rawData = await request.json();
-      logger.debug("Datos recibidos:", rawData);
 
       const parsedData = paymentDataSchema.safeParse(rawData);
 
       if (!parsedData.success) {
         const errors = parsedData.error.format();
-        logger.warn("Validación fallida:", errors);
-
         return new Response(
           JSON.stringify({
             error: "Datos de entrada inválidos",
@@ -55,8 +45,6 @@ export const POST: APIRoute = async ({ request }) => {
 
       data = parsedData.data;
     } catch (error) {
-      logger.error("Error al procesar el JSON:", error);
-
       return new Response(
         JSON.stringify({
           error: "Datos de entrada inválidos o mal formateados",
@@ -65,10 +53,8 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Obtener el cliente de Google Sheets usando la función proporcionada
     const sheets = await getGoogleSheetsClient();
 
-    // Asegurar que la hoja existe con los encabezados correctos
     await ensureSheetExists(sheets, SHEET_NAME, HEADERS);
 
     const values = [
@@ -97,7 +83,6 @@ export const POST: APIRoute = async ({ request }) => {
 
     const recordId = generateRecordId();
 
-    // Actualizar inventario
     if (data.items && Array.isArray(data.items)) {
       const inventoryResponse = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
@@ -127,19 +112,6 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
-    // Enviar correos de confirmación
-    try {
-      await sendConfirmationEmail(data.shippingAddress.email, data);
-      logger.info("Correo de confirmación enviado correctamente");
-
-      await sendAdminNotification(data);
-      logger.info("Correo al administrador enviado correctamente");
-    } catch (emailError) {
-      logger.error("Error al enviar correo de confirmación:", emailError);
-    }
-
-    logger.info("Datos guardados exitosamente:", response.data);
-
     return new Response(
       JSON.stringify({
         success: true,
@@ -150,8 +122,6 @@ export const POST: APIRoute = async ({ request }) => {
       { status: 200, headers: { "Content-Type": "application/json" } },
     );
   } catch (error: any) {
-    logger.error("Error al guardar en Google Sheets:", error);
-
     return new Response(
       JSON.stringify({
         error: "Error al procesar la solicitud",
@@ -200,192 +170,4 @@ function generateRecordId(): string {
   const timestamp = Date.now();
   const random = Math.floor(Math.random() * 10000);
   return `rec_${timestamp}_${random}`;
-}
-
-function saveLocalRecord(recordId: string, data: any): void {
-  logger.debug(`Registro: ${recordId}`);
-  /*  try {
-    const cacheDir = path.resolve(__dirname, "../../../.cache/records");
-
-    if (!fs.existsSync(cacheDir)) {
-      fs.mkdirSync(cacheDir, { recursive: true });
-    }
-
-    const recordPath = path.join(cacheDir, `${recordId}.json`);
-
-    fs.writeFileSync(
-      recordPath,
-      JSON.stringify(
-        {
-          timestamp: new Date().toISOString(),
-          recordId,
-          data,
-        },
-        null,
-        2,
-      ),
-    );
-
-    logger.debug(`Registro local guardado: ${recordPath}`);
-
-    cleanupOldRecords(cacheDir);
-  } catch (error) {
-    logger.warn("No se pudo guardar registro local:", error);
-  }
-  */
-}
-
-function cleanupOldRecords(cacheDir: string): void {
-  try {
-    const files = fs.readdirSync(cacheDir);
-    const now = Date.now();
-    const oneDayMs = 24 * 60 * 60 * 1000;
-
-    files.forEach((file) => {
-      const filePath = path.join(cacheDir, file);
-      const stats = fs.statSync(filePath);
-
-      if (now - stats.mtimeMs > oneDayMs) {
-        fs.unlinkSync(filePath);
-        logger.debug(`Eliminado registro antiguo: ${file}`);
-      }
-    });
-  } catch (error) {
-    logger.warn("Error al limpiar registros antiguos:", error);
-  }
-}
-
-async function ensureSheetWithHeaders(
-  sheets: any,
-  spreadsheetId: string,
-  sheetTitle: string,
-  headers: string[],
-): Promise<void> {
-  try {
-    const res = await sheets.spreadsheets.get({ spreadsheetId });
-    let sheetId = null;
-    let sheetExists = false;
-
-    for (const sheet of res.data.sheets) {
-      if (sheet.properties.title === sheetTitle) {
-        sheetExists = true;
-        sheetId = sheet.properties.sheetId;
-        break;
-      }
-    }
-
-    if (!sheetExists) {
-      logger.info(`La hoja "${sheetTitle}" no existe. Creándola...`);
-
-      const addResponse = await sheets.spreadsheets.batchUpdate({
-        spreadsheetId,
-        requestBody: {
-          requests: [
-            {
-              addSheet: {
-                properties: {
-                  title: sheetTitle,
-                },
-              },
-            },
-          ],
-        },
-      });
-
-      sheetId = addResponse.data.replies[0].addSheet.properties.sheetId;
-      logger.info(`Hoja "${sheetTitle}" creada con ID: ${sheetId}`);
-
-      await sheets.spreadsheets.values.update({
-        spreadsheetId,
-        range: `${sheetTitle}!A1:L1`,
-        valueInputOption: "USER_ENTERED",
-        requestBody: {
-          values: [headers],
-        },
-      });
-
-      await sheets.spreadsheets.batchUpdate({
-        spreadsheetId,
-        requestBody: {
-          requests: [
-            {
-              repeatCell: {
-                range: {
-                  sheetId,
-                  startRowIndex: 0,
-                  endRowIndex: 1,
-                },
-                cell: {
-                  userEnteredFormat: {
-                    backgroundColor: {
-                      red: 0.8,
-                      green: 0.8,
-                      blue: 0.8,
-                    },
-                    textFormat: {
-                      bold: true,
-                    },
-                  },
-                },
-                fields: "userEnteredFormat(backgroundColor,textFormat)",
-              },
-            },
-            {
-              updateSheetProperties: {
-                properties: {
-                  sheetId,
-                  gridProperties: {
-                    frozenRowCount: 1,
-                  },
-                },
-                fields: "gridProperties.frozenRowCount",
-              },
-            },
-          ],
-        },
-      });
-
-      logger.info("Encabezados formateados correctamente");
-    } else {
-      const headerData = await sheets.spreadsheets.values.get({
-        spreadsheetId,
-        range: `${sheetTitle}!A1:L1`,
-      });
-
-      if (
-        !headerData.data.values ||
-        !arraysEqual(headerData.data.values[0], headers)
-      ) {
-        logger.info("Actualizando encabezados...");
-
-        await sheets.spreadsheets.values.update({
-          spreadsheetId,
-          range: `${sheetTitle}!A1:L1`,
-          valueInputOption: "USER_ENTERED",
-          requestBody: {
-            values: [headers],
-          },
-        });
-      }
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      logger.error("Error al configurar la hoja:", error);
-      throw new Error(`Error al configurar la hoja: ${error.message}`);
-    } else {
-      logger.error("Error al configurar la hoja:", error);
-      throw new Error(`Error al configurar la hoja: ${error}`);
-    }
-  }
-}
-
-function arraysEqual(a: unknown[], b: unknown[]): boolean {
-  if (!a || !b) return false;
-  if (a.length !== b.length) return false;
-
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) return false;
-  }
-
-  return true;
 }
