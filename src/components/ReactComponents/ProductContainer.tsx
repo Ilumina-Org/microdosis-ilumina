@@ -68,30 +68,9 @@ export default function ProductContainer({
   };
 
   const handleClick = () => {
-    // Verificar el estado de forma explícita
     if (stock && !stockInfo.loading) {
-      // Usar un método de navegación más robusto
-      const targetUrl = link || `/microdosis-package/${sku}`;
-
-      try {
-        // Intentar múltiples métodos de navegación
-        if (window.location) {
-          window.location.href = targetUrl;
-        } else if (window.open) {
-          window.open(targetUrl, "_self");
-        }
-      } catch (error) {
-        const debugElement = document.createElement("div");
-        debugElement.id = "navigation-error";
-        debugElement.style.position = "fixed";
-        debugElement.style.top = "10px";
-        debugElement.style.left = "10px";
-        debugElement.style.backgroundColor = "red";
-        debugElement.style.color = "white";
-        debugElement.style.padding = "10px";
-        debugElement.textContent = `Navigation error: ${error.message}`;
-        document.body.appendChild(debugElement);
-      }
+      const targetUrl = `/microdosis-package/${sku}`;
+      window.location.assign(targetUrl);
     }
   };
 
@@ -144,34 +123,45 @@ export default function ProductContainer({
           </div>
           <div
             style={{
-              display: "none", // Hidden but still in the DOM
               position: "fixed",
               top: "10px",
               left: "10px",
               backgroundColor: "red",
               color: "white",
               padding: "10px",
+              zIndex: 9999,
             }}
-            id="navigation-debug"
           >
-            {JSON.stringify({
-              stock,
-              stockInfo,
-              link,
-              sku,
-            })}
+            Debug Info:
+            <pre>
+              {JSON.stringify(
+                {
+                  stock,
+                  stockInfo,
+                  link,
+                  sku,
+                  windowLocation: window.location.href,
+                },
+                null,
+                2,
+              )}
+            </pre>
           </div>
           <button
+            onClick={handleClick}
             style={{
               ...buttonStyle,
               opacity: stockInfo.loading ? 0.7 : 1,
-              cursor: !stockInfo.canPurchase ? "not-allowed" : "pointer",
+              cursor:
+                stockInfo.loading || !stockInfo.canPurchase
+                  ? "not-allowed"
+                  : "pointer",
               backgroundColor: !stockInfo.canPurchase
                 ? "#ccc"
                 : buttonStyle.background,
+              pointerEvents:
+                stockInfo.loading || !stockInfo.canPurchase ? "none" : "auto",
             }}
-            onClick={handleClick}
-            disabled={stockInfo.loading || !stockInfo.canPurchase}
           >
             {getButtonText()}
           </button>
