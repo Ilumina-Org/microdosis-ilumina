@@ -1,3 +1,4 @@
+"use client";
 import { Home3 } from "iconsax-react";
 import React, { useEffect, useState } from "react";
 
@@ -37,7 +38,7 @@ export default function ProductContainer({
         canPurchase: stock,
         loading: false,
       });
-    }, 500); // Un breve retraso para simular verificación
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [stock]);
@@ -67,8 +68,30 @@ export default function ProductContainer({
   };
 
   const handleClick = () => {
-    if (!stockInfo.loading && stockInfo.canPurchase) {
-      window.location.href = link;
+    // Verificar el estado de forma explícita
+    if (stock && !stockInfo.loading) {
+      // Usar un método de navegación más robusto
+      const targetUrl = link || `/microdosis-package/${sku}`;
+
+      try {
+        // Intentar múltiples métodos de navegación
+        if (window.location) {
+          window.location.href = targetUrl;
+        } else if (window.open) {
+          window.open(targetUrl, "_self");
+        }
+      } catch (error) {
+        const debugElement = document.createElement("div");
+        debugElement.id = "navigation-error";
+        debugElement.style.position = "fixed";
+        debugElement.style.top = "10px";
+        debugElement.style.left = "10px";
+        debugElement.style.backgroundColor = "red";
+        debugElement.style.color = "white";
+        debugElement.style.padding = "10px";
+        debugElement.textContent = `Navigation error: ${error.message}`;
+        document.body.appendChild(debugElement);
+      }
     }
   };
 
@@ -105,8 +128,8 @@ export default function ProductContainer({
           alt={productTitle}
           fetchPriority="high"
           width="100%"
-          height="55%"
           style={{ objectFit: "contain" }}
+          height="55%"
         />
         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
@@ -118,6 +141,25 @@ export default function ProductContainer({
                 {productDeal}
               </p>
             )}
+          </div>
+          <div
+            style={{
+              display: "none", // Hidden but still in the DOM
+              position: "fixed",
+              top: "10px",
+              left: "10px",
+              backgroundColor: "red",
+              color: "white",
+              padding: "10px",
+            }}
+            id="navigation-debug"
+          >
+            {JSON.stringify({
+              stock,
+              stockInfo,
+              link,
+              sku,
+            })}
           </div>
           <button
             style={{
