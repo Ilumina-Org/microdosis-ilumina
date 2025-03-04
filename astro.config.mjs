@@ -29,13 +29,4 @@ export default defineConfig({
     includeFiles: ["./credentials.json"],
   }),
   integrations: [react()],
-  devToolbar: { enabled: false },
-  vite: {
-    optimizeDeps: {
-      include: ["react", "react-dom", "react/jsx-runtime"],
-    },
-    ssr: {
-      noExternal: ["react", "react-dom"],
-    },
-  },
 });
