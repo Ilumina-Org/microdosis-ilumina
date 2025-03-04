@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 interface ProductContainerProps {
   sku: string;
@@ -26,20 +26,25 @@ export default function ProductContainer({
   stock = true,
   tipo = "package",
 }: ProductContainerProps) {
+  const [clickCount, setClickCount] = useState(0);
+  const [lastEvent, setLastEvent] = useState("");
+
   const tierHandler = (tier: number) => {
     switch (tier) {
-      case 0: // Gold/Premium
-        return "radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%), radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%)";
-      case 1: // Silver
-        return "linear-gradient(-40deg,#dedede,#ffffff 16%,#dedede 21%,#ffffff 24%,#454545 27%,#dedede 36%,#ffffff 45%,#ffffff 60%,#dedede 72%,#ffffff 80%,#dedede 84%,#a1a1a1)";
-      case 2: // Bronze
-        return "linear-gradient(-72deg, #ca7345, #ffdeca 16%, #ca7345 21%, #ffdeca 24%, #a14521 27%, #ca7345 36%, #ffdeca 45%, #ffdeca 60%, #ca7345 72%, #ffdeca 80%, #ca7345 84%, #732100)";
+      case 0:
+        return "Gold";
+      case 1:
+        return "Silver";
+      case 2:
+        return "Bronze";
       default:
-        return "linear-gradient(to right, #f0f0f0, #ffffff)"; // Neutral fallback
+        return "Neutral";
     }
   };
 
   const handleClick = () => {
+    setClickCount((prev) => prev + 1);
+    setLastEvent("Botón clickeado");
     window.location.href = link;
   };
 
@@ -49,25 +54,18 @@ export default function ProductContainer({
   };
 
   return (
-    <div
-      style={{
-        background: tierHandler(tier),
-        padding: ".5rem",
-        borderRadius: "30px",
-        boxShadow: "0px 15px 40px rgb(0, 0, 0, 0.2)",
-      }}
-    >
+    <div style={{ position: "relative", paddingBottom: "3rem" }}>
       <div
         style={{
-          backgroundColor: "white",
+          background: "white",
           width: "16rem",
           height: "27rem",
-          maxHeight: "27rem",
-          display: "flex",
           padding: ".75rem",
+          display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           borderRadius: "20px",
+          boxShadow: "0px 15px 40px rgb(0, 0, 0, 0.2)",
         }}
       >
         <img
@@ -79,23 +77,19 @@ export default function ProductContainer({
           height="55%"
         />
         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
-            <h3 style={{ fontSize: "23px", margin: 0 }}>{productTitle}</h3>
-            <p style={{ fontSize: "15px", margin: 0 }}>{productDetail}</p>
-            <p style={{ fontSize: "30px", margin: 0 }}>{productPrice}</p>
-            {productDeal && (
-              <p style={{ fontSize: "15px", margin: 0, color: "green" }}>
-                {productDeal}
-              </p>
-            )}
-          </div>
+          <h3 style={{ fontSize: "23px", margin: 0 }}>{productTitle}</h3>
+          <p style={{ fontSize: "15px", margin: 0 }}>{productDetail}</p>
+          <p style={{ fontSize: "30px", margin: 0 }}>{productPrice}</p>
+          {productDeal && (
+            <p style={{ fontSize: "15px", margin: 0, color: "green" }}>
+              {productDeal}
+            </p>
+          )}
           <button
             style={{
               width: "fit-content",
               padding: "1rem",
-              paddingBottom: ".75rem",
               background: stock ? "#C1DC3A" : "#ccc",
-              paddingTop: ".75rem",
               borderRadius: "10px",
               border: "none",
               cursor: stock ? "pointer" : "not-allowed",
@@ -106,6 +100,29 @@ export default function ProductContainer({
             {getButtonText()}
           </button>
         </div>
+      </div>
+
+      {/* Debug visual */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "-3rem",
+          width: "100%",
+          backgroundColor: "black",
+          color: "lime",
+          padding: "0.5rem",
+          fontSize: "12px",
+          borderRadius: "5px",
+          textAlign: "left",
+        }}
+      >
+        <strong>🛠 Debug Info</strong>
+        <p>Clicks: {clickCount}</p>
+        <p>Último evento: {lastEvent}</p>
+        <p>Stock: {stock ? "✅ Disponible" : "❌ Agotado"}</p>
+        <p>Tipo: {tipo}</p>
+        <p>SKU: {sku}</p>
+        <p>Tier: {tierHandler(tier)}</p>
       </div>
     </div>
   );
