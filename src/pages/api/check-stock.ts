@@ -17,7 +17,6 @@ export const GET: APIRoute = async ({ request }) => {
     }
 
     const stockData = await getStock();
-
     const productStock = stockData[productId];
 
     if (!productStock) {
