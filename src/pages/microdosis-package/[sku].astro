@@ -6,39 +6,32 @@ import PaymentOptions from "../../components/ReactComponents/PaymentOptions";
 import GuaranteeBox from "../../components/GuaranteeBox.astro";
 import OrderSummary from "../../components/OrderSummary.astro";
 import NotFound from "../../components/ReactComponents/NotFound";
+import { getStock } from "../../utils/stock";
 
 const { sku } = Astro.params;
 let packageData = null;
 let stockInfo = null;
 
-const siteUrl =
-  import.meta.env.SITE ||
-  "https://microdosis-ilumina-git-products-revised-multicompras.vercel.app";
-
 try {
-  const response = await fetch(`${siteUrl}/api/check-stock?productId=${sku}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  stockInfo = await response.json();
+  const stockData = await getStock();
 
-  if (
-    !stockInfo ||
-    stockInfo.code === "PRODUCT_NOT_FOUND" ||
-    stockInfo.code === "MISSING_PRODUCT_ID"
-  ) {
+  if (stockData[sku]) {
+    stockInfo = stockData[sku];
+
+    packageData = {
+      title: stockInfo.title,
+      price: stockInfo.price,
+      originalPrice: stockInfo.regularPrice,
+      savings: Math.round(stockInfo.regularPrice - stockInfo.price),
+      description: stockInfo.notas || `Paquete ${sku}`,
+      availableStock: stockInfo.disponible,
+    };
+
+    console.log("Stock Info", stockInfo);
+  } else {
     throw new Error("Producto no encontrado o no tiene stock disponible.");
   }
-  packageData = {
-    title: `Paquete ${sku}`,
-    price: 100,
-    originalPrice: 120,
-    savings: 20,
-    description: `Descripción para el paquete ${sku}`,
-  };
-  console.log("Stock Info", stockInfo);
-} catch (error: unknown) {
+} catch (error) {
   if (error instanceof Error) {
     if (
       error.message === "Producto no encontrado o no tiene stock disponible."
