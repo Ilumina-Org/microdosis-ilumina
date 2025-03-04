@@ -1,22 +1,28 @@
-/* Estilos base del chatbot */
+/* Estilos base del chatbot - Versión modernizada con tema verde */
 .chat-wrapper {
   position: relative;
   min-height: 100vh;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family:
+    "Inter",
+    "Outfit",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 }
 
+/* Botón flotante con tonos verdes */
 .chat-toggle {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  bottom: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #10b981, #059669);
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.35);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,14 +31,15 @@
 }
 
 .chat-toggle:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  transform: scale(1.05) translateY(-4px);
+  box-shadow: 0 8px 24px rgba(5, 150, 105, 0.45);
 }
 
 .robot-icon {
   width: 30px;
   height: 30px;
   color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 /* Contenedor principal del chat */
@@ -48,126 +55,315 @@
 
 .chat-box {
   background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  padding: 20px;
+  border-radius: 24px;
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.08),
+    0 4px 8px rgba(0, 0, 0, 0.04);
+  padding: 28px;
   width: 100%;
   max-height: 80vh;
   overflow-y: auto;
   position: relative;
   margin-bottom: 20px;
   scrollbar-width: thin;
-  scrollbar-color: #4caf50 #f5f5f5;
+  scrollbar-color: #10b981 #f5f5f5;
 }
 
 .chat-box::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .chat-box::-webkit-scrollbar-track {
-  background: #f5f5f5;
+  background: #f9fafb;
   border-radius: 10px;
 }
 
 .chat-box::-webkit-scrollbar-thumb {
-  background-color: #4caf50;
+  background-color: #10b981;
   border-radius: 10px;
 }
 
 /* Botón de cerrar */
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #f5f5f5;
+  top: 16px;
+  right: 16px;
+  background: rgba(245, 245, 245, 0.8);
+  backdrop-filter: blur(8px);
   border: none;
   font-size: 16px;
-  color: #333;
+  color: #065f46;
   cursor: pointer;
-  padding: 5px 10px;
-  border-radius: 50%;
-  transition: all 0.2s ease;
+  padding: 8px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
+  z-index: 20;
 }
 
 .close-button:hover {
-  background: #e0e0e0;
-  color: #000;
+  background: rgba(224, 224, 224, 0.9);
+  color: #064e3b;
+  transform: rotate(90deg);
 }
 
-/* Mensajes del chatbot */
+/* Mensajes del chatbot con tema verde */
 .chat-message {
-  background: #e8f5e9;
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border-left: 4px solid #4caf50;
+  background: #ecfdf5;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  border-left: none;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.chat-message::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: linear-gradient(to bottom, #10b981, #059669);
+  border-radius: 4px;
 }
 
 .chat-message p {
-  color: #333;
+  color: #064e3b;
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
   margin: 0;
+}
+
+/* Título mejorado */
+.chat-title {
+  font-family: "Outfit", "Inter", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #065f46;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.chat-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(to right, #10b981, #059669);
+  border-radius: 3px;
 }
 
 /* Contenedor de opciones */
 .options {
   display: grid;
-  gap: 12px;
-  margin-top: 20px;
+  gap: 16px;
+  margin-top: 24px;
   max-height: 300px;
   overflow-y: auto;
-  padding-right: 5px;
+  padding-right: 8px;
 }
 
-/* Estilos para botones normales */
+/* Botones con tema verde */
 .button {
   width: 100%;
   text-align: left;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, #007bff, #0056b3);
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #059669, #047857);
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
   color: white;
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  min-width: 100px;
-  outline: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+  letter-spacing: 0.3px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .button:hover {
-  background: linear-gradient(135deg, #0069d9, #0049b3);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #047857, #065f46);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(5, 150, 105, 0.3);
 }
 
-/* Animación de carga */
-.thinking {
-  display: flex;
-  flex-direction: column;
+.button:hover::before {
+  opacity: 1;
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+}
+
+/* Botón reinicio */
+.restart-button {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 20px;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+  display: inline-flex;
   align-items: center;
-  text-align: center;
-  padding: 20px 0;
+  gap: 8px;
 }
 
+.restart-button:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(5, 150, 105, 0.35);
+}
+
+.restart-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+}
+
+/* Botón continuar */
+.continue-button {
+  width: 100%;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 20px;
+  letter-spacing: 0.3px;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.continue-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.continue-button:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(5, 150, 105, 0.35);
+}
+
+.continue-button:hover::before {
+  opacity: 1;
+}
+
+.continue-button:disabled {
+  background: linear-gradient(135deg, #9ca3af, #6b7280);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(156, 163, 175, 0.25);
+}
+
+/* Animación de carga en tono verde */
 .loading-spinner {
   border: 3px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 3px solid #4caf50;
+  border-top: 3px solid #10b981;
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
   margin: 0 auto 12px;
+}
+
+/* Contenedor de resultados */
+.result {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: normal;
+  color: #064e3b;
+  background: #ecfdf5;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  border-left: none;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  white-space: pre-line;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.1);
+}
+
+.result::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: linear-gradient(to bottom, #10b981, #059669);
+  border-radius: 4px;
+}
+
+/* Selección múltiple con tema verde */
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  background: #f0fdf9;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  margin-bottom: 10px;
+  border: 1px solid #d1fae5;
+  user-select: none;
+}
+
+.checkbox-option:hover {
+  background: #d1fae5;
+  transform: translateY(-2px);
+  border-color: #a7f3d0;
+}
+
+.checkbox-option.selected {
+  background-color: #10b981;
+  color: white;
+  border-color: #059669;
 }
 
 @keyframes spin {
@@ -179,124 +375,6 @@
   }
 }
 
-/* Contenedor de resultados */
-.result-container {
-  text-align: center;
-}
-
-.result {
-  font-size: 16px;
-  line-height: 1.6;
-  font-weight: normal;
-  color: #333;
-  background: #e8f5e9;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border-left: 4px solid #4caf50;
-  text-align: left;
-  white-space: pre-line;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-/* Botón de reinicio */
-.restart-button {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 10px;
-  font-weight: 500;
-  font-size: 15px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.restart-button:hover {
-  background: #388e3c;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Selección múltiple mejorada */
-.multi-select {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-@media (max-width: 600px) {
-  .multi-select {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 400px) {
-  .multi-select {
-    grid-template-columns: 1fr;
-  }
-}
-
-.checkbox-option {
-  display: flex;
-  align-items: center;
-  background: #f3f4f6;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 14px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  user-select: none;
-}
-
-.checkbox-option:hover {
-  background: #e5e7eb;
-  transform: translateY(-2px);
-}
-
-.checkbox-option.selected {
-  background-color: #4caf50;
-  color: white;
-  border-color: #4caf50;
-}
-
-/* Botón continuar mejorado */
-.continue-button {
-  width: 100%;
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 16px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 14px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.continue-button:hover {
-  background: #388e3c;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.continue-button:disabled {
-  background: #9ca3af;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
 /* Estilos responsivos */
 @media (max-width: 768px) {
   .chat-container {
@@ -304,8 +382,8 @@
   }
 
   .chat-box {
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: 20px;
+    padding: 20px;
   }
 
   .chat-message p {
@@ -314,7 +392,7 @@
 
   .button {
     font-size: 14px;
-    padding: 10px 14px;
+    padding: 14px 18px;
   }
 
   .result {
@@ -325,19 +403,20 @@
 
 @media (max-width: 480px) {
   .chat-toggle {
-    width: 50px;
-    height: 50px;
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
   }
 
   .robot-icon {
-    width: 25px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
   }
 
   .close-button {
     font-size: 14px;
-    width: 26px;
-    height: 26px;
+    width: 30px;
+    height: 30px;
   }
 
   .options {

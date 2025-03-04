@@ -123,7 +123,7 @@ const ChatBot: React.FC = () => {
   };
 
   // Estados
-  const [chatVisible, setChatVisible] = useState<boolean>(false);
+  const [chatVisible, setChatVisible] = useState<boolean>(true);
   const [step, setStep] = useState<number>(0);
   const [respuestas, setRespuestas] = useState<string[]>([]);
   const [gotasCalculadas, setGotasCalculadas] = useState<number>(0);
@@ -316,71 +316,71 @@ const ChatBot: React.FC = () => {
         </svg>
       </button>
 
-      {chatVisible && (
-        <div className="chat-container">
-          <div className="chat-box">
-            <button onClick={closeChat} className="close-button">×</button>
 
-            {showQuestionSection && (
-              <>
-                <div className="chat-message bot">
-                  <p>{questions[step].text}</p>
-                </div>
-                <div className="options">
-                  {questions[step].type === "multiselect" ? (
-                    <>
-                      <div className="multi-select">
-                        {questions[step].options.map((option, index) => (
-                          <div
-                            key={index}
-                            className={`checkbox-option ${momentoMedicacion.includes(option) ? 'selected' : ''}`}
-                            onClick={() => handleOptionToggle(option)}
-                            data-value={option}
-                          >
-                            {option}
-                          </div>
-                        ))}
-                      </div>
-                      <button
-                        className="continue-button"
-                        onClick={handleMultiSelect}
-                      >
-                        Continuar
-                      </button>
-                    </>
-                  ) : (
-                    questions[step].options.map((option, index) => (
-                      <button
-                        key={index}
-                        className="button"
-                        onClick={() => nextQuestion(option)}
-                      >
-                        {option}
-                      </button>
-                    ))
-                  )}
-                </div>
-              </>
-            )}
+      <div className="chat-container">
+        <div className="chat-box">
+          <button onClick={closeChat} className="close-button">×</button>
 
-            {showThinking && (
-              <div className="thinking">
-                <div className="loading-spinner"></div>
-                <p>Analizando tus respuestas...</p>
+          {showQuestionSection && (
+            <>
+              <div className="chat-message bot">
+                <p>{questions[step].text}</p>
               </div>
-            )}
-
-            {showResult && (
-              <div className="result-container">
-                <p className="result">{resultado}</p>
-                <button onClick={restartChat} className="restart-button">
-                  Realizar otra consulta
-                </button>
+              <div className="options">
+                {questions[step].type === "multiselect" ? (
+                  <>
+                    <div className="multi-select">
+                      {questions[step].options.map((option, index) => (
+                        <div
+                          key={index}
+                          className={`checkbox-option ${momentoMedicacion.includes(option) ? 'selected' : ''}`}
+                          onClick={() => handleOptionToggle(option)}
+                          data-value={option}
+                        >
+                          {option}
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      className="continue-button"
+                      onClick={handleMultiSelect}
+                    >
+                      Continuar
+                    </button>
+                  </>
+                ) : (
+                  questions[step].options.map((option, index) => (
+                    <button
+                      key={index}
+                      className="button"
+                      onClick={() => nextQuestion(option)}
+                    >
+                      {option}
+                    </button>
+                  ))
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
+
+          {showThinking && (
+            <div className="thinking">
+              <div className="loading-spinner"></div>
+              <p>Analizando tus respuestas...</p>
+            </div>
+          )}
+
+          {showResult && (
+            <div className="result-container">
+              <p className="result">{resultado}</p>
+              <button onClick={restartChat} className="restart-button">
+                Realizar otra consulta
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
+
     </div>
   );
 };
