@@ -2,6 +2,7 @@ import { getGoogleSheetsClient, SPREADSHEET_ID, SHEETS } from "./google-sheets";
 import type { StockItem } from "../types/inventory";
 
 type StockData = Record<string, StockItem>;
+
 export const getStock = async (): Promise<StockData> => {
   try {
     const sheets = await getGoogleSheetsClient();
@@ -14,7 +15,7 @@ export const getStock = async (): Promise<StockData> => {
     const seenSkus = new Set();
 
     if (response.data.values && response.data.values.length > 0) {
-      response.data.values.forEach((row) => {
+      response.data.values.forEach((row, index) => {
         const [
           sku,
           title,
@@ -50,6 +51,11 @@ export const getStock = async (): Promise<StockData> => {
           return;
         }
 
+        // Log de los valores antes de agregar al stockData
+        console.log(
+          `Fila ${index + 1}: SKU ${sku}, disponibleFinal: ${disponibleFinal}, totalFinal: ${totalFinal}`,
+        );
+
         stockData[sku] = {
           sku: sku.trim(),
           title: title || "",
@@ -78,15 +84,23 @@ export const getProducts = async (): Promise<any[]> => {
   try {
     const stockData = await getStock();
 
-    return Object.values(stockData).map((item) => ({
-      sku: item.sku,
-      title: item.title,
-      productDetail: `Precio Regular $${item.regularPrice}`,
-      productPrice: `$${item.price}`,
-      productDeal: `(Ahorra ${Math.round((1 - item.price / item.regularPrice) * 100)}%)`,
-      stock: item.disponible > 0,
-      tipo: item.tipo,
-    }));
+    console.log("Stock data fetched for products:", stockData); // Log para revisar el stockData completo
+
+    return Object.values(stockData).map((item) => {
+      console.log(
+        `Evaluando SKU ${item.sku}, disponible: ${item.disponible}, stock: ${item.disponible > 0}`,
+      ); // Log de cada producto
+
+      return {
+        sku: item.sku,
+        title: item.title,
+        productDetail: `Precio Regular $${item.regularPrice}`,
+        productPrice: `$${item.price}`,
+        productDeal: `(Ahorra ${Math.round((1 - item.price / item.regularPrice) * 100)}%)`,
+        stock: item.disponible > 0, // Esto es donde validas el stock
+        tipo: item.tipo,
+      };
+    });
   } catch (error) {
     console.error("Error fetching products:", error);
     return [];
