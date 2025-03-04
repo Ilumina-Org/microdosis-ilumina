@@ -11,10 +11,16 @@ const { sku } = Astro.params;
 let packageData = null;
 let stockInfo = null;
 
+const siteUrl =
+  import.meta.env.SITE ||
+  "https://microdosis-ilumina-git-products-revised-multicompras.vercel.app";
+
 try {
-  const response = await fetch(
-    `http://localhost:4321/api/check-stock?productId=${sku}`,
-  );
+  const response = await fetch(`${siteUrl}/api/check-stock?productId=${sku}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   stockInfo = await response.json();
 
   if (
