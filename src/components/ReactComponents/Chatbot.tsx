@@ -318,7 +318,6 @@ const ChatBot = () => {
 
       {
         chatVisible && (
-          <div className="chat-wrapper">
             <div className="chat-container">
               <div className="chat-box">
                 <button onClick={closeChat} className="close-button">×</button>
@@ -379,7 +378,6 @@ const ChatBot = () => {
                     </button>
                   </div>
                 )}
-              </div>
             </div>
           </div>
         )}
