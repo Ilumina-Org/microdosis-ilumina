@@ -175,6 +175,7 @@
 
 /* Botones con tema verde */
 .button {
+  margin-top: 3px;
   width: 100%;
   text-align: left;
   padding: 16px 20px;
