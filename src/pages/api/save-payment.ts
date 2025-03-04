@@ -8,7 +8,7 @@ import {
   ensureSheetExists,
 } from "../../utils/google-sheets";
 
-const SHEET_NAME = "Pagos";
+const SHEET_NAME = "Ordenes";
 const HEADERS = [
   "Fecha",
   "ID de Pago",
