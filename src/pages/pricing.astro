@@ -11,7 +11,6 @@ try {
 } catch (error) {
   errorMessage = "Hubo un problema al cargar los productos. Intenta más tarde.";
 }
-console.log("productos", products);
 ---
 
 <Layout>
@@ -65,11 +64,7 @@ console.log("productos", products);
             productDeal={product.productDeal}
             tier={product.tier}
             stock={product.stock}
-            tipo={product.tipo}
-            onClickHandler={(link) => {
-              console.log("Navegando a:", link);
-              window.location.href = link;
-            }}
+            purchaseType={product.tipo}
           />
         ))
       }

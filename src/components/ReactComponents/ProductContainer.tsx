@@ -1,53 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
 
 interface ProductContainerProps {
   sku: string;
-  link?: string;
-  imageUrl?: string;
+  link: string;
+  imageUrl: string;
   productTitle: string;
   productDetail: string;
   productPrice: string;
   productDeal?: string;
-  tier: number;
-  stock: boolean;
-  tipo?: "package" | "subscription";
-  onClickHandler?: (link: string) => void; // Agregamos prop opcional
+  tier?: number;
+  stock?: boolean;
+  purchaseType?: "package" | "subscription";
 }
 
 export default function ProductContainer({
   sku,
-  link = `/microdosis-package/${sku}`,
-  imageUrl = `/products/${sku}-card.svg`,
+  link,
+  imageUrl,
   productTitle,
   productDetail,
   productPrice,
-  productDeal = "",
+  productDeal,
   tier = 0,
   stock = true,
-  tipo = "package",
-  onClickHandler, // Nuevo prop
+  purchaseType = "package",
 }: ProductContainerProps) {
-  const [clicks, setClicks] = useState(0);
-  const [lastEvent, setLastEvent] = useState<string>("Ninguno");
+  const tierStyles = {
+    0: "radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%), radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%)",
+    1: "linear-gradient(-40deg,#dedede,#ffffff 16%,#dedede 21%,#ffffff 24%,#454545 27%,#dedede 36%,#ffffff 45%,#ffffff 60%,#dedede 72%,#ffffff 80%,#dedede 84%,#a1a1a1)",
+    2: "linear-gradient(-72deg, #ca7345, #ffdeca 16%, #ca7345 21%, #ffdeca 24%, #a14521 27%, #ca7345 36%, #ffdeca 45%, #ffdeca 60%, #ca7345 72%, #ffdeca 80%, #ca7345 84%, #732100)",
+  };
 
   const handleClick = () => {
-    if (!stock) {
-      console.log("❌ Producto agotado. No se puede comprar.");
-      return;
-    }
-
-    // Incrementamos clicks local
-    setClicks((prev) => prev + 1);
-
-    // Establecemos último evento
-    setLastEvent(`Clicked SKU: ${sku} - Link: ${link}`);
-
-    // Si se provee un handler personalizado, lo usamos
-    if (onClickHandler) {
-      onClickHandler(link);
-    } else {
-      // Comportamiento por defecto
-      console.log(`🔗 Redirigiendo a: ${link}`);
+    if (stock) {
       window.location.href = link;
     }
   };
@@ -55,7 +40,7 @@ export default function ProductContainer({
   return (
     <div
       style={{
-        background: "linear-gradient(to right, #e0eafc, #cfdef3)",
+        background: tierStyles[tier] || "",
         padding: ".5rem",
         borderRadius: "30px",
         boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.2)",
@@ -65,7 +50,8 @@ export default function ProductContainer({
         style={{
           backgroundColor: "white",
           width: "16rem",
-          height: "28rem",
+          height: "27rem",
+          maxHeight: "27rem",
           display: "flex",
           padding: ".75rem",
           flexDirection: "column",
@@ -73,47 +59,44 @@ export default function ProductContainer({
           borderRadius: "20px",
         }}
       >
-        <img src={imageUrl} alt={productTitle} width="100%" height="55%" />
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <h3 style={{ fontSize: "23px" }}>{productTitle}</h3>
-          <p>{productDetail}</p>
-          <p style={{ fontSize: "30px" }}>{productPrice}</p>
-          {productDeal && <p style={{ color: "green" }}>{productDeal}</p>}
+        <img
+          src={imageUrl}
+          alt={productTitle}
+          width="100%"
+          height="55%"
+          style={{ objectFit: "contain" }}
+        />
+        <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
+            <h3 style={{ fontSize: "23px", margin: 0 }}>{productTitle}</h3>
+            <p style={{ fontSize: "15px", margin: 0 }}>{productDetail}</p>
+            <p style={{ fontSize: "30px", margin: 0 }}>{productPrice}</p>
+            {productDeal && (
+              <p style={{ fontSize: "15px", margin: 0, color: "green" }}>
+                {productDeal}
+              </p>
+            )}
+          </div>
           <button
             style={{
+              width: "fit-content",
+              padding: "1rem",
               background: stock ? "#C1DC3A" : "#ccc",
               borderRadius: "10px",
               border: "none",
               cursor: stock ? "pointer" : "not-allowed",
               opacity: stock ? 1 : 0.7,
-              padding: "1rem",
-              fontWeight: "bold",
             }}
             onClick={handleClick}
             disabled={!stock}
           >
-            {stock ? "Comprar ahora" : "AGOTADO"}
+            {purchaseType === "subscription"
+              ? "Suscripción mensual"
+              : stock
+                ? "Comprar ahora"
+                : "AGOTADO"}
           </button>
         </div>
-      </div>
-      <div
-        style={{
-          marginTop: "1rem",
-          fontSize: "12px",
-          color: "#666",
-          background: "#f4f4f4",
-          padding: "0.5rem",
-          borderRadius: "10px",
-          boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <strong>🛠 Debug Info</strong>
-        <p>Clicks: {clicks}</p>
-        <p>Último evento: {lastEvent}</p>
-        <p>Stock: {stock ? "✅ Disponible" : "❌ Agotado"}</p>
-        <p>Tipo: {tipo}</p>
-        <p>SKU: {sku}</p>
-        <p>Tier: {tier}</p>
       </div>
     </div>
   );
