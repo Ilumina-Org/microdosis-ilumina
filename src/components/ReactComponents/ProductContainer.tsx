@@ -16,8 +16,8 @@ interface ProductContainerProps {
 
 export default function ProductContainer({
   sku,
-  link = `/microdosis-package/${sku}`, // Default link generation
-  imageUrl = `/src/assets/products/${sku}-card.svg`, // Default image path
+  link = `/microdosis-package/${sku}`,
+  imageUrl = `/src/assets/products/${sku}-card.svg`,
   productTitle,
   productDetail,
   productPrice,
@@ -28,8 +28,20 @@ export default function ProductContainer({
 }: ProductContainerProps) {
   const [stockInfo, setStockInfo] = useState({
     canPurchase: stock,
-    loading: true,
+    loading: false, // Inicializar directamente en false
   });
+
+  useEffect(() => {
+    // Simular una verificación mínima de stock
+    const timeoutId = setTimeout(() => {
+      setStockInfo({
+        canPurchase: stock,
+        loading: false,
+      });
+    }, 500); // Un breve retraso para simular verificación
+
+    return () => clearTimeout(timeoutId);
+  }, [stock]);
 
   const tierHandler = (tier: number) => {
     switch (tier) {
@@ -55,14 +67,6 @@ export default function ProductContainer({
     cursor: "pointer",
   };
 
-  useEffect(() => {
-    // Initial stock state setup
-    setStockInfo({
-      canPurchase: stock,
-      loading: false,
-    });
-  }, [stock]);
-
   const handleClick = () => {
     console.log(`Button clicked for product SKU: ${sku}`);
     if (!stockInfo.loading && stockInfo.canPurchase) {
@@ -70,7 +74,6 @@ export default function ProductContainer({
     }
   };
 
-  // Determine button text based on stock and type
   const getButtonText = () => {
     if (stockInfo.loading) return "Verificando...";
     if (!stockInfo.canPurchase) return "AGOTADO";
@@ -78,6 +81,7 @@ export default function ProductContainer({
   };
 
   console.log("debugging", stockInfo);
+
   return (
     <div
       style={{
