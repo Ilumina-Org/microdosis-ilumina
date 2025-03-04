@@ -30,6 +30,18 @@ export default function ProductContainer({
     loading: true,
   });
 
+  // Estilo para el botón
+  const buttonStyle = {
+    width: "fit-content",
+    padding: "1rem",
+    paddingTop: ".75rem",
+    paddingBottom: ".75rem",
+    background: "#C1DC3A",
+    borderRadius: "10px",
+    border: "none",
+    cursor: "pointer",
+  };
+
   const tierHandler = (tier: number) => {
     switch (tier) {
       case 0:
@@ -41,17 +53,6 @@ export default function ProductContainer({
       default:
         return "";
     }
-  };
-
-  const buttonStyle = {
-    width: "fit-content",
-    padding: "1rem",
-    paddingTop: ".75rem",
-    paddingBottom: ".75rem",
-    background: "#C1DC3A",
-    borderRadius: "10px",
-    border: "none",
-    cursor: "pointer",
   };
 
   useEffect(() => {
