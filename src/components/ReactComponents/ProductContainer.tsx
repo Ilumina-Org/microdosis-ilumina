@@ -28,11 +28,10 @@ export default function ProductContainer({
 }: ProductContainerProps) {
   const [stockInfo, setStockInfo] = useState({
     canPurchase: stock,
-    loading: false, // Inicializar directamente en false
+    loading: false,
   });
 
   useEffect(() => {
-    // Simular una verificación mínima de stock
     const timeoutId = setTimeout(() => {
       setStockInfo({
         canPurchase: stock,
@@ -68,7 +67,6 @@ export default function ProductContainer({
   };
 
   const handleClick = () => {
-    console.log(`Button clicked for product SKU: ${sku}`);
     if (!stockInfo.loading && stockInfo.canPurchase) {
       window.location.href = link;
     }
@@ -79,8 +77,6 @@ export default function ProductContainer({
     if (!stockInfo.canPurchase) return "AGOTADO";
     return tipo === "subscription" ? "Suscripción mensual" : "Comprar ahora";
   };
-
-  console.log("debugging", stockInfo);
 
   return (
     <div
@@ -122,9 +118,6 @@ export default function ProductContainer({
                 {productDeal}
               </p>
             )}
-            <h3 style={{ color: "black" }}>
-              debug info: {JSON.stringify(stockInfo)}
-            </h3>
           </div>
           <button
             style={{

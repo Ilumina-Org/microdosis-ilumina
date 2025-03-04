@@ -1,4 +1,5 @@
 ---
+import { content_v2_1 } from "googleapis";
 import Layout from "../layouts/Layout.astro";
 import { getProducts } from "../utils/stock";
 import ProductContainer from "./ReactComponents/ProductContainer";
@@ -59,7 +60,7 @@ console.log("productos", products);
           <ProductContainer
             client:load
             key={product.sku}
-            imageUrl={`/src/assets/products/${product.sku}-card.svg`}
+            imageUrl={`/public/products/${product.sku}-card.svg`}
             sku={product.sku}
             productTitle={product.title}
             productDetail={product.productDetail}
