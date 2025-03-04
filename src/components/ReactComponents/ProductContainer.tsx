@@ -30,11 +30,24 @@ export default function ProductContainer({
   const [lastEvent, setLastEvent] = useState<string>("Ninguno");
 
   const handleClick = () => {
-    if (!stock) return;
-    setClicks((prev) => prev + 1);
+    if (!stock) {
+      console.log("❌ Producto agotado. No se puede comprar.");
+      return;
+    }
+
+    console.log("✅ Botón clickeado");
+
+    setClicks((prev) => {
+      console.log(`Clicks antes: ${prev}, después: ${prev + 1}`);
+      return prev + 1;
+    });
+
     setLastEvent(`Clicked SKU: ${sku} - Link: ${link}`);
-    console.log(`Redirigiendo a: ${link}`);
-    window.location.href = link;
+    console.log(`🔗 Redirigiendo a: ${link}`);
+
+    setTimeout(() => {
+      window.location.href = link;
+    }, 300); // Simula la redirección
   };
 
   return (
@@ -65,7 +78,7 @@ export default function ProductContainer({
           <p style={{ fontSize: "30px" }}>{productPrice}</p>
           {productDeal && <p style={{ color: "green" }}>{productDeal}</p>}
 
-          {/* 🔘 Botón fijo, no cubierto por Debug Info */}
+          {/* 🔘 Aseguramos que el botón sea interactivo */}
           <button
             style={{
               background: stock ? "#C1DC3A" : "#ccc",
@@ -76,7 +89,10 @@ export default function ProductContainer({
               padding: "1rem",
               fontWeight: "bold",
             }}
-            onClick={handleClick}
+            onClick={() => {
+              console.log("🎯 Click detectado en el botón");
+              handleClick();
+            }}
             disabled={!stock}
           >
             {stock ? "Comprar ahora" : "AGOTADO"}
@@ -84,7 +100,7 @@ export default function ProductContainer({
         </div>
       </div>
 
-      {/* 🛠 Debug Info (Movido fuera del contenedor) */}
+      {/* 🛠 Debug Info (fuera del contenedor del botón) */}
       <div
         style={{
           marginTop: "1rem",
