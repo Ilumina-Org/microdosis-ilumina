@@ -195,6 +195,10 @@ const ChatBot = () => {
     else if (step === 3) { // ¿Tiene diagnóstico?
       const tieneDiagnostico = answer === "Sí";
       setTieneEnfermedad(tieneDiagnostico);
+      if (!tieneDiagnostico) {
+        setStep(5);
+        return;
+      }
     }
     else if (step === 4 && tieneEnfermedad) { // Tipo de diagnóstico
       setDiagnosticoSeleccionado(answer);
@@ -202,24 +206,20 @@ const ChatBot = () => {
       setGotasCalculadas(prev => prev + data.ajuste);
       setHorasEspera(data.horas);
     }
-    else if (step === 5 && tieneEnfermedad) { // ¿Toma medicamentos?
+    else if (step === 5) { // ¿Toma medicamentos?
       const tomaMeds = answer === "Sí";
       setTomaMedicamentos(tomaMeds);
+
+      // Si no toma medicamentos, saltar a última pregunta
+      if (!tomaMeds) {
+        setStep(7);
+        return;
+      }
     }
 
-    let nextStep = step + 1;
+    setStep(prev => prev + 1);
 
-    // Lógica para saltar preguntas según respuestas
-    if (!tieneEnfermedad && nextStep === 4) {
-      nextStep = 7; // Saltar a la última pregunta
-    }
-    else if (!tomaMedicamentos && tieneEnfermedad && nextStep === 6) {
-      nextStep = 7; // Saltar a la última pregunta
-    }
-
-    setStep(nextStep);
-
-    if (nextStep >= questions.length) {
+    if (step + 1 >= questions.length) {
       startThinking();
     }
   };
