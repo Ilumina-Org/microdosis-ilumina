@@ -104,7 +104,6 @@ export default function ProductContainer({
               opacity: stock ? 1 : 0.7,
             }}
             onClick={handleClick}
-            disabled={!stock}
           >
             {getButtonText()}
           </button>
