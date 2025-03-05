@@ -378,7 +378,8 @@
 /* Estilos responsivos */
 @media (max-width: 768px) {
   .chat-container {
-    width: 90%;
+    width: 80%;
+    right: 14.5%;
   }
 
   .chat-box {
