@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Chatbot from "../components/ReactComponents/Chatbot";
-import Products from "../components/Products.astro";
+import Products from "../components/ReactPages/Products.tsx";
 import Landing from "../components/ReactPages/Landing.tsx";
 import Testimonials from "../components/ReactPages/Testimonials.tsx";
 import About from "../components/ReactPages/About.tsx";
@@ -12,7 +12,7 @@ import FAQs from "../components/ReactPages/FAQs.tsx";
   <Landing id="inicio" client:load />
   <About id="about" />
   <Testimonials id="testimonios" client:load />
-  <Products id="products" />
+  <Products id="products" client:load />
   <FAQs id="faqs" client:load />
   <Chatbot client:load />
 </Layout>
