@@ -1,10 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getProducts } from "../utils/stock";
-import ProductContainer from "./ReactComponents/ProductContainer";
+import ProductContainer from "../components/ReactComponents/ProductContainer";
 
-const products = await getProducts();
-console.log("products", products);
+let products = [];
+let errorMessage = "";
+try {
+  products = await getProducts();
+  products = products.slice(0, 3);
+} catch (error) {
+  errorMessage = "Hubo un problema al cargar los productos. Intenta más tarde.";
+}
 ---
 
 <Layout>
@@ -14,17 +20,15 @@ console.log("products", products);
     style={{
       display: "flex",
       flexDirection: "column",
-      height: "70%",
+      height: "100vh",
       justifyContent: "center",
     }}
   >
-    <!-- Sección de Título -->
     <div style={{ width: "100%", textAlign: "left" }}>
       <h2 style={{ fontWeight: 300, fontSize: "35px", color: "black" }}>
         Paquetes Disponibles
       </h2>
     </div>
-
     <div
       style={{
         display: "flex",
@@ -35,30 +39,38 @@ console.log("products", products);
       }}
     >
       {
+        errorMessage && (
+          <p style={{ color: "red", fontSize: "18px" }}>{errorMessage}</p>
+        )
+      }
+
+      {
+        !errorMessage && products.length === 0 && (
+          <p style={{ fontSize: "18px" }}>No hay productos disponibles.</p>
+        )
+      }
+
+      {
         products.map((product) => (
           <ProductContainer
             client:load
             key={product.sku}
+            imageUrl={`/products/${product.sku}-card.svg`}
+            link={`microdosis-package/${product.sku}`}
             sku={product.sku}
-            link={product.link}
-            imageUrl={product.imageUrl}
             productTitle={product.title}
             productDetail={product.productDetail}
             productPrice={product.productPrice}
             productDeal={product.productDeal}
             tier={product.tier}
-            purchaseType={
-              product.sku.includes("subscription") ? "subscription" : undefined
-            }
+            stock={product.stock}
+            purchaseType={product.tipo}
           />
         ))
       }
     </div>
-
-    <!-- <ReviewComponent /> -->
   </section>
 </Layout>
-
 <style>
   .container {
     --horizontalPadding: 10rem;
@@ -68,9 +80,8 @@ console.log("products", products);
     padding-left: var(--horizontalPadding);
     scroll-snap-align: start;
   }
-
   @media (max-width: 768px) {
-    #container {
+    .container {
       --horizontalPadding: 2rem;
       padding: 1rem;
     }

@@ -1,4 +1,6 @@
+import { Whatsapp } from "iconsax-react";
 import React, { useEffect, useRef, useState } from "react";
+import Button from "../ReactComponents/Button";
 
 const NavigationButtons = () => {
   const [active, setActive] = useState<string | null>();
@@ -27,6 +29,7 @@ const NavigationButtons = () => {
 
   return (
     <div
+      className="navigation"
       style={{
         position: "fixed",
         display: "flex",
@@ -99,6 +102,37 @@ const NavigationButtons = () => {
       >
         Preguntas <br /> frecuentes
       </a>
+      {/* 
+      <div
+        style={{
+          position: "fixed",
+          bottom: "2rem",
+          right: "4rem",
+        }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            right: 0,
+            bottom: 80,
+            borderRadius: "10px",
+            padding: ".5rem",
+            paddingRight: ".85rem",
+            backgroundColor: "#B5BC94",
+            color: "black",
+            width: 140,
+          }}
+        >
+          Simula tu dosificación
+        </span>
+        <Button
+          bacgrkoundColor="red"
+          styles={{ backgroundColor: "white" }}
+          icon={<Whatsapp size="40" color="#013726" variant="Bold" />}
+          padding={10}
+        />
+      </div>
+      */}
     </div>
   );
 };

@@ -1,19 +1,13 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "lucasan.videla@gmail.com",
-    pass: "srie cajk uwmc qfas",
-  },
-});
+const resend = new Resend("re_123456789"); // Reemplaza con tu API key de Resend
 
 export async function sendConfirmationEmail(
   to: string,
   data: any,
 ): Promise<void> {
-  const mailOptions = {
-    from: '"Tu Empresa" <lucasan.videla@gmail.com>',
+  await resend.emails.send({
+    from: "Tu Empresa <no-reply@tudominio.com>", // Cambia por tu dominio verificado en Resend
     to,
     subject: "Confirmación de Registro - Tu Orden ha sido Procesada",
     html: `
@@ -28,33 +22,28 @@ export async function sendConfirmationEmail(
       <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
       <p>Saludos,<br>Tu Empresa</p>
     `,
-  };
-
-  await transporter.sendMail(mailOptions);
+  });
 }
 
 export async function sendAdminNotification(data: any): Promise<void> {
-  const mailOptions = {
-    from: '"Sistema de Órdenes" <lucasan.videla@gmail.com>',
-    to: "lucasan.videla@gmail.com",
+  await resend.emails.send({
+    from: "Sistema de Órdenes <no-reply@tudominio.com>", // Cambia por tu dominio verificado en Resend
+    to: "lucasan.videla@gmail.com", // Email del administrador
     subject: `Nueva Orden Recibida - ${data.merchantOrderId}`,
     html: `
       <h1 style="color: #ff5722;">¡Nueva orden requiere atención!</h1>
-
       <h3>Datos del Cliente:</h3>
       <ul>
         <li><strong>Nombre:</strong> ${data.shippingAddress.name}</li>
         <li><strong>Email:</strong> ${data.shippingAddress.email}</li>
         <li><strong>Teléfono:</strong> ${data.shippingAddress.phone}</li>
       </ul>
-
       <h3>Dirección de Envío:</h3>
       <p>
         ${data.shippingAddress.address}<br>
         ${data.shippingAddress.city}, ${data.shippingAddress.state}<br>
         ${data.shippingAddress.zipCode}, ${data.shippingAddress.country}
       </p>
-
       <h3>Detalles de Pago:</h3>
       <table border="1" cellpadding="5" style="border-collapse: collapse;">
         <tr>
@@ -70,12 +59,9 @@ export async function sendAdminNotification(data: any): Promise<void> {
           <td>${new Date().toLocaleDateString()}</td>
         </tr>
       </table>
-
       <p style="margin-top: 20px; color: #666;">
         Este pedido fue registrado el ${new Date().toLocaleString()}
       </p>
     `,
-  };
-
-  await transporter.sendMail(mailOptions);
+  });
 }
