@@ -424,3 +424,13 @@
     max-height: 250px;
   }
 }
+
+@keyframes dropShadowPulse {
+  0%,
+  100% {
+    filter: drop-shadow(1.5px 1.5px 4px white);
+  }
+  50% {
+    filter: drop-shadow(6px 6px 12px white);
+  }
+}

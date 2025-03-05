@@ -307,80 +307,152 @@ const ChatBot = () => {
   return (
     <>
       <button onClick={() => toggleChat()} className="chat-toggle">
-        <svg className="robot-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="11" width="18" height="10" rx="2" />
-          <circle cx="12" cy="5" r="2" />
-          <path d="M12 7v4" />
-          <line x1="8" y1="16" x2="8" y2="16" />
-          <line x1="16" y1="16" x2="16" y2="16" />
+        <svg
+          width="80%"
+          height="85.044815mm"
+          viewBox="0 0 141.92133 85.044815"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+          }}
+        >
+          <g transform="translate(-31.008006,-6.8815468)">
+            <g transform="translate(-1.7247387,-160.05575)" style={{ opacity: 1 }}>
+              <path
+                style={{
+                  animation: 'dropShadowPulse 2s infinite',
+                  animationTimingFunction: 'ease-in-out',
+                  opacity: 1,
+                  fill: 'none',
+                  fillOpacity: 1,
+                  fillRule: 'evenodd',
+                  stroke: 'white',
+                  strokeWidth: 4.231,
+                  strokeLinecap: 'round',
+                  strokeDasharray: 'none',
+                  strokeOpacity: 1
+                }}
+                d="m 94.515679,242.22717 c 0,0 -30.700348,21.99443 -58.986062,-8.59158 0,0 23.111498,-28.52399 67.954703,0 0,0 -2.06968,-40.55221 -47.947734,-46.39452 0,0 -2.414634,16.49585 8.278745,28.18041"
+              />
+              <path
+                style={{
+                  animation: 'dropShadowPulse 2s infinite',
+                  animationTimingFunction: 'ease-in-out',
+                  opacity: 1,
+                  fill: 'none',
+                  fillOpacity: 1,
+                  fillRule: 'evenodd',
+                  stroke: 'white',
+                  strokeWidth: 4.231,
+                  strokeLinecap: 'round',
+                  strokeDasharray: 'none',
+                  strokeOpacity: 1
+                }}
+                d="m 89.686411,194.11439 c 0,0 1.724737,-14.7775 13.108009,-24.40009 0,0 31.73519,27.14938 1.37979,63.92129"
+              />
+              <path
+                style={{
+                  animation: 'dropShadowPulse 2s infinite',
+                  animationTimingFunction: 'ease-in-out',
+                  opacity: 1,
+                  fill: 'none',
+                  fillOpacity: 1,
+                  fillRule: 'evenodd',
+                  stroke: 'white',
+                  strokeWidth: 4.231,
+                  strokeLinecap: 'round',
+                  strokeDasharray: 'none',
+                  strokeOpacity: 1
+                }}
+                d="m 122.80139,196.52003 c 0,0 13.79791,-13.05922 27.94076,-11.34093 0,0 0.34496,47.08187 -46.56794,48.45649"
+              />
+              <path
+                style={{
+                  animation: 'dropShadowPulse 2s infinite',
+                  animationTimingFunction: 'ease-in-out',
+                  opacity: 1,
+                  fill: 'none',
+                  fillOpacity: 1,
+                  fillRule: 'evenodd',
+                  stroke: 'white',
+                  strokeWidth: 4.231,
+                  strokeLinecap: 'round',
+                  strokeDasharray: 'none',
+                  strokeOpacity: 1
+                }}
+                d="m 144.87804,219.20175 c 0,0 14.14286,-1.03097 26.90593,10.65356 0,0 -30.01045,38.49026 -67.9547,3.78028"
+              />
+            </g>
+          </g>
         </svg>
-      </button>
+      </button >
 
       {
         chatVisible && (
-            <div className="chat-container">
-              <div className="chat-box">
-                <button onClick={closeChat} className="close-button">×</button>
-                {showQuestionSection && (
-                  <>
-                    <div className="chat-message bot">
-                      <p>{questions[step].text}</p>
-                    </div>
-                    <div className="options">
-                      {questions[step].type === "multiselect" ? (
-                        <>
-                          <div className="multi-select">
-                            {questions[step].options.map((option, index) => (
-                              <div
-                                key={index}
-                                className={`checkbox-option ${momentoMedicacion.includes(option) ? 'selected' : ''}`}
-                                onClick={() => handleOptionToggle(option)}
-                                data-value={option}
-                              >
-                                {option}
-                              </div>
-                            ))}
-                          </div>
-                          <button
-                            className="continue-button"
-                            onClick={handleMultiSelect}
-                          >
-                            Continuar
-                          </button>
-                        </>
-                      ) : (
-                        questions[step].options.map((option, index) => (
-                          <button
-                            key={index}
-                            className="button"
-                            onClick={() => nextQuestion(option)}
-                          >
-                            {option}
-                          </button>
-                        ))
-                      )}
-                    </div>
-                  </>
-                )}
-
-                {showThinking && (
-                  <div className="thinking">
-                    <div className="loading-spinner"></div>
-                    <p>Analizando tus respuestas...</p>
+          <div className="chat-container">
+            <div className="chat-box">
+              <button onClick={closeChat} className="close-button">×</button>
+              {showQuestionSection && (
+                <>
+                  <div className="chat-message bot">
+                    <p>{questions[step].text}</p>
                   </div>
-                )}
-
-                {showResult && (
-                  <div className="result-container">
-                    <p className="result">{resultado}</p>
-                    <button onClick={restartChat} className="restart-button">
-                      Realizar otra consulta
-                    </button>
+                  <div className="options">
+                    {questions[step].type === "multiselect" ? (
+                      <>
+                        <div className="multi-select">
+                          {questions[step].options.map((option, index) => (
+                            <div
+                              key={index}
+                              className={`checkbox-option ${momentoMedicacion.includes(option) ? 'selected' : ''}`}
+                              onClick={() => handleOptionToggle(option)}
+                              data-value={option}
+                            >
+                              {option}
+                            </div>
+                          ))}
+                        </div>
+                        <button
+                          className="continue-button"
+                          onClick={handleMultiSelect}
+                        >
+                          Continuar
+                        </button>
+                      </>
+                    ) : (
+                      questions[step].options.map((option, index) => (
+                        <button
+                          key={index}
+                          className="button"
+                          onClick={() => nextQuestion(option)}
+                        >
+                          {option}
+                        </button>
+                      ))
+                    )}
                   </div>
-                )}
+                </>
+              )}
+
+              {showThinking && (
+                <div className="thinking">
+                  <div className="loading-spinner"></div>
+                  <p>Analizando tus respuestas...</p>
+                </div>
+              )}
+
+              {showResult && (
+                <div className="result-container">
+                  <p className="result">{resultado}</p>
+                  <button onClick={restartChat} className="restart-button">
+                    Realizar otra consulta
+                  </button>
+                </div>
+              )}
             </div>
           </div>
-        )}
+        )
+      }
     </>
   );
 };
