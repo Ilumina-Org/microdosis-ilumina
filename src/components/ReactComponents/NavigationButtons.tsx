@@ -1,14 +1,27 @@
-import { Whatsapp } from "iconsax-react";
-import React, { useEffect, useRef, useState } from "react";
-import Button from "../ReactComponents/Button";
+import React, { useState, useEffect } from "react";
 
 const NavigationButtons = () => {
   const [active, setActive] = useState<string | null>();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleClick = (e: any, target: string) => {
     let value = e.target.getAttribute("href");
     if (`${value}`.includes(target)) {
       setActive(`${target}`);
+      setIsMobileMenuOpen(false);
     } else {
       setActive(null);
     }
@@ -17,15 +30,141 @@ const NavigationButtons = () => {
   const aStyling = {
     textDecoration: "none",
     color: "white",
+    transition: "all 0.3s ease",
   };
 
   const handleSelect = (value: string) => {
-    if (active === value) {
-      return "-.5px -.5px 0 #ffffff, .5px -.5px 0 #ffffff, -.5px .5px 0 #ffffff, .5px .5px 0 #ffffff";
-    } else {
-      return undefined;
-    }
+    return active === value
+      ? "-.5px -.5px 0 #ffffff, .5px -.5px 0 #ffffff, -.5px .5px 0 #ffffff, .5px .5px 0 #ffffff"
+      : undefined;
   };
+
+  const navLinks = [
+    { href: "#inicio", label: "Inicio", target: "inicio" },
+    { href: "#about", label: "¿Qué es?", target: "about" },
+    { href: "#testimonios", label: "Testimonios", target: "testimonios" },
+    {
+      href: "/products",
+      label: "Productos",
+      target: "products",
+      transitionName: "products-nav-link",
+    },
+    { href: "#faqs", label: "Preguntas frecuentes", target: "faqs" },
+  ];
+
+  const renderNavLinks = () => (
+    <>
+      {navLinks.map((link) => (
+        <a
+          key={link.target}
+          href={link.href}
+          // Agregamos el atributo de transición si existe
+          {...(link.transitionName
+            ? { "data-transition-name": link.transitionName }
+            : {})}
+          onClick={(e) => handleClick(e, link.target)}
+          style={{
+            ...aStyling,
+            textShadow: handleSelect(link.target),
+            opacity: active == link.target ? 1 : 0.5,
+            ...(isMobile
+              ? {
+                  fontSize: "20px",
+                  padding: "10px 0",
+                  textAlign: "center",
+                  width: "100%",
+                }
+              : {}),
+          }}
+        >
+          {link.label}
+        </a>
+      ))}
+    </>
+  );
+
+  const MenuIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  );
+
+  const CloseIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  );
+
+  if (isMobile) {
+    return (
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          zIndex: 1000,
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: "1rem",
+            right: "1rem",
+            zIndex: 1100,
+            cursor: "pointer",
+          }}
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+        </div>
+
+        {isMobileMenuOpen && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(1, 55, 38, 0.95)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "20px",
+              zIndex: 1000,
+            }}
+          >
+            {renderNavLinks()}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -37,102 +176,15 @@ const NavigationButtons = () => {
         backgroundColor: "transparent",
         color: "white",
         gap: "20px",
-
-        right: "4rem",
+        right: "3rem",
         top: "5rem",
-
         fontSize: "30px",
         fontFamily: "Inter",
         fontWeight: "200",
         textAlign: "right",
       }}
     >
-      <a
-        href="#inicio"
-        onClick={(e) => handleClick(e, "inicio")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("inicio"),
-          opacity: active == "inicio" ? 1 : 0.5,
-        }}
-      >
-        Inicio
-      </a>
-      <a
-        href="#about"
-        onClick={(e) => handleClick(e, "about")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("about"),
-          opacity: active == "about" ? 1 : 0.5,
-        }}
-      >
-        ¿Qué es?
-      </a>
-      <a
-        href="#testimonios"
-        onClick={(e) => handleClick(e, "testimonios")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("testimonios"),
-          opacity: active == "testimonios" ? 1 : 0.5,
-        }}
-      >
-        Testimonios
-      </a>
-      <a
-        href="#products"
-        onClick={(e) => handleClick(e, "products")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("products"),
-          opacity: active == "products" ? 1 : 0.5,
-        }}
-      >
-        Productos
-      </a>
-      <a
-        href="#faqs"
-        onClick={(e) => handleClick(e, "faqs")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("faqs"),
-          opacity: active == "faqs" ? 1 : 0.5,
-        }}
-      >
-        Preguntas <br /> frecuentes
-      </a>
-      {/* 
-      <div
-        style={{
-          position: "fixed",
-          bottom: "2rem",
-          right: "4rem",
-        }}
-      >
-        <span
-          style={{
-            position: "absolute",
-            right: 0,
-            bottom: 80,
-            borderRadius: "10px",
-            padding: ".5rem",
-            paddingRight: ".85rem",
-            backgroundColor: "#B5BC94",
-            color: "black",
-            width: 140,
-          }}
-        >
-          Simula tu dosificación
-        </span>
-        <Button
-          bacgrkoundColor="red"
-          styles={{ backgroundColor: "white" }}
-          icon={<Whatsapp size="40" color="#013726" variant="Bold" />}
-          padding={10}
-        />
-      </div>
-      */}
+      {renderNavLinks()}
     </div>
   );
 };

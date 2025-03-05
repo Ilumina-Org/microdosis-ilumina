@@ -1,5 +1,4 @@
 import React from "react";
-import useResponsiveness from "../../utils/useResponsiveness";
 
 export const SectionLayout = ({
   id,

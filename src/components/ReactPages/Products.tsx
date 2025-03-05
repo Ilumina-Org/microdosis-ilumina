@@ -1,107 +1,74 @@
-
-import React from "react";
-import Layout from "../layouts/Layout.astro";
-import { getProducts } from "../../utils/stock";
+"use client";
 import ProductContainer from "../../components/ReactComponents/ProductContainer";
-import { SectionLayout } from "../../components/ReactComponents/SectionLayout";
-import useResponsiveness from "../../utils/useResponsiveness";
+import { SectionLayoutv2 } from "../../components/ReactComponents/SectionLayoutv2";
 
-let products = [];
-let errorMessage = "";
-try {
-  products = await getProducts();
-  products = products.slice(0, 3);
-} catch (error) {
-  errorMessage = "Hubo un problema al cargar los productos. Intenta más tarde.";
+interface Product {
+  sku: string;
+  title: string;
+  productDetail: string;
+  productPrice: string;
+  stock: boolean;
+  productDeal: string;
+  tipo: string;
+  tier: number;
 }
 
-interface LandingProps {
-  id: string;
-  horizontalPadding: string | number;
-  ref: React.Ref<HTMLDivElement>;
+interface ProductsPageProps {
+  products: Product[];
 }
 
-
-const Products = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
-  const { handleResponsiveness } = useResponsiveness();
-  let padding = handleResponsiveness([26, 10, 25, 10])
-
-
+const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
   return (
-    <SectionLayout
-      id={props.id}
-      ref={ref}
-      background="white"
-      horizontalPadding={padding}
-      height="100vh"
-    >
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <div style={{ width: "100%", textAlign: "left", }}>
-          <h2 style={{ fontWeight: 300, fontSize: "35px", color: "black" }}>
-            Paquetes Disponibles
-          </h2>
-        </div>
+    <SectionLayoutv2 id="products" background="blue" height="auto">
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          padding: "2rem 1rem",
+          alignItems: "center",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "2rem",
+            marginBottom: "2rem",
+            textAlign: "center",
+          }}
+        >
+          Paquetes Disponibles
+        </h2>
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
-            alignContent: "center",
-            gap: "30px",
+            flexDirection: "row",
             flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "30px",
+            maxWidth: "1200px",
+            width: "100%",
           }}
         >
-          {
-            errorMessage && (
-              <p style={{ color: "red", fontSize: "18px" }}>{errorMessage}</p>
-            )
-          }
-
-          {
-            !errorMessage && products.length === 0 && (
-              <p style={{ fontSize: "18px" }}>No hay productos disponibles.</p>
-            )
-          }
-
-          {
-            products.map((product) => (
-              <ProductContainer
-                client:load
-                key={product.sku}
-                imageUrl={`/products/${product.sku}-card.svg`}
-                link={`microdosis-package/${product.sku}`}
-                sku={product.sku}
-                productTitle={product.title}
-                productDetail={product.productDetail}
-                productPrice={product.productPrice}
-                productDeal={product.productDeal}
-                tier={product.tier}
-                stock={product.stock}
-                purchaseType={product.tipo}
-              />
-            ))
-          }
+          {products.map((product: Product) => (
+            <ProductContainer
+              key={product.sku}
+              sku={product.sku}
+              link={"microdosis-package/" + product.sku}
+              imageUrl={"public/products/" + product.sku + "-card.svg"}
+              productTitle={product.title}
+              productDetail={product.productDetail}
+              productPrice={product.productPrice}
+              productDeal={product.productDeal}
+              stock={product.stock}
+              purchaseType={product.tipo as any}
+              tier={product.tier}
+            />
+          ))}
         </div>
-        <style>
-          {`
-  .container {
-    --horizontalPadding: 10rem;
-    background: white;
-    padding: 2rem;
-    padding-right: var(--horizontalPadding);
-    padding-left: var(--horizontalPadding);
-    scroll-snap-align: start;
-  }
-  @media (max-width: 768px) {
-    .container {
-      --horizontalPadding: 2rem;
-      padding: 1rem;
-    }
-}
-`}
-        </style>
       </div>
-    </SectionLayout >
+    </SectionLayoutv2>
   );
-});
+};
 
-export default Products;
+export default ProductsPage;

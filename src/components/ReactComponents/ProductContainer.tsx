@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface ProductContainerProps {
   sku: string;
@@ -25,6 +25,8 @@ export default function ProductContainer({
   stock = true,
   purchaseType = "package",
 }: ProductContainerProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
   const tierStyles = {
     0: "radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%), radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%)",
     1: "linear-gradient(-40deg,#dedede,#ffffff 16%,#dedede 21%,#ffffff 24%,#454545 27%,#dedede 36%,#ffffff 45%,#ffffff 60%,#dedede 72%,#ffffff 80%,#dedede 84%,#a1a1a1)",
@@ -39,11 +41,17 @@ export default function ProductContainer({
 
   return (
     <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         background: tierStyles[tier] || "",
         padding: ".5rem",
         borderRadius: "30px",
-        boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.2)",
+        boxShadow: isHovered
+          ? "0px 20px 50px rgba(0, 0, 0, 0.3)"
+          : "0px 15px 40px rgba(0, 0, 0, 0.2)",
+        transform: isHovered ? "translateY(-10px)" : "translateY(0)",
+        transition: "all 0.3s ease-in-out",
       }}
     >
       <div
