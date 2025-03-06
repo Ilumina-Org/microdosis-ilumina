@@ -6,6 +6,17 @@ const MercadoPagoCheckoutPro = ({ product_data }: { product_data: any }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const initialized = useRef(false);
+  const orderIdRef = useRef<string>(generateOrderId());
+
+  // Generar order ID único
+  function generateOrderId(): string {
+    const savedOrderId = localStorage.getItem("mp_order_id");
+    if (savedOrderId) return savedOrderId;
+
+    const newOrderId = crypto.randomUUID();
+    localStorage.setItem("mp_order_id", newOrderId);
+    return newOrderId;
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -23,7 +34,10 @@ const MercadoPagoCheckoutPro = ({ product_data }: { product_data: any }) => {
         const response = await fetch("/api/create-preference", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(product_data),
+          body: JSON.stringify({
+            ...product_data,
+            order_id: orderIdRef.current,
+          }),
           signal: controller.signal,
         });
 

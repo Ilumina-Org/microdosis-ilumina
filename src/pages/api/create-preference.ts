@@ -6,6 +6,7 @@ interface RequestBody {
   name: string;
   price: number;
   quantity: number;
+  order_id: string;
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -13,7 +14,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(null, { status: 204 });
   }
 
-  const { name, price, quantity }: RequestBody = await request.json();
+  const { name, price, quantity, order_id }: RequestBody = await request.json();
 
   const client = new MercadoPagoConfig({
     accessToken: import.meta.env.MP_ACCESS_TOKEN,
@@ -37,6 +38,9 @@ export const POST: APIRoute = async ({ request }) => {
           pending: `${import.meta.env.SITE}/pending`,
         },
         auto_return: "approved",
+        notification_url:
+          "https://webhook.site/139937f9-ca25-4976-a8f4-8d69833b2676",
+        external_reference: order_id,
       },
     });
 
@@ -50,7 +54,6 @@ export const POST: APIRoute = async ({ request }) => {
     });
   } catch (error) {
     console.error("Error creating preference:", error);
-
     return new Response(JSON.stringify({ error: (error as Error).message }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
