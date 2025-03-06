@@ -1,12 +1,11 @@
-// MercadoPagoCheckoutPro.tsx - Componente actualizado
 import React, { useEffect, useRef, useState } from "react";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
-import { Cup } from "iconsax-react";
 
 interface ProductData {
-  title: string;
+  name: string;
   price: number;
   quantity: number;
+  district: string;
 }
 
 const MercadoPagoCheckoutPro = ({
@@ -17,48 +16,41 @@ const MercadoPagoCheckoutPro = ({
   const [preferenceId, setPreferenceId] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const initialized = useRef(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
     const initializePayment = async () => {
       try {
-        if (!initialized.current) {
-          initMercadoPago(import.meta.env.PUBLIC_MERCADOPAGO_PUBLIC_KEY, {
-            locale: "es-PE",
-            advancedFraudPrevention: true,
-          });
-          initialized.current = true;
-        }
+        initMercadoPago(import.meta.env.PUBLIC_MERCADOPAGO_PUBLIC_KEY, {
+          locale: "es-PE",
+          advancedFraudPrevention: true,
+        });
 
         const response = await fetch("/api/create-preference", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            items: [
-              {
-                title: product_data.title,
-                unit_price: product_data.price,
-                quantity: product_data.quantity,
-              },
-            ],
+            name: product_data.name,
+            price: product_data.price,
+            quantity: product_data.quantity,
+            district: product_data.district,
           }),
           signal: controller.signal,
         });
+
         const { id } = await response.json();
-        if (!id) throw new Error("Error al crear preferencia");
+        if (!id) throw new Error("No se pudo iniciar el pago");
 
         setPreferenceId(id);
-        setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Error desconocido");
+      } finally {
         setLoading(false);
       }
     };
 
     initializePayment();
-
     return () => controller.abort();
   }, [product_data]);
 
@@ -72,6 +64,12 @@ const MercadoPagoCheckoutPro = ({
           initialization={{
             preferenceId: preferenceId,
             redirectMode: "self",
+          }}
+          customization={{
+            visual: {
+              buttonBackground: "default",
+              buttonHeight: "48px",
+            },
           }}
         />
       )}
