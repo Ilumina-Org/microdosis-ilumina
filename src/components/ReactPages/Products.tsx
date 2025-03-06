@@ -1,4 +1,6 @@
 "use client";
+
+import React from "react";
 import ProductContainer from "../../components/ReactComponents/ProductContainer";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
 
@@ -15,11 +17,19 @@ interface Product {
 
 interface ProductsPageProps {
   products: Product[];
+  id: string;
+  horizontalPadding?: string | number;
+  ref: React.Ref<HTMLDivElement>;
 }
 
-const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
+const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>((props, ref) => {
   return (
-    <SectionLayout id="products" height="auto">
+    <SectionLayout
+      id={props.id}
+      ref={ref}
+      height="auto"
+      background="white"
+    >
       <div
         style={{
           width: "100%",
@@ -51,7 +61,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
           }}
         >
           {
-            products.map((product: Product) => (
+            props.products.map((product: Product) => (
               <ProductContainer
                 key={product.sku}
                 sku={product.sku}
@@ -71,6 +81,8 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
       </div >
     </SectionLayout >
   );
-};
 
-export default ProductsPage;
+});
+
+
+export default Products;
