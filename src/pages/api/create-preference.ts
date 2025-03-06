@@ -1,26 +1,16 @@
+// src/routes/api/create-preference.ts
 export const prerender = false;
 import { MercadoPagoConfig, Preference } from "mercadopago";
 import type { APIRoute } from "astro";
 
-interface RequestBody {
-  name: string;
-  price: number;
-  quantity: number;
-  order_id: string;
-}
-
 export const POST: APIRoute = async ({ request }) => {
-  if (request.method === "OPTIONS") {
-    return new Response(null, { status: 204 });
-  }
-
-  const { name, price, quantity, order_id }: RequestBody = await request.json();
-
   const client = new MercadoPagoConfig({
     accessToken: import.meta.env.MP_ACCESS_TOKEN,
   });
 
   try {
+    const { name, price, quantity } = await request.json();
+
     const preference = await new Preference(client).create({
       body: {
         items: [
@@ -29,34 +19,23 @@ export const POST: APIRoute = async ({ request }) => {
             title: name,
             unit_price: Number(price),
             quantity: Number(quantity),
-            currency_id: "ARS",
+            currency_id: "PEN",
           },
         ],
         back_urls: {
           success: `${import.meta.env.SITE}/success`,
           failure: `${import.meta.env.SITE}/failure`,
-          pending: `${import.meta.env.SITE}/pending`,
         },
-        auto_return: "approved",
-        notification_url:
-          "https://webhook.site/139937f9-ca25-4976-a8f4-8d69833b2676",
-        external_reference: order_id,
       },
     });
 
-    if (!preference.id) {
-      throw new Error("Preference ID not found");
-    }
-
-    return new Response(JSON.stringify({ id: preference.id }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(JSON.stringify({ id: preference.id }), { status: 200 });
   } catch (error) {
-    console.error("Error creating preference:", error);
-    return new Response(JSON.stringify({ error: (error as Error).message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({
+        error: error instanceof Error ? error.message : "Error",
+      }),
+      { status: 500 },
+    );
   }
 };

@@ -81,10 +81,9 @@ const PaymentOptions = ({
                 <MercadoPagoCheckoutPro
                   key={`${newTotal}-${selectedDistrict}`}
                   product_data={{
+                    title: title,
                     price: newTotal,
-                    name: title,
                     quantity: 1,
-                    district: selectedDistrict,
                   }}
                 />
               ),

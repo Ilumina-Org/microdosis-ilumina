@@ -1,32 +1,33 @@
+// MercadoPagoCheckoutPro.tsx - Componente actualizado
 import React, { useEffect, useRef, useState } from "react";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+import { Cup } from "iconsax-react";
 
-const MercadoPagoCheckoutPro = ({ product_data }: { product_data: any }) => {
-  const [preferenceId, setPreferenceId] = useState<string | null>(null);
+interface ProductData {
+  title: string;
+  price: number;
+  quantity: number;
+}
+
+const MercadoPagoCheckoutPro = ({
+  product_data,
+}: {
+  product_data: ProductData;
+}) => {
+  const [preferenceId, setPreferenceId] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState("");
   const initialized = useRef(false);
-  const orderIdRef = useRef<string>(generateOrderId());
-
-  // Generar order ID único
-  function generateOrderId(): string {
-    const savedOrderId = localStorage.getItem("mp_order_id");
-    if (savedOrderId) return savedOrderId;
-
-    const newOrderId = crypto.randomUUID();
-    localStorage.setItem("mp_order_id", newOrderId);
-    return newOrderId;
-  }
 
   useEffect(() => {
     const controller = new AbortController();
-    let isMounted = true;
 
     const initializePayment = async () => {
       try {
         if (!initialized.current) {
           initMercadoPago(import.meta.env.PUBLIC_MERCADOPAGO_PUBLIC_KEY, {
             locale: "es-PE",
+            advancedFraudPrevention: true,
           });
           initialized.current = true;
         }
@@ -35,43 +36,45 @@ const MercadoPagoCheckoutPro = ({ product_data }: { product_data: any }) => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            ...product_data,
-            order_id: orderIdRef.current,
+            items: [
+              {
+                title: product_data.title,
+                unit_price: product_data.price,
+                quantity: product_data.quantity,
+              },
+            ],
           }),
           signal: controller.signal,
         });
+        const { id } = await response.json();
+        if (!id) throw new Error("Error al crear preferencia");
 
-        const data = await response.json();
-        if (!data.id) throw new Error("Error al crear preferencia");
-
-        if (isMounted) {
-          setPreferenceId(data.id);
-        }
+        setPreferenceId(id);
+        setLoading(false);
       } catch (err) {
-        if (isMounted && !controller.signal.aborted) {
-          setError(err instanceof Error ? err.message : "Error desconocido");
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        setError(err instanceof Error ? err.message : "Error desconocido");
+        setLoading(false);
       }
     };
 
     initializePayment();
 
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
+    return () => controller.abort();
   }, [product_data]);
 
   if (loading) return <div>Cargando pasarela de pago...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="mercado-pago-container">
-      {preferenceId && <Wallet initialization={{ preferenceId }} />}
+      {preferenceId && (
+        <Wallet
+          initialization={{
+            preferenceId: preferenceId,
+            redirectMode: "self",
+          }}
+        />
+      )}
     </div>
   );
 };
