@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import MercadoPagoCheckoutPro from "./MercadopagoCheckoutPro";
 import "./PaymentOptions.css";
 import type { JSX } from "astro/jsx-runtime";
+import { CULQI_PLANS, getCulqiLink } from "../../utils/shipping";
 
 interface PaymentOptionsProps {
   basePrice: number;
@@ -174,6 +175,7 @@ const PaymentOptions = ({
         </div>
 
         {/* Opción: Tarjeta de Crédito/Débito */}
+        {/*
         <div
           className={`payment-option ${activeOption === "card-option" ? "active" : ""}`}
         >
@@ -192,7 +194,7 @@ const PaymentOptions = ({
             </p>
           </div>
         </div>
-
+        */}
         {/* Opción: Culqi */}
         <div
           className={`payment-option ${activeOption === "culqi-option" ? "active" : ""}`}
@@ -206,10 +208,48 @@ const PaymentOptions = ({
             <span className="toggle-icon">▼</span>
           </div>
           <div className="payment-option-content">
-            <p className="coming-soon">Integración con Culqi en desarrollo</p>
+            {selectedDistrict ? (
+              <div className="culqi-payment">
+                <p>Pago seguro con Culqi - Total: S/ {totalPrice.toFixed(2)}</p>
+                {(() => {
+                  const culqiLink = getCulqiLink(selectedDistrict);
+                  return (
+                    <a
+                      href={culqiLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`culqi-button ${!culqiLink ? "disabled" : ""}`}
+                      onClick={(e) => {
+                        if (!culqiLink) {
+                          e.preventDefault();
+                          setError(
+                            "No se encontró un método de pago para esta ubicación",
+                          );
+                        }
+                      }}
+                    >
+                      Pagar con Culqi
+                      <span className="external-icon" aria-hidden="true">
+                        ↗
+                      </span>
+                    </a>
+                  );
+                })()}
+
+                <div className="security-info">
+                  <span className="lock-icon">🔒</span>
+                  <span>Protegido por encriptación SSL de 256-bits</span>
+                </div>
+              </div>
+            ) : (
+              <p className="select-district-alert">
+                ⚠️ Por favor selecciona tu distrito para mostrar las opciones de
+                pago
+              </p>
+            )}
           </div>
         </div>
-        {/* Opción: Transferencia Bancaria */}
+        {/*
         <div
           className={`payment-option ${activeOption === "transfer-option" ? "active" : ""}`}
         >
@@ -245,6 +285,7 @@ const PaymentOptions = ({
             </div>
           </div>
         </div>
+        */}
       </div>
     </div>
   );

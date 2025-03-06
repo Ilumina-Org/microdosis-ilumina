@@ -34,3 +34,22 @@ export function calculateShippingCost(
   }
   return DEFAULT_SHIPPING_COST;
 }
+
+export function getCulqiLink(districtCode: string): string {
+  if (CULQI_PLANS[districtCode]) {
+    return CULQI_PLANS[districtCode];
+  }
+
+  return CULQI_PLANS["DEFAULT"] || "";
+}
+
+export const CULQI_PLANS: { [key: string]: string } = {
+  LIM01:
+    "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
+  MIRA: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
+  BARR: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
+  SURC: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
+  SANI: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
+  DEFAULT:
+    "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
+};
