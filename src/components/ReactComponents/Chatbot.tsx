@@ -217,6 +217,18 @@ const ChatBot = () => {
       }
     }
 
+    else if (step === 6 && tomaMedicamentos) { // ¿En qué momento tomas las microdosis?
+      const handleOptionToggle = (option: string) => {
+        setMomentoMedicacion(prev => {
+          if (prev.includes(option)) {
+            return prev.filter(item => item !== option);
+          } else {
+            return [...prev, option];
+          }
+        });
+      };
+    }
+
     setStep(prev => prev + 1);
 
     if (step + 1 >= questions.length) {
