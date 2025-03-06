@@ -50,24 +50,26 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
             width: "100%",
           }}
         >
-          {products.map((product: Product) => (
-            <ProductContainer
-              key={product.sku}
-              sku={product.sku}
-              link={"microdosis-package/" + product.sku}
-              imageUrl={"products/" + product.sku + "-card.svg"}
-              productTitle={product.title}
-              productDetail={product.productDetail}
-              productPrice={product.productPrice}
-              productDeal={product.productDeal}
-              stock={product.stock}
-              purchaseType={product.tipo as any}
-              tier={product.tier}
-            />
-          ))}
-        </div>
-      </div>
-    </SectionLayout>
+          {
+            products.map((product: Product) => (
+              <ProductContainer
+                key={product.sku}
+                sku={product.sku}
+                link={"microdosis-package/" + product.sku}
+                imageUrl={"products/" + product.sku + "-card.svg"}
+                productTitle={product.title}
+                productDetail={product.productDetail}
+                productPrice={product.productPrice}
+                productDeal={product.productDeal}
+                stock={product.stock}
+                purchaseType={product.tipo as any}
+                tier={product.tier}
+              />
+            ))
+          }
+        </div >
+      </div >
+    </SectionLayout >
   );
 };
 
