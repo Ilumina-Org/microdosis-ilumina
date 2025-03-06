@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import FaqsPage from "../components/ReactPages/FAQsv2";
+---
+
+<Layout>
+  <div transition:name="faq-page" transition:animate="fade">
+    <FaqsPage id="faq-page" client:only />
+  </div>
+</Layout>

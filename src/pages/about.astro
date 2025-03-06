@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import AboutPage from "../components/ReactPages/About";
+---
+
+<Layout>
+  <div transition:name="about-page" transition:animate="fade">
+    <AboutPage id="client-page" client:load transition:persist />
+  </div>
+</Layout>

@@ -1,6 +1,7 @@
 "use client";
 import ProductContainer from "../../components/ReactComponents/ProductContainer";
 import { SectionLayoutv2 } from "../../components/ReactComponents/SectionLayoutv2";
+import { SectionLayout } from "../ReactComponents/SectionLayout";
 
 interface Product {
   sku: string;
@@ -19,7 +20,7 @@ interface ProductsPageProps {
 
 const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
   return (
-    <SectionLayoutv2 id="products" background="blue" height="auto">
+    <SectionLayout id="products" height="auto">
       <div
         style={{
           width: "100%",
@@ -55,7 +56,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
               key={product.sku}
               sku={product.sku}
               link={"microdosis-package/" + product.sku}
-              imageUrl={"public/products/" + product.sku + "-card.svg"}
+              imageUrl={"products/" + product.sku + "-card.svg"}
               productTitle={product.title}
               productDetail={product.productDetail}
               productPrice={product.productPrice}
@@ -67,7 +68,7 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
           ))}
         </div>
       </div>
-    </SectionLayoutv2>
+    </SectionLayout>
   );
 };
 

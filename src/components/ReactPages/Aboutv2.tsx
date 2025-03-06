@@ -10,20 +10,16 @@ interface LandingProps {
 }
 
 const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
-  const { handleResponsiveness, isMobile, isTablet } = useResponsiveness();
-  const padding = handleResponsiveness([26, 16, 10, 5]);
-
-  const sectionHeight = isMobile || isTablet ? "auto" : "auto";
+  const { handleResponsiveness } = useResponsiveness();
+  const padding = handleResponsiveness([26, 10, 5, 5]);
+  // Altura dinámica según el dispositivo
+  const sectionHeight = handleResponsiveness(["140vh", "auto", "auto", "auto"]);
 
   return (
-    <SectionLayout
-      id={props.id}
-      ref={ref}
-      horizontalPadding={padding}
-      height={sectionHeight}
-    >
+    <SectionLayout id={props.id} ref={ref}>
       <div className="about-container">
-        <div className="about-section first-section">
+        {/* Primera Sección */}
+        <div className="about-section">
           <div className="about-text">
             <h2 className="about-title">¿Qué es la Microdosis de Ayahuasca?</h2>
             <p className="about-paragraph">
@@ -35,91 +31,76 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               reconocidos beneficios curativos.
             </p>
           </div>
-          <div className="about-image-container">
+          <div className="about-image">
             <PlaceHolderImage />
           </div>
         </div>
 
-        <div className="about-section second-section">
-          <div className="about-image-container mobile-order-2">
+        {/* Segunda Sección */}
+        <div className="about-section">
+          <div className="about-image mobile-order-2">
             <PlaceHolderImage />
           </div>
           <div className="about-text mobile-order-1">
             <h2 className="about-title">Beneficios Principales</h2>
             <ul className="about-list">
               <li className="about-list-item">
-                <div className="about-check-container">
-                  <span className="about-check">✓</span>
-                </div>
-                <div className="about-list-content">
+                <span className="about-check">✓</span>
+                <div>
                   <strong>Regulación de Neurotransmisores:</strong> Restablece
                   el equilibrio de dopamina, serotonina y más, mejorando tu
                   bienestar emocional y mental.
                 </div>
               </li>
               <li className="about-list-item">
-                <div className="about-check-container">
-                  <span className="about-check">✓</span>
-                </div>
-                <div className="about-list-content">
+                <span className="about-check">✓</span>
+                <div>
                   <strong>Estados Expandidos de Conciencia:</strong> Profundiza
                   tu autoconocimiento y expande tu conciencia, abriendo nuevas
                   perspectivas de vida.
                 </div>
               </li>
               <li className="about-list-item">
-                <div className="about-check-container">
-                  <span className="about-check">✓</span>
-                </div>
-                <div className="about-list-content">
+                <span className="about-check">✓</span>
+                <div>
                   <strong>Neurogénesis Mejorada:</strong> Estimula la producción
                   neuronal, aumentando tu creatividad y agudeza mental.
                 </div>
               </li>
               <li className="about-list-item">
-                <div className="about-check-container">
-                  <span className="about-check">✓</span>
-                </div>
-                <div className="about-list-content">
+                <span className="about-check">✓</span>
+                <div>
                   <strong>Enriquecimiento de Relaciones Personales:</strong>{" "}
                   Fortalece tus conexiones sociales, mejorando la comunicación y
                   la empatía en tus relaciones.
                 </div>
               </li>
               <li className="about-list-item">
-                <div className="about-check-container">
-                  <span className="about-check">✓</span>
-                </div>
-                <div className="about-list-content">
+                <span className="about-check">✓</span>
+                <div>
                   <strong>Potenciación del Sistema Inmunológico:</strong>{" "}
                   Refuerza tus defensas naturales y mejora la funcionalidad de
                   sistemas vitales.
                 </div>
               </li>
               <li className="about-list-item">
-                <div className="about-check-container">
-                  <span className="about-check">✓</span>
-                </div>
-                <div className="about-list-content">
+                <span className="about-check">✓</span>
+                <div>
                   <strong>Optimización del Sueño:</strong> Promueve patrones de
                   sueño más saludables y reparadores, esencial para una vida
                   plena y activa.
                 </div>
               </li>
               <li className="about-list-item">
-                <div className="about-check-container">
-                  <span className="about-check">✓</span>
-                </div>
-                <div className="about-list-content">
+                <span className="about-check">✓</span>
+                <div>
                   <strong>Revitalización de la Piel y Tejidos:</strong> Nutre y
                   revitaliza tu piel, mejorando su textura y elasticidad.
                 </div>
               </li>
               <li className="about-list-item">
-                <div className="about-check-container">
-                  <span className="about-check">✓</span>
-                </div>
-                <div className="about-list-content">
+                <span className="about-check">✓</span>
+                <div>
                   <strong>Auto Hipnosis en Meditaciones:</strong> Potencia tus
                   sesiones de meditación, facilitando un estado de auto hipnosis
                   para una relajación profunda.
@@ -134,86 +115,70 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           .about-container {
             display: flex;
             flex-direction: column;
+            justify-content: space-around;
+            gap: 60px;
             width: 100%;
-            padding: 40px 0;
-            gap: 80px;
+            padding: 20px 0;
           }
 
           .about-section {
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
             align-items: center;
             width: 100%;
-          }
-
-          .first-section,
-          .second-section {
-            gap: 60px;
+            gap: 40px;
           }
 
           .about-text {
-            flex: 1;
-            max-width: 600px;
+            width: 50%;
           }
 
           .about-title {
-            font-size: 2.5rem;
+            font-size: 2.7rem;
             margin-top: 0;
-            margin-bottom: 1.5rem;
             color: #013424;
-            line-height: 1.2;
           }
 
           .about-paragraph {
             font-size: 1.25rem;
             line-height: 1.6;
             color: #1d1d1d;
-            margin: 0;
           }
 
-          .about-image-container {
-            width: 350px;
+          .about-image {
+            width: 25rem;
             height: auto;
             display: flex;
             justify-content: center;
-            align-items: center;
           }
 
           .about-list {
             list-style-type: none;
             padding: 0;
-            margin: 0;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
           }
 
           .about-list-item {
             display: flex;
             align-items: flex-start;
+            gap: 10px;
             font-size: 1.25rem;
             line-height: 1.6;
             color: #1d1d1d;
           }
 
-          .about-check-container {
-            margin-right: 12px;
-            margin-top: 2px;
-          }
-
           .about-check {
             color: #969628;
             font-size: 1.5rem;
-            font-weight: bold;
+            flex-shrink: 0;
           }
 
-          .about-list-content {
-            flex: 1;
-          }
-
-          @media (max-width: 1600px) {
+          @media (max-width: 1399px) {
             .about-title {
-              font-size: 2.2rem;
+              font-size: 2.3rem;
             }
 
             .about-paragraph,
@@ -221,16 +186,12 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               font-size: 1.15rem;
             }
 
-            .about-image-container {
-              width: 300px;
+            .about-image {
+              width: 22rem;
             }
           }
 
-          @media (max-width: 1200px) {
-            .about-container {
-              gap: 60px;
-            }
-
+          @media (max-width: 992px) {
             .about-title {
               font-size: 2rem;
             }
@@ -240,53 +201,30 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               font-size: 1.1rem;
             }
 
-            .about-image-container {
-              width: 280px;
-            }
-
-            .first-section,
-            .second-section {
-              gap: 40px;
-            }
-          }
-
-          @media (max-width: 992px) {
-            .about-container {
-              padding: 30px 0;
-              gap: 50px;
-            }
-
-            .about-title {
-              font-size: 1.8rem;
-            }
-
-            .about-image-container {
-              width: 250px;
+            .about-image {
+              width: 18rem;
             }
           }
 
           @media (max-width: 768px) {
             .about-container {
-              padding: 20px 0;
               gap: 40px;
             }
 
             .about-section {
               flex-direction: column;
-              gap: 30px;
+              gap: 20px;
             }
 
             .about-text {
               width: 100%;
-              max-width: 100%;
               order: 1;
             }
 
-            .about-image-container {
+            .about-image {
               width: 100%;
-              max-width: 300px;
+              max-width: 20rem;
               order: 2;
-              margin: 0 auto;
             }
 
             .mobile-order-1 {
@@ -300,36 +238,21 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             .about-title {
               font-size: 1.8rem;
               text-align: center;
-              margin-bottom: 1rem;
-            }
-
-            .first-section,
-            .second-section {
-              gap: 20px;
             }
           }
 
           @media (max-width: 480px) {
-            .about-container {
-              gap: 30px;
-            }
-
             .about-title {
-              font-size: 1.6rem;
+              font-size: 1.5rem;
             }
 
             .about-paragraph,
             .about-list-item {
               font-size: 1rem;
-              line-height: 1.5;
             }
 
             .about-check {
               font-size: 1.2rem;
-            }
-
-            .about-list {
-              gap: 12px;
             }
           }
         `}

@@ -40,16 +40,31 @@ const NavigationButtons = () => {
   };
 
   const navLinks = [
-    { href: "#inicio", label: "Inicio", target: "inicio" },
-    { href: "#about", label: "¿Qué es?", target: "about" },
-    { href: "#testimonios", label: "Testimonios", target: "testimonios" },
+    { href: "/", label: "Inicio", target: "landing" },
+    {
+      href: "/about",
+      label: "¿Qué es?",
+      target: "about",
+      transitionName: "about-nav-link",
+    },
+    {
+      href: "/testimonials",
+      label: "Testimonios",
+      target: "testimonios",
+      transitionName: "testimonios-nav-link",
+    },
     {
       href: "/products",
       label: "Productos",
       target: "products",
       transitionName: "products-nav-link",
     },
-    { href: "#faqs", label: "Preguntas frecuentes", target: "faqs" },
+    {
+      href: "/frequently-asked-questions",
+      label: "Preguntas frecuentes",
+      target: "faqs",
+      transitionName: "faqs-nav-link",
+    },
   ];
 
   const renderNavLinks = () => (
@@ -182,6 +197,7 @@ const NavigationButtons = () => {
         fontFamily: "Inter",
         fontWeight: "200",
         textAlign: "right",
+        zIndex: 1000,
       }}
     >
       {renderNavLinks()}

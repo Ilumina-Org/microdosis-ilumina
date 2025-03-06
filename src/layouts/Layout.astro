@@ -21,7 +21,7 @@ import { ClientRouter } from "astro:transitions";
     <title>{title}</title>
   </head>
   <body>
-    <NavigationButtons client:load />
+    <NavigationButtons client:load transition:persist="navigation-buttons" />
     <slot />
   </body>
 </html>

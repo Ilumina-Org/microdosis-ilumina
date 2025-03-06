@@ -1,14 +1,28 @@
 import React from "react";
 
-export const SectionLayout = ({
-  id,
-  children,
-  background,
-  height = "100vh",
-  ref,
-  horizontalPadding,
-}: any) => {
-  const gradientBackground = `
+interface SectionLayoutProps {
+  id?: string;
+  children: React.ReactNode;
+  background?: string;
+  minHeight?: string;
+  className?: string;
+  padding?: string;
+}
+
+export const SectionLayout = React.forwardRef<HTMLElement, SectionLayoutProps>(
+  (
+    {
+      id,
+      children,
+      background,
+      minHeight = "100vh",
+      className = "",
+      padding = "2rem",
+    },
+    ref,
+  ) => {
+    // Fondo por defecto con gradiente
+    const defaultBackground = `
       radial-gradient(
         41.74% 98.84% at 61.04% 47.01%,
         rgba(0, 0, 0, 0) 0%,
@@ -22,23 +36,23 @@ export const SectionLayout = ({
       ),
       #013726`;
 
-  const containerStyle = {
-    display: "flex",
-    height: height,
-    justifyContent: "center",
-    zIndex: 100,
-    background: background ? background : gradientBackground,
-    paddingLeft: `${horizontalPadding}rem`,
-    paddingRight: `${horizontalPadding}rem`,
-  };
-
-  return (
-    <section
-      id={id}
-      ref={ref}
-      style={{ ...containerStyle, flexDirection: "row" }}
-    >
-      {children}
-    </section>
-  );
-};
+    return (
+      <section
+        id={id}
+        ref={ref}
+        className={className}
+        style={{
+          minHeight: minHeight,
+          width: "100%",
+          background: background || defaultBackground,
+          boxSizing: "border-box",
+          padding: padding,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {children}
+      </section>
+    );
+  },
+);

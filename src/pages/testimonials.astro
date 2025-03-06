@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Testimonials from "../components/ReactPages/Testimonialsv2";
+---
+
+<Layout>
+  <div transition:name="testimonials-page" transition:animate="fade">
+    <Testimonials id="testimonials" client:load />
+  </div>
+</Layout>
