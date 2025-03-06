@@ -23,7 +23,7 @@
 }
 
 .payment-option.active {
-  box-shadow: 0 4px 16px rgba(80, 184, 154, 0.2);
+  box-shadow: 0 4px 16px rgba(10, 76, 57, 0.3);
   border: 2px solid #50b89a;
 }
 
@@ -31,14 +31,13 @@
   padding: 1rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.3rem;
   cursor: pointer;
   position: relative;
 }
 
 .payment-icon {
-  font-size: 1.8rem;
-  width: 40px;
+  font-size: 1.3rem;
   text-align: center;
 }
 
@@ -223,8 +222,14 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, #1ccad8 0%, #00a19b 100%);
-  color: white;
+  background:
+    radial-gradient(
+      41.74% 98.84% at 61.04% 47.01%,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.15) 100%
+    ),
+    linear-gradient(135deg, #0a4c39 0%, #0c523b 100%);
+  color: whitesmoke;
   font-weight: 600;
   border: none;
   border-radius: 8px;
@@ -232,23 +237,31 @@
   margin: 16px 0;
   font-size: 16px;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition:
+    all 0.3s ease,
+    box-shadow 0.3s ease;
   width: 100%;
   max-width: 300px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(10, 76, 57, 0.3);
   position: relative;
   overflow: hidden;
 }
 
 .culqi-button:hover {
-  background: linear-gradient(135deg, #00a19b 0%, #1ccad8 100%);
+  background:
+    radial-gradient(
+      41.74% 98.84% at 61.04% 47.01%,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    ),
+    linear-gradient(135deg, #0c523b 0%, #0e5940 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 12px rgba(10, 76, 57, 0.4);
 }
 
 .culqi-button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(10, 76, 57, 0.2);
 }
 
 .culqi-button .external-icon {
@@ -262,7 +275,7 @@
 }
 
 .culqi-button.disabled {
-  background: #e0e0e0;
+  background: #2a3d36;
   color: #888;
   cursor: not-allowed;
   box-shadow: none;
@@ -278,7 +291,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   top: 0;
   left: 0;
@@ -296,15 +309,27 @@
 @keyframes pulse {
   0% {
     transform: scale(0.95);
-    opacity: 0.7;
+    opacity: 0.6;
   }
   50% {
     transform: scale(1);
-    opacity: 0.3;
+    opacity: 0.2;
   }
   100% {
     transform: scale(0.95);
-    opacity: 0.7;
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: 480px) {
+  .culqi-button {
+    padding: 10px 16px;
+    font-size: 14px;
+    max-width: 80%;
+  }
+
+  .culqi-button .external-icon {
+    font-size: 16px;
   }
 }
 
@@ -317,4 +342,58 @@
 
 .lock-icon {
   color: #00a19b;
+}
+
+/* Estilos para los botones de tipo de ubicación */
+.location-type-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.location-type-btn {
+  padding: 8px 12px;
+  border: 1px solid #bbb;
+  background: #f5f5f5;
+  border-radius: 8px; /* Usamos bordes redondeados como en el botón de WhatsApp */
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  color: #333;
+  font-size: 1rem; /* Mantemos un tamaño de fuente similar pero un poco más pequeño */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px; /* Evitamos que los botones sean demasiado pequeños */
+}
+
+.location-type-btn.active {
+  background:
+    radial-gradient(
+      41.74% 98.84% at 61.04% 47.01%,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    ),
+    linear-gradient(68.99deg, #084737 10.95%, #0a4c39 60.57%, #0c523b 103.7%),
+    #0a4c39;
+  color: whitesmoke;
+  border-color: #0a4c39;
+}
+
+.location-type-btn:hover:not(.active) {
+  background:
+    radial-gradient(
+      41.74% 98.84% at 61.04% 47.01%,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    ),
+    linear-gradient(68.99deg, #0a5b46 10.95%, #0d634e 60.57%, #0e6b54 103.7%),
+    #0d634e;
+  color: whitesmoke;
+  border-color: #0d634e;
+}
+
+.location-selector {
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
