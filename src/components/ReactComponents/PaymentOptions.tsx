@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import MercadoPagoCheckoutPro from "./MercadopagoCheckoutPro";
+import React, { useState, useEffect } from "react";
 import "./PaymentOptions.css";
 import type { JSX } from "astro/jsx-runtime";
 import { CULQI_PLANS, getCulqiLink } from "../../utils/shipping";
@@ -15,52 +14,59 @@ const PaymentOptions = ({
   title,
   packageId,
 }: PaymentOptionsProps) => {
+  const [shippingType, setShippingType] = useState<
+    "distrito" | "provincia" | null
+  >(null);
   const [districts, setDistricts] = useState<
     Array<{ code: string; name: string }>
   >([]);
-  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [provinces, setProvinces] = useState<
+    Array<{ code: string; name: string }>
+  >([]);
+  const [selectedLocation, setSelectedLocation] = useState("");
   const [totalPrice, setTotalPrice] = useState(basePrice);
   const [loadingShipping, setLoadingShipping] = useState(false);
   const [shippingCost, setShippingCost] = useState(0);
   const [error, setError] = useState("");
 
   const [activeOption, setActiveOption] = useState<string | null>(
-    "mercadopago-option",
+    "culqi-option",
   );
-  const [mercadoPagoKey, setMercadoPagoKey] = useState(0);
-
-  const mercadoPagoRef = useRef<{
-    price: number;
-    district: string;
-    instance: JSX.Element | null;
-  }>({ price: 0, district: "", instance: null });
 
   useEffect(() => {
-    if (!selectedDistrict) setMercadoPagoKey((prev) => prev + 1);
-  }, [selectedDistrict]);
-
-  useEffect(() => {
-    const fetchDistricts = async () => {
+    const fetchLocations = async () => {
       try {
-        const response = await fetch("/api/districts");
-        const data = await response.json();
-        setDistricts(data);
+        const [districtsResponse, provincesResponse] = await Promise.all([
+          fetch("/api/districts"),
+          fetch("/api/provinces"),
+        ]);
+
+        const districtsData = await districtsResponse.json();
+        const provincesData = await provincesResponse.json();
+
+        setDistricts(districtsData);
+        setProvinces(provincesData);
       } catch (err) {
-        setError("Error cargando los distritos");
+        setError("Error cargando las ubicaciones");
       }
     };
-    fetchDistricts();
+    fetchLocations();
   }, []);
+
   useEffect(() => {
     const controller = new AbortController();
 
     const calculateShipping = async () => {
-      if (!selectedDistrict) return;
+      if (!selectedLocation) return;
 
       setLoadingShipping(true);
       try {
+        const endpoint =
+          shippingType === "distrito"
+            ? "calculate-shipping"
+            : "calculate-province-shipping";
         const response = await fetch(
-          `/api/calculate-shipping?district=${selectedDistrict}&packageId=${packageId}`,
+          `/api/${endpoint}?location=${selectedLocation}&packageId=${packageId}`,
           { signal: controller.signal },
         );
         const data = await response.json();
@@ -69,27 +75,6 @@ const PaymentOptions = ({
           setShippingCost(data.shippingCost);
           const newTotal = basePrice + data.shippingCost;
           setTotalPrice(newTotal);
-
-          if (
-            newTotal !== mercadoPagoRef.current.price ||
-            selectedDistrict !== mercadoPagoRef.current.district
-          ) {
-            mercadoPagoRef.current = {
-              price: newTotal,
-              district: selectedDistrict,
-              instance: (
-                <MercadoPagoCheckoutPro
-                  key={`${newTotal}-${selectedDistrict}`}
-                  product_data={{
-                    price: newTotal,
-                    name: title,
-                    quantity: 1,
-                    district: selectedDistrict,
-                  }}
-                />
-              ),
-            };
-          }
         }
       } catch (err) {
         if (!controller.signal.aborted) {
@@ -104,31 +89,67 @@ const PaymentOptions = ({
 
     calculateShipping();
     return () => controller.abort();
-  }, [selectedDistrict, packageId, basePrice, title]);
+  }, [selectedLocation, packageId, basePrice, shippingType]);
 
   const toggleAccordion = (optionId: string) => {
     setActiveOption((prev) => (prev === optionId ? null : optionId));
+  };
+
+  const handleLocationTypeChange = (type: "distrito" | "provincia") => {
+    setShippingType(type);
+    setSelectedLocation("");
+    setShippingCost(0);
   };
 
   return (
     <div className="payment-section">
       <h2>Método de Pago</h2>
 
-      {/* Selector de distrito */}
+      {/* Selector de ubicación */}
       <div className="shipping-selector">
-        <label>Distrito de entrega:</label>
-        <select
-          value={selectedDistrict}
-          onChange={(e) => setSelectedDistrict(e.target.value)}
-          disabled={loadingShipping}
-        >
-          <option value="">Seleccione su distrito</option>
-          {districts.map((district) => (
-            <option key={district.code} value={district.code}>
-              {district.name}
-            </option>
-          ))}
-        </select>
+        <div className="location-type-buttons">
+          <button
+            className={`location-type-btn ${shippingType === "distrito" ? "active" : ""}`}
+            onClick={() => handleLocationTypeChange("distrito")}
+          >
+            Envío Distrito Lima
+          </button>
+          <button
+            className={`location-type-btn ${shippingType === "provincia" ? "active" : ""}`}
+            onClick={() => handleLocationTypeChange("provincia")}
+          >
+            Envío Provincia
+          </button>
+        </div>
+
+        {shippingType && (
+          <div className="location-selector">
+            <label>
+              {shippingType === "distrito"
+                ? "Seleccione su distrito:"
+                : "Seleccione su provincia:"}
+            </label>
+            <select
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+              disabled={loadingShipping}
+            >
+              <option value="">
+                {shippingType === "distrito"
+                  ? "Seleccione distrito"
+                  : "Seleccione provincia"}
+              </option>
+              {(shippingType === "distrito" ? districts : provinces).map(
+                (location) => (
+                  <option key={location.code} value={location.code}>
+                    {location.name}
+                  </option>
+                ),
+              )}
+            </select>
+          </div>
+        )}
+
         {loadingShipping && (
           <span className="loading">Calculando envío...</span>
         )}
@@ -140,62 +161,6 @@ const PaymentOptions = ({
       </div>
 
       <div className="payment-options">
-        {/* Opción: Mercado Pago */}
-        {/*
-        <div
-          className={`payment-option ${activeOption === "mercadopago-option" ? "active" : ""}`}
-        >
-          <div
-            className="payment-option-header"
-            onClick={() => toggleAccordion("mercadopago-option")}
-          >
-            <span className="payment-icon">🟡</span>
-            <span className="payment-title">Mercado Pago</span>
-            <div className="payment-badge">Recomendado</div>
-            <span className="toggle-icon">▼</span>
-          </div>
-          <div className="payment-option-content">
-            <div className="mercado-pago-details">
-              <p className="payment-description">
-                Paga con tarjeta, efectivo o saldo de Mercado Pago
-              </p>
-              <div className="payment-methods-grid">
-                <span className="method-icon">💳</span>
-                <span className="method-icon">📱</span>
-                <span className="method-icon">💵</span>
-              </div>
-
-              {selectedDistrict && mercadoPagoRef.current.instance}
-
-              <div className="security-info">
-                <span className="lock-icon">🔒</span>
-                <span>Transacción 100% segura</span>
-              </div>
-            </div>
-          </div>
-        </div>
-*/}
-        {/* Opción: Tarjeta de Crédito/Débito */}
-        {/*
-        <div
-          className={`payment-option ${activeOption === "card-option" ? "active" : ""}`}
-        >
-          <div
-            className="payment-option-header"
-            onClick={() => toggleAccordion("card-option")}
-          >
-            <span className="payment-icon">💳</span>
-            <span className="payment-title">Tarjeta de Débito/Crédito</span>
-            <span className="toggle-icon">▼</span>
-          </div>
-          <div className="payment-option-content">
-            <p className="coming-soon">
-              Próximamente: Estamos trabajando en la integración segura de
-              tarjetas
-            </p>
-          </div>
-        </div>
-        */}
         {/* Opción: Culqi */}
         <div
           className={`payment-option ${activeOption === "culqi-option" ? "active" : ""}`}
@@ -204,20 +169,26 @@ const PaymentOptions = ({
             className="payment-option-header"
             onClick={() => toggleAccordion("culqi-option")}
           >
-            <span className="payment-icon">⚡</span>
+            <span className="payment-icon">
+              <img
+                src="/icons/culqi_icon.svg"
+                width="25px"
+                height="25px"
+                alt="Culqi"
+              />
+            </span>
             <span className="payment-title">Culqi</span>
             <span className="toggle-icon">▼</span>
           </div>
           <div className="payment-option-content">
-            {selectedDistrict ? (
+            {selectedLocation ? (
               <div className="culqi-payment">
                 <p>Pago seguro con Culqi - Total: S/ {totalPrice.toFixed(2)}</p>
                 {(() => {
-                  const culqiLink = getCulqiLink(selectedDistrict);
+                  const culqiLink = getCulqiLink(selectedLocation);
                   return (
                     <a
                       href={culqiLink}
-                      target="_blank"
                       rel="noopener noreferrer"
                       className={`culqi-button ${!culqiLink ? "disabled" : ""}`}
                       onClick={(e) => {
@@ -244,49 +215,12 @@ const PaymentOptions = ({
               </div>
             ) : (
               <p className="select-district-alert">
-                ⚠️ Por favor selecciona tu distrito para mostrar las opciones de
-                pago
+                ⚠️ Por favor selecciona tu ubicación para mostrar las opciones
+                de pago
               </p>
             )}
           </div>
         </div>
-        {/*
-        <div
-          className={`payment-option ${activeOption === "transfer-option" ? "active" : ""}`}
-        >
-          <div
-            className="payment-option-header"
-            onClick={() => toggleAccordion("transfer-option")}
-          >
-            <span className="payment-icon">🏦</span>
-            <span className="payment-title">Transferencia Bancaria</span>
-            <span className="toggle-icon">▼</span>
-          </div>
-          <div className="payment-option-content">
-            <div className="bank-transfer-details">
-              <div className="bank-info-item">
-                <span className="info-label">Banco:</span>
-                <span className="info-value">Banco Nacional</span>
-              </div>
-              <div className="bank-info-item">
-                <span className="info-label">Titular:</span>
-                <span className="info-value">Microdosis Ilumina S.A.</span>
-              </div>
-              <div className="bank-info-item">
-                <span className="info-label">CBU/CVU:</span>
-                <span className="info-value highlight">
-                  0000000000000000000000
-                </span>
-              </div>
-              <div className="bank-info-item">
-                <span className="info-label">ALIAS:</span>
-                <span className="info-value highlight">MICRODOSIS.ILUMINA</span>
-              </div>
-              <button className="contact-button">📩 Enviar Comprobante</button>
-            </div>
-          </div>
-        </div>
-        */}
       </div>
     </div>
   );
