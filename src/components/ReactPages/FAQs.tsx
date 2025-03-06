@@ -6,6 +6,7 @@ import logo from "../../assets/logo.png?url";
 import TestimonialCarousel from "../ReactComponents/TestimonialCarousel";
 import useResponsiveness from "../../utils/useResponsiveness";
 import { Facebook, Whatsapp } from "iconsax-react";
+import { useMediaQuery } from "react-responsive";
 
 interface LandingProps {
   id: string;
@@ -16,6 +17,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
   (props, ref) => {
     const { handleResponsiveness } = useResponsiveness();
     let padding = handleResponsiveness([26, 10, 25, 10]);
+    const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
 
     const FAQ = ({ title, answer }) => (
       <div
@@ -49,14 +51,16 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
     );
 
     return (
-      <SectionLayout id={props.id} ref={ref} horizontalPadding={0}>
+      <SectionLayout
+        id={props.id}
+        ref={ref}
+        horizontalPadding={desktop ? "20vw" : "10vw"}
+        style={{ position: "absolute" }}
+      >
         <div
           style={{
             flexDirection: "column",
             alignContent: "space-around",
-            paddingRight: `${padding}rem`,
-            paddingLeft: `${padding}rem`,
-            zIndex: 1,
           }}
         >
           <div
@@ -119,12 +123,13 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
         <div
           style={{
             position: "absolute",
+            bottom: "2rem",
             display: "flex",
             justifyContent: "space-between",
             gap: "15px",
             flexDirection: "row",
             width: "92vw",
-            marginTop: "90vh",
+            marginTop: "90vg",
             zIndex: 1,
           }}
         >
@@ -147,7 +152,8 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             style={{
               display: "flex",
               flexDirection: "row",
-              alignItems: "flex-end",
+              alignItems: "center",
+              paddingRight: desktop ? "5rem" : "6rem",
               gap: "20px",
             }}
           >

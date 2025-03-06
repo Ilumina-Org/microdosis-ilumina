@@ -4,6 +4,7 @@ import { SectionLayout } from "../ReactComponents/SectionLayout";
 import { ShoppingCart, ArrowDown2, Whatsapp, Facebook } from "iconsax-react";
 import { initializeAnimation } from "../../utils/appleAnimation";
 import useResponsiveness from "../../utils/useResponsiveness";
+import { useMediaQuery } from "react-responsive";
 
 //now that im using react find a library that can do this easily,
 // import animationScript from '../../../public/animation.js';
@@ -17,9 +18,7 @@ interface LandingProps {
 const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   // Use useEffect to run the script after the component mounts
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { handleResponsiveness } = useResponsiveness();
-
-  let padding = handleResponsiveness([26, 10, 25, 10]);
+  const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -28,7 +27,11 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   }, []);
 
   return (
-    <SectionLayout id={props.id} ref={ref} horizontalPadding={padding}>
+    <SectionLayout
+      id={props.id}
+      ref={ref}
+      horizontalPadding={desktop ? "25vw" : "20vw"}
+    >
       <div
         style={{
           height: "auto",
@@ -38,7 +41,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         }}
       >
         <p style={{ color: "white", fontSize: "50px" }}>ILUMINA</p>
-      </div>
+      {/* </div> */}
       <div className="content fade-in-slide-left">
         <h1>
           Descubre el poder <br /> sanador de la <br />
@@ -60,11 +63,13 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             borderRadius: "15px",
             gap: "15px",
           }}
-          icon={<ShoppingCart size={30} color="black" />}
+          icon={
+            <ShoppingCart size={30} color="black" style={{ opacity: "0.5" }} />
+          }
         />
       </div>
       <div className="image-container">
-        {/* <canvas id="model-image" ref={canvasRef}></canvas> */}
+        <canvas id="model-image" ref={canvasRef}></canvas>
       </div>
       <a
         className="bottom-action"
@@ -161,7 +166,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
           h1 {
           font-weight: 800;
-            font-size: 70px;
+            font-size: 4vw !important;
             color: white;
             line-height: 98%;
             margin: 0;
@@ -198,9 +203,9 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
           @media only screen and (min-width: 1920px) {
             canvas {
-              bottom: 3rem !important;
+              bottom:  ${7}rem !important;
               right: 10rem !important;
-              transform: scale(2.5) !important;
+              transform: scale(${desktop ? 3.25 : 2.5}) !important;
               }
               .content > h1{
                 font-size: 4.5rem;

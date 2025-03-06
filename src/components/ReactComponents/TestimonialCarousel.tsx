@@ -15,20 +15,24 @@ const TestimonialCarousel = () => {
   const TestTestimonials = [
     {
       name: "Sofia P.",
-      review: "Tras sufrir de depresión por años, las microdosis de ayahuasca me han dado una nueva perspectiva de vida. Cada día me siento más conectada con mi alegría interior y con las personas a mi alrededor. Es como si hubiera encontrado la llave para desbloquear mi felicidad.",
+      review:
+        "Tras sufrir de depresión por años, las microdosis de ayahuasca me han dado una nueva perspectiva de vida. Cada día me siento más conectada con mi alegría interior y con las personas a mi alrededor. Es como si hubiera encontrado la llave para desbloquear mi felicidad.",
     },
     {
       name: "Carlos M",
-      review: "La claridad mental que he alcanzado desde que comencé con las microdosis es increíble. Puedo pensar con más profundidad y resolver problemas con una eficiencia que nunca antes había experimentado. Ha mejorado enormemente mi desempeño en el trabajo y mi satisfacción personal."
+      review:
+        "La claridad mental que he alcanzado desde que comencé con las microdosis es increíble. Puedo pensar con más profundidad y resolver problemas con una eficiencia que nunca antes había experimentado. Ha mejorado enormemente mi desempeño en el trabajo y mi satisfacción personal.",
     },
     {
       name: "Elena Q",
-      review: "Después de años luchando con trastornos de ansiedad, finalmente siento que tengo control sobre mi vida. Las microdosis me han ayudado a calmar mi mente y a enfrentar situaciones estresantes con una serenidad que nunca pensé posible."
+      review:
+        "Después de años luchando con trastornos de ansiedad, finalmente siento que tengo control sobre mi vida. Las microdosis me han ayudado a calmar mi mente y a enfrentar situaciones estresantes con una serenidad que nunca pensé posible.",
     },
     {
       name: "Tomás R",
-      review: "Como atleta, siempre estoy buscando mejorar mi rendimiento y recuperación. Las microdosis de ayahuasca han sido fundamentales para mejorar mi concentración durante las competencias y acelerar mi recuperación después de entrenamientos intensos. Es un cambio radical en mi rutina deportiva."
-    }
+      review:
+        "Como atleta, siempre estoy buscando mejorar mi rendimiento y recuperación. Las microdosis de ayahuasca han sido fundamentales para mejorar mi concentración durante las competencias y acelerar mi recuperación después de entrenamientos intensos. Es un cambio radical en mi rutina deportiva.",
+    },
   ];
 
   const Testimonial = ({ name, review, index }: any) => {
@@ -63,7 +67,16 @@ const TestimonialCarousel = () => {
           }}
         />
         */}
-        <PlaceHolder />
+        <div
+          style={{
+            width: "100%",
+            overflow: "hidden",
+            borderRadius: "15px",
+            maxWidth: "150px",
+          }}
+        >
+          <PlaceHolder />
+        </div>
         <div
           style={{
             flexDirection: "column",
@@ -80,10 +93,7 @@ const TestimonialCarousel = () => {
               textOverflow: "ellipsis",
             }}
           >
-            {formatText(
-              review,
-              200
-            )}
+            {formatText(review, 200)}
           </p>
           <p
             style={{
