@@ -5,12 +5,16 @@ import Landing from "../components/ReactPages/Landing";
 import Testimonials from "../components/ReactPages/Testimonials";
 import About from "../components/ReactPages/About";
 import FAQs from "../components/ReactPages/FAQs";
+import Products from "../components/ReactPages/Products";
+import { getProducts } from "../utils/stock";
+const products = (await getProducts()).slice(0, 3);
 ---
 
 <Layout>
   <Landing id="inicio" client:load />
   <About id="about" client:load />
   <Testimonials id="testimonios" client:load />
+  <Products id="products" client:load products={products} />
   <FAQs id="faqs" client:load />
   <Chatbot client:load />
 </Layout>

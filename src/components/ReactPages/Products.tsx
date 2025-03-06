@@ -1,4 +1,6 @@
 "use client";
+
+import React from "react";
 import ProductContainer from "../../components/ReactComponents/ProductContainer";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
 
@@ -15,11 +17,19 @@ interface Product {
 
 interface ProductsPageProps {
   products: Product[];
+  id: string;
+  horizontalPadding?: string | number;
+  ref: React.Ref<HTMLDivElement>;
 }
 
-const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
+const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>((props, ref) => {
   return (
-    <SectionLayout id="products" height="auto">
+    <SectionLayout
+      id={props.id}
+      ref={ref}
+      height="auto"
+      background="white"
+    >
       <div
         style={{
           width: "100%",
@@ -50,25 +60,29 @@ const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
             width: "100%",
           }}
         >
-          {products.map((product: Product) => (
-            <ProductContainer
-              key={product.sku}
-              sku={product.sku}
-              link={"microdosis-package/" + product.sku}
-              imageUrl={"products/" + product.sku + "-card.svg"}
-              productTitle={product.title}
-              productDetail={product.productDetail}
-              productPrice={product.productPrice}
-              productDeal={product.productDeal}
-              stock={product.stock}
-              purchaseType={product.tipo as any}
-              tier={product.tier}
-            />
-          ))}
-        </div>
-      </div>
-    </SectionLayout>
+          {
+            props.products.map((product: Product) => (
+              <ProductContainer
+                key={product.sku}
+                sku={product.sku}
+                link={"microdosis-package/" + product.sku}
+                imageUrl={"products/" + product.sku + "-card.svg"}
+                productTitle={product.title}
+                productDetail={product.productDetail}
+                productPrice={product.productPrice}
+                productDeal={product.productDeal}
+                stock={product.stock}
+                purchaseType={product.tipo as any}
+                tier={product.tier}
+              />
+            ))
+          }
+        </div >
+      </div >
+    </SectionLayout >
   );
-};
 
-export default ProductsPage;
+});
+
+
+export default Products;
