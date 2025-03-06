@@ -141,6 +141,7 @@ const PaymentOptions = ({
 
       <div className="payment-options">
         {/* Opción: Mercado Pago */}
+        {/*
         <div
           className={`payment-option ${activeOption === "mercadopago-option" ? "active" : ""}`}
         >
@@ -173,7 +174,7 @@ const PaymentOptions = ({
             </div>
           </div>
         </div>
-
+*/}
         {/* Opción: Tarjeta de Crédito/Débito */}
         {/*
         <div
