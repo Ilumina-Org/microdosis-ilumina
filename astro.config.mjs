@@ -24,9 +24,6 @@ export default defineConfig({
         : {},
   },
   output: "server",
-  adapter: vercel({
-    maxDuration: 60,
-    includeFiles: ["./credentials.json"],
-  }),
+  adapter: vercel(),
   integrations: [react()],
 });
