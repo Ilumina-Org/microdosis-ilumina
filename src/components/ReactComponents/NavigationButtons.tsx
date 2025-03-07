@@ -36,7 +36,7 @@ const NavigationButtons = () => {
         flexDirection: "column",
         backgroundColor: "transparent",
         color: "white",
-        zIndex: "12",
+        zIndex: "10",
         gap: "20px",
 
         right: "4rem",

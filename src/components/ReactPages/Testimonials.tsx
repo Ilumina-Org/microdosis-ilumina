@@ -27,15 +27,15 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
           <div
             style={{
               height: "fit-content",
-              maxWidth: "900px",
+              maxWidth: "800px",
               borderRadius: "20px",
               overflow: "hidden",
               boxShadow: "1px 0px 40px rgba(0, 0, 0, 0.48)",
             }}
           >
             <iframe
-              width="900"
-              height="515"
+              width="800"
+              height="400"
               src="https://www.youtube.com/embed/qRTVg8HHzUo?si=oT9nLeT7KbVrjKc6"
               title="YouTube video player"
               frameBorder="0"

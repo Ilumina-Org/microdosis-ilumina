@@ -29,7 +29,7 @@ export const SectionLayout = ({
     display: "flex",
     height: height,
     justifyContent: "center",
-    zIndex: 10,
+    // zIndex: 10,
     background: background ? background : gradientBackground,
     paddingLeft: horizontalPadding,
     paddingRight: horizontalPadding,

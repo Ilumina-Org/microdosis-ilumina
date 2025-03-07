@@ -56,6 +56,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
         ref={ref}
         horizontalPadding={desktop ? "20vw" : "10vw"}
         style={{ position: "absolute" }}
+        verticalPadding={"4rem"}
       >
         <div
           style={{

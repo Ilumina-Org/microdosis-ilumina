@@ -41,7 +41,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         }}
       >
         <p style={{ color: "white", fontSize: "50px" }}>ILUMINA</p>
-      {/* </div> */}
+      </div>
       <div className="content fade-in-slide-left">
         <h1>
           Descubre el poder <br /> sanador de la <br />
