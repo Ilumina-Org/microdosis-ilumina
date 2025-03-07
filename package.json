@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy": "astro build && wrangler pages deploy"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.2.3",
@@ -35,6 +36,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@types/node": "^22.13.9",
     "prettier": "^3.5.2",
     "prettier-plugin-astro": "^0.14.1",
     "vite-plugin-node-polyfills": "^0.23.0"
