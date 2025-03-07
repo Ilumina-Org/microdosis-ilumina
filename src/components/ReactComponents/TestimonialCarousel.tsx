@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import imageUrl from "../../assets/user1.png?url";
-
+import PlaceHolder from "./PlaceHolder";
 const TestimonialCarousel = () => {
   const [opacityIndex, setOpacityIndex] = useState(0);
   const handleChange = (index: number) => {
@@ -14,20 +14,21 @@ const TestimonialCarousel = () => {
 
   const TestTestimonials = [
     {
-      name: "John Doe",
-      review:
-        "I had an amazing experience with this service! The team was professional, responsive, and delivered beyond my expectations. Highly recommend!",
+      name: "Sofia P.",
+      review: "Tras sufrir de depresión por años, las microdosis de ayahuasca me han dado una nueva perspectiva de vida. Cada día me siento más conectada con mi alegría interior y con las personas a mi alrededor. Es como si hubiera encontrado la llave para desbloquear mi felicidad.",
     },
     {
-      name: "Jane Smith",
-      review:
-        "Absolutely fantastic! The quality of work is top-notch, and the customer service is exceptional. I will definitely use them again.",
+      name: "Carlos M",
+      review: "La claridad mental que he alcanzado desde que comencé con las microdosis es increíble. Puedo pensar con más profundidad y resolver problemas con una eficiencia que nunca antes había experimentado. Ha mejorado enormemente mi desempeño en el trabajo y mi satisfacción personal."
     },
     {
-      name: "Jane Smith",
-      review:
-        "Absolutely fantastic! The quality of work is top-notch, and the customer service is exceptional. I will definitely use them again.",
+      name: "Elena Q",
+      review: "Después de años luchando con trastornos de ansiedad, finalmente siento que tengo control sobre mi vida. Las microdosis me han ayudado a calmar mi mente y a enfrentar situaciones estresantes con una serenidad que nunca pensé posible."
     },
+    {
+      name: "Tomás R",
+      review: "Como atleta, siempre estoy buscando mejorar mi rendimiento y recuperación. Las microdosis de ayahuasca han sido fundamentales para mejorar mi concentración durante las competencias y acelerar mi recuperación después de entrenamientos intensos. Es un cambio radical en mi rutina deportiva."
+    }
   ];
 
   const Testimonial = ({ name, review, index }: any) => {
@@ -49,6 +50,7 @@ const TestimonialCarousel = () => {
           transform: `scale(${opacityIndex === index ? 1 : 0.9})`,
         }}
       >
+        {/*
         <img
           src={imageUrl}
           alt=""
@@ -60,6 +62,8 @@ const TestimonialCarousel = () => {
             maxWidth: "150px",
           }}
         />
+        */}
+        <PlaceHolder />
         <div
           style={{
             flexDirection: "column",
@@ -77,7 +81,7 @@ const TestimonialCarousel = () => {
             }}
           >
             {formatText(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nonodio quis elit sagittis luctus eget ac metus. Fusce finibus necrisus vitae facilisis. Morbi sit amet tempor arcu. Nullam eget velitvenenatis, tincidunt sapien ac",
+              review,
               200
             )}
           </p>
@@ -88,7 +92,7 @@ const TestimonialCarousel = () => {
               marginBottom: 0,
             }}
           >
-            Carla Maurice R.
+            {name}
           </p>
         </div>
       </div>

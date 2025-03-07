@@ -1,0 +1,12 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ProductsPage from "../components/ReactPages/Products";
+import { getProducts } from "../utils/stock";
+const products = (await getProducts()).slice(0, 3);
+---
+
+<Layout>
+  <div transition:name="products-page" transition:animate="fade">
+    <ProductsPage client:load products={products} />
+  </div>
+</Layout>

@@ -1,11 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getProducts } from "../utils/stock";
-import ProductContainer from "./ReactComponents/ProductContainer";
+import ProductContainer from "../components/ReactComponents/ProductContainer";
 
 let products = [];
 let errorMessage = "";
-
 try {
   products = await getProducts();
   products = products.slice(0, 3);
@@ -30,7 +29,6 @@ try {
         Paquetes Disponibles
       </h2>
     </div>
-
     <div
       style={{
         display: "flex",
@@ -57,24 +55,22 @@ try {
           <ProductContainer
             client:load
             key={product.sku}
+            imageUrl={`/products/${product.sku}-card.svg`}
+            link={`microdosis-package/${product.sku}`}
             sku={product.sku}
-            link={`/microdosis-package/${product.sku}`}
-            imageUrl={`/assets/${product.sku}`}
             productTitle={product.title}
             productDetail={product.productDetail}
             productPrice={product.productPrice}
             productDeal={product.productDeal}
             tier={product.tier}
-            purchaseType={
-              product.sku.includes("subscription") ? "subscription" : undefined
-            }
+            stock={product.stock}
+            purchaseType={product.tipo}
           />
         ))
       }
     </div>
   </section>
 </Layout>
-
 <style>
   .container {
     --horizontalPadding: 10rem;
@@ -84,9 +80,8 @@ try {
     padding-left: var(--horizontalPadding);
     scroll-snap-align: start;
   }
-
   @media (max-width: 768px) {
-    #container {
+    .container {
       --horizontalPadding: 2rem;
       padding: 1rem;
     }

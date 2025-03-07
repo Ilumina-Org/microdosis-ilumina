@@ -64,7 +64,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         />
       </div>
       <div className="image-container">
-        <canvas id="model-image" ref={canvasRef}></canvas>
+        {/* <canvas id="model-image" ref={canvasRef}></canvas> */}
       </div>
       <a
         className="bottom-action"

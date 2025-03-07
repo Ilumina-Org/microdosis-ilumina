@@ -8,7 +8,7 @@ export const getStock = async (): Promise<StockData> => {
     const sheets = await getGoogleSheetsClient();
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEETS.INVENTORY}!A2:I`,
+      range: `${SHEETS.INVENTORY}!A2:J`,
     });
 
     const stockData: StockData = {};
@@ -26,48 +26,43 @@ export const getStock = async (): Promise<StockData> => {
           notas,
           featured,
           tipo,
+          tier,
         ] = row;
 
+        // Skip invalid or duplicate SKUs
         if (!sku?.trim() || seenSkus.has(sku)) {
           console.warn(`SKU duplicado o inválido: ${sku}. Fila omitida.`);
           return;
         }
+
         seenSkus.add(sku);
 
-        const numDisponible = parseInt(disponible, 10);
-        const numTotal = parseInt(total, 10);
-        const numPrice = parseFloat(price);
-        const numRegularPrice = parseFloat(regularPrice);
+        // Parse numeric values with robust error handling
+        const numDisponible = parseInt(disponible, 10) || 0;
+        const numTotal = parseInt(total, 10) || numDisponible;
+        const numPrice = parseFloat(price) || 0;
+        const numRegularPrice = parseFloat(regularPrice) || 0;
+        const numTier = parseInt(tier, 10) || 0;
 
-        // Asignar valores por defecto si no existen
-        const disponibleFinal = isNaN(numDisponible) ? 0 : numDisponible;
-        const totalFinal = isNaN(numTotal) ? disponibleFinal : numTotal;
-
-        // Validar que no sean negativos
-        if (disponibleFinal < 0 || totalFinal < 0) {
+        // Validate non-negative values
+        if (numDisponible < 0 || numTotal < 0) {
           console.warn(
             `Valores negativos encontrados para el SKU ${sku}. Fila omitida.`,
           );
           return;
         }
 
-        // Log de los valores antes de agregar al stockData
-        console.log(
-          `Fila ${index + 1}: SKU ${sku}, disponibleFinal: ${disponibleFinal}, totalFinal: ${totalFinal}`,
-        );
-
         stockData[sku] = {
           sku: sku.trim(),
           title: title || "",
-          price: numPrice || 0,
-          regularPrice: numRegularPrice || 0,
-          disponible: disponibleFinal,
-          total: totalFinal,
+          price: numPrice,
+          regularPrice: numRegularPrice,
+          disponible: numDisponible,
+          total: numTotal,
           notas: notas || "",
-          featured: featured === "true",
-          tipo: (tipo === "subscription" ? "subscription" : "package") as
-            | "package"
-            | "subscription",
+          featured: featured === "TRUE",
+          tipo: tipo === "subscription" ? "subscription" : "package",
+          tier: numTier,
         };
       });
     }
@@ -76,7 +71,7 @@ export const getStock = async (): Promise<StockData> => {
     return stockData;
   } catch (error) {
     console.error("Error fetching stock:", error);
-    return {}; // Retornar vacío en caso de error
+    return {};
   }
 };
 
@@ -84,21 +79,22 @@ export const getProducts = async (): Promise<any[]> => {
   try {
     const stockData = await getStock();
 
-    console.log("Stock data fetched for products:", stockData); // Log para revisar el stockData completo
-
     return Object.values(stockData).map((item) => {
-      console.log(
-        `Evaluando SKU ${item.sku}, disponible: ${item.disponible}, stock: ${item.disponible > 0}`,
-      ); // Log de cada producto
+      const discountPercentage =
+        item.price && item.regularPrice
+          ? Math.round((1 - item.price / item.regularPrice) * 100)
+          : 0;
 
       return {
         sku: item.sku,
         title: item.title,
-        productDetail: `Precio Regular $${item.regularPrice}`,
-        productPrice: `$${item.price}`,
-        productDeal: `(Ahorra ${Math.round((1 - item.price / item.regularPrice) * 100)}%)`,
-        stock: item.disponible > 0, // Esto es donde validas el stock
+        productDetail: `Precio Regular $${item.regularPrice.toFixed(2)}`,
+        productPrice: `$${item.price.toFixed(2)}`,
+        productDeal:
+          discountPercentage > 0 ? `(Ahorra ${discountPercentage}%)` : "",
+        stock: item.disponible > 0,
         tipo: item.tipo,
+        tier: item.tier,
       };
     });
   } catch (error) {

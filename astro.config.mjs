@@ -1,13 +1,13 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
-import vercel from "@astrojs/vercel/serverless";
+import cloudflare from "@astrojs/cloudflare";
 
 export default defineConfig({
   site: "http://localhost:4321",
   server: {
     headers:
-      process.env.NODE_ENV === "production"
+      import.meta.env.NODE_ENV === "production"
         ? {
             "Content-Security-Policy": `
         default-src 'self';
@@ -24,17 +24,22 @@ export default defineConfig({
         : {},
   },
   output: "server",
-  adapter: vercel({
-    maxDuration: 60,
-    includeFiles: ["./credentials.json"],
+  adapter: cloudflare({
+    platformProxy: {
+      enabled: true,
+    },
   }),
   integrations: [react()],
-  devToolbar: { enabled: false },
   vite: {
-    build: {
-      rollupOptions: {
-        external: ["react", "react-dom", "react/jsx-runtime"],
-      },
+    resolve: {
+      // Use react-dom/server.edge instead of react-dom/server.browser for React 19.
+      // Without this, MessageChannel from node:worker_threads needs to be polyfilled.
+      alias:
+        process.env.NODE_ENV === "production" || import.meta.env.PROD
+          ? {
+              "react-dom/server": "react-dom/server.edge",
+            }
+          : undefined,
     },
   },
 });
