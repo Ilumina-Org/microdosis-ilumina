@@ -54,8 +54,6 @@
   max-width: 500px;
 }
 
-
-
 @keyframes chatSlideIn {
   0% {
     opacity: 0;
@@ -70,9 +68,8 @@
 }
 
 .chat-slide-in {
-  animation: chatSlideIn .25s ease-out forwards;
+  animation: chatSlideIn 0.25s ease-out forwards;
 }
-
 
 .chat-box {
   background: #ffffff;
@@ -474,20 +471,6 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 
-.tooltip-bubble:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  margin-left: 0;
-  border-left: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-top: 8px solid rgba(0, 0, 0, 0.8);
-  border-right: none; /* Quitamos el borde derecho */
-}
 
 keyframes fadeIn {
   from {
