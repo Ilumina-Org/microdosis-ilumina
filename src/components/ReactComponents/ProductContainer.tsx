@@ -57,8 +57,8 @@ export default function ProductContainer({
       <div
         style={{
           backgroundColor: "white",
-          width: "16rem",
-          height: "27rem",
+          width: "18rem",
+          height: "32rem",
           maxHeight: "27rem",
           display: "flex",
           padding: ".75rem",
