@@ -6,27 +6,25 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy": "astro build && wrangler pages deploy"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^12.2.3",
     "@astrojs/react": "^4.2.1",
-    "@astrojs/vercel": "^8.0.4",
     "@hookform/resolvers": "^4.1.2",
-    "@mercadopago/sdk-react": "^0.0.24",
-    "@types/crypto-js": "^4.2.2",
+    "@types/node": "^22.13.9",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "astro": "^5.4.2",
-    "crypto-js": "^4.2.0",
-    "googleapis": "^144.0.0",
     "iconsax-react": "^0.0.8",
-    "mercadopago": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "react-responsive": "^10.0.1",
     "react-responsive-carousel": "^3.2.23",
     "resend": "^4.1.2",
+    "wrangler": "^3.114.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
