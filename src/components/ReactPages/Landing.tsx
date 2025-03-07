@@ -4,22 +4,37 @@ import { SectionLayout } from "../ReactComponents/SectionLayout";
 import { ShoppingCart, ArrowDown2, Whatsapp, Facebook } from "iconsax-react";
 import { initializeAnimation } from "../../utils/appleAnimation";
 import useResponsiveness from "../../utils/useResponsiveness";
+import { useMediaQuery } from "react-responsive";
+import staticImage from "../../assets/static-flask.png?url";
 
 //now that im using react find a library that can do this easily,
 // import animationScript from '../../../public/animation.js';
 
 interface LandingProps {
   id: string;
-  //horizontalPadding: any;
   ref: React.Ref<HTMLDivElement>;
 }
 
 const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   // Use useEffect to run the script after the component mounts
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { handleResponsiveness } = useResponsiveness();
+  const mobile = useMediaQuery({ orientation: "portrait" });
+  const large = useMediaQuery({ query: "(min-width: 2400px)" });
+  const desktop = useMediaQuery({
+    query: "(min-width: 1920px) and (max-width: 2399px)",
+  });
+  const medium = useMediaQuery({
+    query: "(min-width: 1400px) and (max-width: 1919px)",
+  });
+  const small = useMediaQuery({ query: "(max-width: 1399px)" });
 
-  let padding = handleResponsiveness([26, 10, 25, 10]);
+  const responsiveHandler = (s, m, l, xl) => {
+    //console.log("queso", small, medium, desktop, large);
+    if (small) return s;
+    if (medium) return m;
+    if (desktop) return l;
+    if (large) return xl;
+  };
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -32,7 +47,12 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   }
 
   return (
-    <SectionLayout id={props.id} ref={ref} horizontalPadding={padding}>
+    <SectionLayout
+      id={props.id}
+      ref={ref}
+      horizontalPadding={desktop ? "20vw" : "18vw"}
+      style={{ overflow: "hidden" }}
+    >
       <div
         style={{
           height: "auto",
@@ -54,7 +74,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         <Button
           id="toggle-chat"
           label="Comprar ahora"
-          fontSize={30}
+          //fontSize={30}
           padding={15}
           styles={{
             backgroundColor: "#C1DC3A",
@@ -63,13 +83,31 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             alignItems: "center",
             borderRadius: "15px",
             gap: "15px",
+            fontSize: desktop ? "1.5vw" : "2vw",
           }}
-          icon={<ShoppingCart size={30} color="black" />}
-          onClick={() => handleClick()}
+          icon={
+            <ShoppingCart size={30} color="black" style={{ opacity: "0.5" }} />
+          }
         />
       </div>
       <div className="image-container">
-        {/* <canvas id="model-image" ref={canvasRef}></canvas> */}
+        {!small ? (
+          <canvas id="model-image" ref={canvasRef}></canvas>
+        ) : (
+          <img
+            className="fadeInIMage"
+            src={staticImage}
+            style={{
+              position: "relative",
+              right: "14rem",
+              top: "10rem",
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              transform: "scale(3) rotate(0.2deg)",
+            }}
+          />
+        )}
       </div>
       <a
         className="bottom-action"
@@ -106,16 +144,6 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         {`
             *{
           z-index: 2
-          }
-
-          canvas {
-            position: absolute;
-            bottom: 3rem;
-            right: 0rem;
-            max-height: 90vh;
-            max-width: 99vw;
-            transform: scale(2.25);
-            z-index: 1 !important;
           }
 
           .bottom-action{
@@ -161,12 +189,16 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           }
 
           .fade-in-slide-left {
-            animation: fadeInSlideFromLeft 1.5s ease-out forwards;
+            animation: fadeInSlideFromLeft 1s ease-out forwards;
+          }
+
+          .fadeInIMage{
+          animation: fadeInSlideFromLeft 1.5s ease-in forwards
           }
 
           h1 {
           font-weight: 800;
-            font-size: 70px;
+            font-size: 4vw !important;
             color: white;
             line-height: 98%;
             margin: 0;
@@ -185,10 +217,27 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           }
 
           .image-container {
+          ${mobile && "transform: oscale(2.5)"}
+          position:relative,
+          border: 1px solid transparent;
             flex: 1;
             flexGrow: 1;
             right: 0;
-            overflow: hidden;
+            ${small ? "overflow: show" : "overflow: hidden"}
+            z-index: 1 !important;
+          }
+
+          .image-container > img {
+          // border:1px solid white
+          }
+
+          canvas {
+            position: absolute !important;
+            bottom: 3rem;
+            right: ${small ? "0rem" : "5rem"};
+            transform: scale(${responsiveHandler(2.4, 2.4, 2.5, 4)}) !important;
+            max-height: 90vh;
+            max-width: 99vw;
             z-index: 1 !important;
           }
 
@@ -203,9 +252,24 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
           @media only screen and (min-width: 1920px) {
             canvas {
-              bottom: 3rem !important;
+              bottom: ${7} rem !important;
               right: 10rem !important;
-              transform: scale(2.5) !important;
+              }
+              .content > h1{
+                font-size: 4.5rem;
+              }
+              .content > h3{
+                font-size:2rem;
+              }
+              .bottom-action > p{
+                font-size: 2rem
+              }
+          }
+          @media
+           screen and (min-width: 1920px) {
+            canvas {
+              bottom:  ${7}rem !important;
+              right: 10rem !important;
               }
               .content > h1{
                 font-size: 4.5rem;

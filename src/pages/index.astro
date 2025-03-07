@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Chatbot from "../components/ReactComponents/Chatbot";
+import NavigationButtons from "../components/ReactComponents/NavigationButtons";
 import Landing from "../components/ReactPages/Landing";
 import Testimonials from "../components/ReactPages/Testimonials";
 import About from "../components/ReactPages/About";
@@ -18,5 +19,6 @@ const products = (await getProducts()).slice(0, 3);
   <Products id="products" client:load products={products} />
   <FAQs id="frequently-asked-questions" client:load />
   <Chatbot client:load />
+  <NavigationButtons client:load />
   <CookieConsent client:load />
 </Layout>

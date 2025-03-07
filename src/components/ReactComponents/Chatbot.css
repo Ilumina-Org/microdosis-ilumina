@@ -13,8 +13,8 @@
 /* Botón flotante con tonos verdes */
 .chat-toggle {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 2rem;
+  right: 4rem;
   width: 64px;
   height: 64px;
   border-radius: 20px;
@@ -45,12 +45,34 @@
 /* Contenedor principal del chat */
 .chat-container {
   position: fixed;
-  bottom: 10%;
-  right: 5.5%;
+  /* bottom: 10%;
+  right: 5.5%; */
+  bottom: 6rem;
+  right: 7rem;
   z-index: 1000;
   width: 90%;
   max-width: 500px;
 }
+
+
+
+@keyframes chatSlideIn {
+  0% {
+    opacity: 0;
+    bottom: 3rem;
+    right: 7rem;
+  }
+  100% {
+    opacity: 1;
+    bottom: 6rem;
+    right: 7rem;
+  }
+}
+
+.chat-slide-in {
+  animation: chatSlideIn .25s ease-out forwards;
+}
+
 
 .chat-box {
   background: #ffffff;
