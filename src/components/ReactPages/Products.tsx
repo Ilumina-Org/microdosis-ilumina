@@ -1,30 +1,32 @@
+"use client";
 
 import React from "react";
-import Layout from "../layouts/Layout.astro";
-import { getProducts } from "../../utils/stock";
 import ProductContainer from "../../components/ReactComponents/ProductContainer";
-import { SectionLayout } from "../../components/ReactComponents/SectionLayout";
+import { SectionLayout } from "../ReactComponents/SectionLayout";
 import useResponsiveness from "../../utils/useResponsiveness";
 
-let products = [];
-let errorMessage = "";
-try {
-  products = await getProducts();
-  products = products.slice(0, 3);
-} catch (error) {
-  errorMessage = "Hubo un problema al cargar los productos. Intenta más tarde.";
+interface Product {
+  sku: string;
+  title: string;
+  productDetail: string;
+  productPrice: string;
+  stock: boolean;
+  productDeal: string;
+  tipo: string;
+  tier: number;
 }
 
-interface LandingProps {
+interface ProductsPageProps {
+  products: Product[];
   id: string;
-  horizontalPadding: string | number;
+  horizontalPadding?: string | number;
   ref: React.Ref<HTMLDivElement>;
 }
 
+const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>((props, ref) => {
 
-const Products = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   const { handleResponsiveness } = useResponsiveness();
-  let padding = handleResponsiveness([26, 10, 25, 10])
+  let padding = handleResponsiveness([16, 10, 25, 10])
 
 
   return (
@@ -35,73 +37,60 @@ const Products = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => 
       horizontalPadding={padding}
       height="100vh"
     >
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <div style={{ width: "100%", textAlign: "left", }}>
-          <h2 style={{ fontWeight: 300, fontSize: "35px", color: "black" }}>
-            Paquetes Disponibles
-          </h2>
-        </div>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          padding: "2rem 1rem",
+          alignItems: "center",
+          gap: "50px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "2rem",
+            marginBottom: "2rem",
+            textAlign: "center",
+          }}
+        >
+          Paquetes Disponibles
+        </h2>
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
-            alignContent: "center",
-            gap: "30px",
+            flexDirection: "row",
             flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "30px",
+            maxWidth: "1200px",
+            width: "100%",
           }}
         >
           {
-            errorMessage && (
-              <p style={{ color: "red", fontSize: "18px" }}>{errorMessage}</p>
-            )
-          }
-
-          {
-            !errorMessage && products.length === 0 && (
-              <p style={{ fontSize: "18px" }}>No hay productos disponibles.</p>
-            )
-          }
-
-          {
-            products.map((product) => (
+            props.products.map((product: Product) => (
               <ProductContainer
-                client:load
                 key={product.sku}
-                imageUrl={`/products/${product.sku}-card.svg`}
-                link={`microdosis-package/${product.sku}`}
                 sku={product.sku}
+                link={"microdosis-package/" + product.sku}
+                imageUrl={"products/" + product.sku + "-card.svg"}
                 productTitle={product.title}
                 productDetail={product.productDetail}
                 productPrice={product.productPrice}
                 productDeal={product.productDeal}
-                tier={product.tier}
                 stock={product.stock}
-                purchaseType={product.tipo}
+                purchaseType={product.tipo as any}
+                tier={product.tier}
               />
             ))
           }
-        </div>
-        <style>
-          {`
-  .container {
-    --horizontalPadding: 10rem;
-    background: white;
-    padding: 2rem;
-    padding-right: var(--horizontalPadding);
-    padding-left: var(--horizontalPadding);
-    scroll-snap-align: start;
-  }
-  @media (max-width: 768px) {
-    .container {
-      --horizontalPadding: 2rem;
-      padding: 1rem;
-    }
-}
-`}
-        </style>
-      </div>
+        </div >
+      </div >
     </SectionLayout >
   );
+
 });
+
 
 export default Products;

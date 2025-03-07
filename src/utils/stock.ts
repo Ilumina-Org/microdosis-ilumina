@@ -1,21 +1,36 @@
-import { getGoogleSheetsClient, SPREADSHEET_ID, SHEETS } from "./google-sheets";
+import {
+  getSheetData,
+  updateSheetData,
+  INVENTORY_SHEET,
+} from "./google-sheets";
 import type { StockItem } from "../types/inventory";
 
 type StockData = Record<string, StockItem>;
 
+// Definición de tipos
+/**
+
+ * Obtiene el inventario completo desde Google Sheets
+ * @returns Objeto con los datos de inventario indexados por SKU
+ */
 export const getStock = async (): Promise<StockData> => {
   try {
-    const sheets = await getGoogleSheetsClient();
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEETS.INVENTORY}!A2:J`, // Added J to include Tier column
-    });
+    console.log("Obteniendo datos de stock desde la hoja:", INVENTORY_SHEET);
+    const data = await getSheetData(INVENTORY_SHEET, "A2:J");
+
+    console.log(`Datos obtenidos: ${data.length} filas`);
 
     const stockData: StockData = {};
     const seenSkus = new Set();
 
-    if (response.data.values && response.data.values.length > 0) {
-      response.data.values.forEach((row, index) => {
+    if (data && data.length > 0) {
+      data.forEach((row, index) => {
+        if (row.length < 10) {
+          // Cambiado a 10 porque son 10 columnas (A-J)
+          console.warn(`Fila ${index + 2} inválida (incompleta). Omitiendo.`);
+          return;
+        }
+
         const [
           sku,
           title,
@@ -29,55 +44,83 @@ export const getStock = async (): Promise<StockData> => {
           tier,
         ] = row;
 
-        // Skip invalid or duplicate SKUs
-        if (!sku?.trim() || seenSkus.has(sku)) {
-          console.warn(`SKU duplicado o inválido: ${sku}. Fila omitida.`);
+        // Verificación SKU
+        const cleanSku = String(sku).trim();
+        if (!cleanSku) {
+          console.warn(`Fila ${index + 2} sin SKU válido. Omitiendo.`);
           return;
         }
 
-        seenSkus.add(sku);
-
-        // Parse numeric values with robust error handling
-        const numDisponible = parseInt(disponible, 10) || 0;
-        const numTotal = parseInt(total, 10) || numDisponible;
-        const numPrice = parseFloat(price) || 0;
-        const numRegularPrice = parseFloat(regularPrice) || 0;
-        const numTier = parseInt(tier, 10) || 0;
-
-        // Validate non-negative values
-        if (numDisponible < 0 || numTotal < 0) {
-          console.warn(
-            `Valores negativos encontrados para el SKU ${sku}. Fila omitida.`,
-          );
+        if (seenSkus.has(cleanSku)) {
+          console.warn(`SKU duplicado: ${cleanSku} en fila ${index + 2}`);
           return;
         }
+        seenSkus.add(cleanSku);
 
-        stockData[sku] = {
-          sku: sku.trim(),
-          title: title || "",
+        const numDisponible = Math.max(0, Number(disponible) || 0);
+        const numTotal = Math.max(numDisponible, Number(total) || 0);
+        const numPrice = Math.max(0, Number(price) || 0);
+        const numRegularPrice = Math.max(0, Number(regularPrice) || 0);
+        const numTier = Math.max(0, Number(tier) || 0);
+
+        stockData[cleanSku] = {
+          sku: cleanSku,
+          title: String(title),
           price: numPrice,
           regularPrice: numRegularPrice,
           disponible: numDisponible,
           total: numTotal,
-          notas: notas || "",
-          featured: featured === "TRUE",
-          tipo: tipo === "subscription" ? "subscription" : "package",
+          notas: String(notas),
+          featured: String(featured).toUpperCase() === "TRUE",
+          tipo:
+            String(tipo).toLowerCase() === "subscription"
+              ? "subscription"
+              : "package",
           tier: numTier,
         };
+
+        console.log(`Procesado SKU: ${cleanSku}, Stock: ${numDisponible}`);
       });
     }
 
-    console.log("Stock data fetched successfully");
+    console.log(`Stock procesado: ${Object.keys(stockData).length} SKUs`);
     return stockData;
   } catch (error) {
-    console.error("Error fetching stock:", error);
+    console.error("Error obteniendo stock:", error);
     return {};
   }
 };
 
-export const getProducts = async (): Promise<any[]> => {
+/**
+ * Interfaz para los productos formateados para la UI
+ */
+interface Product {
+  sku: string;
+  title: string;
+  productDetail: string;
+  productPrice: string;
+  productDeal: string;
+  stock: boolean;
+  tipo: string;
+  tier: number;
+}
+
+/**featured: featured === "TRUE",
+
+ * Obtiene productos formateados para mostrar en la UI
+ * @returns Array de productos formateados
+ */
+export const getProducts = async (): Promise<Product[]> => {
   try {
+    console.log("Obteniendo datos de productos...");
     const stockData = await getStock();
+    const productCount = Object.keys(stockData).length;
+
+    console.log(`Formateando ${productCount} productos para UI`);
+
+    if (productCount === 0) {
+      console.warn("No se encontraron productos en el inventario");
+    }
 
     return Object.values(stockData).map((item) => {
       const discountPercentage =
@@ -98,7 +141,39 @@ export const getProducts = async (): Promise<any[]> => {
       };
     });
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error("Error detallado al obtener productos:", error);
     return [];
+  }
+};
+
+/**
+ * Actualiza datos en la hoja de inventario
+ * @param range Rango de celdas a actualizar
+ * @param values Valores a insertar
+ * @returns Respuesta de la API
+ */
+export const updateInventory = async (
+  range: string,
+  values: (string | number | boolean | null)[][],
+): Promise<any> => {
+  try {
+    console.log(`Actualizando inventario en rango: ${range}`);
+    const result = await updateSheetData(INVENTORY_SHEET, range, values);
+    console.log("Datos de inventario actualizados correctamente:", result);
+    return result;
+  } catch (error) {
+    console.error("Error detallado al actualizar inventario:", error);
+    throw error;
+  }
+};
+
+// Función auxiliar para verificar si un SKU existe
+export const checkSkuExists = async (sku: string): Promise<boolean> => {
+  try {
+    const stockData = await getStock();
+    return !!stockData[sku];
+  } catch (error) {
+    console.error(`Error al verificar si el SKU ${sku} existe:`, error);
+    return false;
   }
 };

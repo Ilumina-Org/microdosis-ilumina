@@ -42,6 +42,10 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
     }
   }, []);
 
+  const handleClick = () => {
+    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+  }
+
   return (
     <SectionLayout
       id={props.id}

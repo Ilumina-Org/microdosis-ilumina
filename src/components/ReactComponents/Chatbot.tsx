@@ -166,10 +166,23 @@ const ChatBot = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [resultado, setResultado] = useState<string>("");
   const [showQuestionSection, setShowQuestionSection] = useState<boolean>(true);
+  const [showTooltip, setShowTooltip] = useState<boolean>(true);
 
+  {/*
+  useEffect(() => {
+    if (showTooltip) {
+      const timeout = setTimeout(() => {
+        setShowTooltip(false);
+      }, 2000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [showTooltip]);
+*/}
   // Manejadores de eventos
   const toggleChat = () => {
     setChatVisible(!chatVisible);
+    setShowTooltip(!showTooltip);
   };
 
   const closeChat = () => {
@@ -349,6 +362,11 @@ const ChatBot = () => {
   return (
     <>
       <button onClick={() => toggleChat()} className="chat-toggle">
+        {showTooltip && (
+          <div className="tooltip-bubble">
+            Simula tu microdosis de ayahuasca
+          </div>
+        )}
         <svg
           width="80%"
           height="85.044815mm"

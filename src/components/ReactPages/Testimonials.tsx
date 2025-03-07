@@ -54,7 +54,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
         </div>
       </SectionLayout>
     );
-  }
+  },
 );
 
 export default Testimonials;
