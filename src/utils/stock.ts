@@ -8,7 +8,7 @@ export const getStock = async (): Promise<StockData> => {
     const sheets = await getGoogleSheetsClient();
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEETS.INVENTORY}!A2:J`, // Added J to include Tier column
+      range: `${SHEETS.INVENTORY}!A2:J`,
     });
 
     const stockData: StockData = {};
