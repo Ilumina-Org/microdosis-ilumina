@@ -1,0 +1,103 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PackageHeader from "../../components/PackageHeader.astro";
+import PackageDescription from "../../components/PackageDescription.astro";
+import PaymentOptions from "../../components/ReactComponents/PaymentOptions";
+import GuaranteeBox from "../../components/GuaranteeBox.astro";
+import OrderSummary from "../../components/OrderSummary.astro";
+import NotFound from "../../components/ReactComponents/NotFound";
+import { getStock } from "../../utils/stock";
+
+const { sku } = Astro.params;
+let packageData = null;
+let stockInfo = null;
+
+try {
+  const stockData = await getStock();
+
+  if (stockData[sku]) {
+    stockInfo = stockData[sku];
+
+    packageData = {
+      title: stockInfo.title,
+      price: stockInfo.price,
+      originalPrice: stockInfo.regularPrice,
+      savings: Math.round(stockInfo.regularPrice - stockInfo.price),
+      description: stockInfo.notas || `Paquete ${sku}`,
+      availableStock: stockInfo.disponible,
+    };
+
+    console.log("Stock Info", stockInfo);
+  } else {
+    throw new Error("Producto no encontrado o no tiene stock disponible.");
+  }
+} catch (error) {
+  if (error instanceof Error) {
+    if (
+      error.message === "Producto no encontrado o no tiene stock disponible."
+    ) {
+      console.warn(`Paquete con SKU ${sku} no encontrado o sin stock.`);
+      Astro.response.status = 404;
+    } else {
+      console.error("Error inesperado:", error);
+      Astro.response.status = 500;
+    }
+  }
+}
+---
+
+{
+  packageData ? (
+    <Layout>
+      <div class="package-container">
+        <div class="package-detail">
+          <PackageHeader
+            title={packageData.title}
+            price={packageData.price}
+            originalPrice={packageData.originalPrice}
+            savings={packageData.savings}
+          />
+          <PackageDescription description={packageData.description} />
+          <PaymentOptions
+            client:load
+            basePrice={packageData.price}
+            title={packageData.title}
+            packageId={sku}
+          />
+          {/*          <GuaranteeBox />*/}
+        </div>
+        <OrderSummary title={packageData.title} price={packageData.price} />
+      </div>
+    </Layout>
+  ) : (
+    <Layout>
+      <NotFound client:load />
+    </Layout>
+  )
+}
+
+<style>
+  html {
+    font-size: 14px;
+    color: #333;
+  }
+  .package-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  @media (max-width: 768px) {
+    .package-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  .package-detail {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+</style>

@@ -14,7 +14,7 @@ npm create astro@latest -- --template basics
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+nside of your Astro project, you'll see the following folders and files:
 
 ```text
 /
@@ -49,4 +49,11 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 
 ## Credit
 
+# This project is a fork of the [Astro docs template](https://github.com/withastro/astro/tree/main/examples/docs).
+
+# ilumina
+
+## Credit
+
 This project is a fork of the [Astro docs template](https://github.com/withastro/astro/tree/main/examples/docs).
+

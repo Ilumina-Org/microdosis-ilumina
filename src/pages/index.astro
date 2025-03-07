@@ -1,11 +1,24 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from "../layouts/Layout.astro";
+import Chatbot from "../components/ReactComponents/Chatbot";
+import NavigationButtons from "../components/ReactComponents/NavigationButtons";
+import Landing from "../components/ReactPages/Landing";
+import Testimonials from "../components/ReactPages/Testimonials";
+import About from "../components/ReactPages/About";
+import FAQs from "../components/ReactPages/FAQs";
+import Products from "../components/ReactPages/Products";
+import { getProducts } from "../utils/stock";
+import CookieConsent from "../components/ReactComponents/CookiesConsent";
+const products = (await getProducts()).slice(0, 3);
 ---
 
 <Layout>
-	<Welcome />
+  <Landing id="landing" client:load />
+  <About id="about" client:load />
+  <Testimonials id="testimonials" client:load />
+  <Products id="products" client:load products={products} />
+  <FAQs id="frequently-asked-questions" client:load />
+  <Chatbot client:load />
+  <NavigationButtons client:load />
+  <CookieConsent client:load />
 </Layout>
