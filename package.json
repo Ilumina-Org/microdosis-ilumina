@@ -12,20 +12,12 @@
   "dependencies": {
     "@astrojs/cloudflare": "^12.2.3",
     "@astrojs/react": "^4.2.1",
-    "@astrojs/vercel": "^8.0.4",
     "@hookform/resolvers": "^4.1.2",
-    "@mercadopago/sdk-react": "^0.0.24",
-    "@types/crypto-js": "^4.2.2",
     "@types/node": "^22.13.9",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "astro": "^5.4.2",
-    "crypto-js": "^4.2.0",
-    "google-auth-library": "^9.15.1",
-    "google-spreadsheet": "^4.1.4",
-    "googleapis": "^144.0.0",
     "iconsax-react": "^0.0.8",
-    "mercadopago": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
@@ -36,7 +28,6 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/node": "^22.13.9",
     "prettier": "^3.5.2",
     "prettier-plugin-astro": "^0.14.1",
     "vite-plugin-node-polyfills": "^0.23.0"
