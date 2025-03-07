@@ -9,9 +9,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
 
     steps:
       - name: Checkout repository
@@ -47,20 +44,10 @@ jobs:
       - name: Build Astro site
         run: pnpm build
 
-      - name: Set environment name
-        id: set-environment
-        run: |
-          if [[ $GITHUB_REF == refs/heads/main ]]; then
-            echo "ENVIRONMENT_NAME=production" >> $GITHUB_OUTPUT
-          else
-            echo "ENVIRONMENT_NAME=preview" >> $GITHUB_OUTPUT
-          fi
-
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME }}
+          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
           directory: dist
-          environment: ${{ steps.set-environment.outputs.ENVIRONMENT_NAME }}
