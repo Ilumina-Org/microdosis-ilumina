@@ -19,6 +19,7 @@ interface LandingProps {
 const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
   const small = useMediaQuery({ query: "(min-width: 1366px)" });
+  const mobile = useMediaQuery({ orientation: "portrait" });
 
   return (
     <SectionLayout
@@ -29,6 +30,7 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
       horizontalPadding={desktop ? "20vw" : "10vw"}
       verticalPadding={"5rem"}
       height="auto"
+      style={{ nprder: "10px solid red" }}
     >
       <div className="about-container">
         {/* First Section */}
@@ -124,7 +126,7 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         {`
             .about-container {
               display: flex;
-              flex-direction: column;
+              flex-direction: rows;
               justify-content: space-between;
               gap: 4rem;
             }

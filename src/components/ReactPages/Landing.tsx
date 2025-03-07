@@ -28,16 +28,12 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   });
   const small = useMediaQuery({ query: "(max-width: 1399px)" });
 
-  if (!small) {
-    null;
-  }
-
   const responsiveHandler = (s, m, l, xl) => {
-    console.log("queso", small, medium, desktop, large);
-    if (small) return s; // Small screens (up to 1399px)
-    if (medium) return m; // Medium screens (1400px - 1919px)
-    if (desktop) return l; // Desktop screens (1920px - 2399px)
-    if (large) return xl; // Large screens (2400px and above)
+    //console.log("queso", small, medium, desktop, large);
+    if (small) return s;
+    if (medium) return m;
+    if (desktop) return l;
+    if (large) return xl;
   };
 
   useEffect(() => {
@@ -217,6 +213,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           }
 
           .image-container {
+          ${mobile && "transform: oscale(2.5)"}
           position:relative,
           border: 1px solid transparent;
             flex: 1;
@@ -251,7 +248,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
           @media only screen and (min-width: 1920px) {
             canvas {
-              bottom:  ${7}rem !important;
+              bottom: ${7} rem !important;
               right: 10rem !important;
               }
               .content > h1{
