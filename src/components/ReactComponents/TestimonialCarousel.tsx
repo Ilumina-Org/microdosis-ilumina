@@ -3,6 +3,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import imageUrl from "../../assets/user1.png?url";
 import PlaceHolder from "./PlaceHolder";
+import { useMediaQuery } from "react-responsive";
 const TestimonialCarousel = () => {
   const [opacityIndex, setOpacityIndex] = useState(0);
   const handleChange = (index: number) => {
@@ -11,6 +12,9 @@ const TestimonialCarousel = () => {
   const formatText = (text: string, slice: number) => {
     return `${text.slice(0, slice)}...`;
   };
+
+  const laptop = useMediaQuery({ query: "(min-width: 1400px)" });
+  const smallerLaptop = useMediaQuery({ query: "(min-width: 1366px)" });
 
   const TestTestimonials = [
     {
@@ -45,7 +49,7 @@ const TestimonialCarousel = () => {
           display: "flex",
           marginRight: "2rem",
           marginLeft: "2rem",
-          height: "12rem",
+          height: !laptop ? (smallerLaptop ? "10rem" : "12rem") : "10rem", // here respo
           borderRadius: "30px",
           backgroundColor: "white",
           padding: "2rem",
@@ -131,7 +135,7 @@ const TestimonialCarousel = () => {
       <Carousel
         autoPlay={true}
         infiniteLoop={true}
-        interval={2000}
+        interval={2250}
         centerSlidePercentage={50}
         showThumbs={false}
         showArrows={false}

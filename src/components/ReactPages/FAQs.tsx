@@ -18,6 +18,11 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
     const { handleResponsiveness } = useResponsiveness();
     let padding = handleResponsiveness([26, 10, 25, 10]);
     const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
+    const small = useMediaQuery({ query: "(min-width: 1366px)" });
+
+    if (!desktop && !small) {
+      return <p>loading</p>;
+    }
 
     const FAQ = ({ title, answer }) => (
       <div
@@ -29,7 +34,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
         <h4
           style={{
             textWrap: "wrap",
-            fontSize: "2.4rem",
+            fontSize: small ? "2rem" : "2.4rem",
             fontWeight: "500",
             color: "#c1dc3a",
             margin: 0,
@@ -42,7 +47,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             fontWeight: "200",
             color: "white",
             lineHeight: "1.75rem",
-            fontSize: "1.25rem",
+            fontSize: small ? "1.2rem" : "1.25rem",
           }}
         >
           {answer}
@@ -54,14 +59,16 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
       <SectionLayout
         id={props.id}
         ref={ref}
-        horizontalPadding={desktop ? "20vw" : "10vw"}
-        style={{ position: "absolute" }}
-        verticalPadding={"4rem"}
+        horizontalPadding={desktop ? "20vw" : "15vw"}
+        // style={{ position: "absolute" }}
+        style={{ display: "flex", flexDirection: "column", height: "auto" }}
+        // verticalPadding={"4rem"}
       >
         <div
           style={{
             flexDirection: "column",
             alignContent: "space-around",
+            marginTop: "5rem",
           }}
         >
           <div
@@ -69,14 +76,15 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
               width: "100%",
               display: "flex",
               // alignItems: "right",
-              justifyContent: "center",
+              // justifyContent: "center",
+              justifyContent: "space-evenly",
               gap: "50px",
               flexDirection: "column",
             }}
           >
             <h3
               style={{
-                fontSize: "3.5rem",
+                fontSize: small ? "2.5rem" : "3.5rem",
                 fontWeight: 200,
                 color: "white",
                 opacity: 1,
@@ -123,38 +131,47 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
 
         <div
           style={{
-            position: "absolute",
-            bottom: "2rem",
             display: "flex",
-            justifyContent: "space-between",
-            gap: "15px",
             flexDirection: "row",
-            width: "92vw",
-            marginTop: "90vg",
-            zIndex: 1,
+            marginTop: "5rem",
+            marginBottom: "1.5rem",
           }}
         >
-          <div>
-            <img src={logo} width={200} style={{ margin: "0" }} />
-            <h4
-              style={{
-                margin: "0",
-                color: "white",
-                fontWeight: "100",
-                fontSize: "20px",
-                opacity: "0.5",
-              }}
-            >
-              Lorem@ ipsum dolor sit amet consectetur. Mi viverra tristique
-              tristique mass
-            </h4>
+          <div
+            style={{
+              // position: "absolute",
+              // bottom: "2rem",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              gap: "15px",
+              width: "92vw",
+              zIndex: 1,
+            }}
+          >
+            <div>
+              <img src={logo} width={200} style={{ margin: "0" }} />
+              <h4
+                style={{
+                  margin: "0",
+                  color: "white",
+                  fontWeight: "100",
+                  fontSize: "20px",
+                  opacity: "0.5",
+                }}
+              >
+                Lorem@ ipsum dolor sit amet consectetur. Mi viverra tristique
+                tristique mass
+              </h4>
+            </div>
           </div>
           <div
             style={{
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              paddingRight: desktop ? "5rem" : "6rem",
+              width: "fit-content",
+              // paddingRight: desktop ? "5rem" : "6rem",
               gap: "20px",
             }}
           >

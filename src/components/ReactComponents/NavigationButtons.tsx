@@ -1,6 +1,7 @@
 import { Whatsapp } from "iconsax-react";
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../ReactComponents/Button";
+import { useMediaQuery } from "react-responsive";
 
 const NavigationButtons = () => {
   const [active, setActive] = useState<string | null>();
@@ -13,6 +14,13 @@ const NavigationButtons = () => {
       setActive(null);
     }
   };
+
+  const small = useMediaQuery({ query: "(min-width: 1400px)" });
+
+  if (!small) {
+    // return <p>loading</p>;
+    return null;
+  }
 
   const aStyling = {
     textDecoration: "none",
@@ -42,7 +50,7 @@ const NavigationButtons = () => {
         right: "4rem",
         top: "5rem",
 
-        fontSize: "30px",
+        fontSize: small ? "22px" : "30px",
         fontFamily: "Inter",
         fontWeight: "200",
         textAlign: "right",
@@ -103,6 +111,14 @@ const NavigationButtons = () => {
       >
         Preguntas <br /> frecuentes
       </a>
+      <style>
+        {`
+          .navigation > a:hover {
+            opacity: 1 !important;
+            transition: .25s ease-in-out !important;
+          }
+          `}
+      </style>
     </div>
   );
 };

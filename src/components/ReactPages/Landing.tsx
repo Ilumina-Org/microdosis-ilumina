@@ -11,7 +11,6 @@ import { useMediaQuery } from "react-responsive";
 
 interface LandingProps {
   id: string;
-  //horizontalPadding: any;
   ref: React.Ref<HTMLDivElement>;
 }
 
