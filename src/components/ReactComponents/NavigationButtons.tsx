@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { Whatsapp } from "iconsax-react";
+import React, { useEffect, useRef, useState } from "react";
+import Button from "../ReactComponents/Button";
+import { useMediaQuery } from "react-responsive";
 
 const NavigationButtons = () => {
   const [active, setActive] = useState<string | null>();
@@ -27,10 +30,17 @@ const NavigationButtons = () => {
     }
   };
 
+  const small = useMediaQuery({ query: "(min-width: 1400px)" });
+
+  if (!small) {
+    // return <p>loading</p>;
+    return null;
+  }
+
   const aStyling = {
     textDecoration: "none",
     color: "white",
-    transition: "all 0.3s ease",
+    textShadow: " 1px 1px 2px pink",
   };
 
   const handleSelect = (value: string) => {
@@ -189,17 +199,81 @@ const NavigationButtons = () => {
         flexDirection: "column",
         backgroundColor: "transparent",
         color: "white",
+        zIndex: "12",
         gap: "20px",
         right: "3rem",
         top: "5rem",
-        fontSize: "30px",
+
+        fontSize: small ? "1.5vw" : "1vw",
         fontFamily: "Inter",
         fontWeight: "200",
         textAlign: "right",
         zIndex: 1000,
       }}
     >
-      {renderNavLinks()}
+      <a
+        href="#inicio"
+        onClick={(e) => handleClick(e, "inicio")}
+        style={{
+          ...aStyling,
+          textShadow: handleSelect("inicio"),
+          opacity: active == "inicio" ? 1 : 0.5,
+        }}
+      >
+        Inicio
+      </a>
+      <a
+        href="#about"
+        onClick={(e) => handleClick(e, "about")}
+        style={{
+          ...aStyling,
+          textShadow: handleSelect("about"),
+          opacity: active == "about" ? 1 : 0.5,
+        }}
+      >
+        ¿Qué es?
+      </a>
+      <a
+        href="#testimonios"
+        onClick={(e) => handleClick(e, "testimonios")}
+        style={{
+          ...aStyling,
+          textShadow: handleSelect("testimonios"),
+          opacity: active == "testimonios" ? 1 : 0.5,
+        }}
+      >
+        Testimonios
+      </a>
+      <a
+        href="#products"
+        onClick={(e) => handleClick(e, "products")}
+        style={{
+          ...aStyling,
+          textShadow: handleSelect("products"),
+          opacity: active == "products" ? 1 : 0.5,
+        }}
+      >
+        Productos
+      </a>
+      <a
+        href="#faqs"
+        onClick={(e) => handleClick(e, "faqs")}
+        style={{
+          ...aStyling,
+          textShadow: handleSelect("faqs"),
+          opacity: active == "faqs" ? 1 : 0.5,
+        }}
+      >
+        Preguntas <br /> frecuentes
+      </a>
+      <style>
+        {`
+          .navigation > a:hover {
+            opacity: 1 !important;
+            transition: opacity .25s ease-in-out !important;
+          }
+          `}
+      </style>
     </div>
   );
 };

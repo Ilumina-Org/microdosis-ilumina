@@ -8,6 +8,8 @@ export const SectionLayout = ({
   height = "100vh",
   ref,
   horizontalPadding,
+  verticalPadding,
+  style,
 }: any) => {
   const gradientBackground = `
       radial-gradient(
@@ -27,17 +29,19 @@ export const SectionLayout = ({
     display: "flex",
     height: height,
     justifyContent: "center",
-    zIndex: 100,
+    // zIndex: 10,
     background: background ? background : gradientBackground,
-    paddingLeft: `${horizontalPadding}rem`,
-    paddingRight: `${horizontalPadding}rem`,
+    paddingLeft: horizontalPadding,
+    paddingRight: horizontalPadding,
+    paddingTop: verticalPadding,
+    paddingBottom: verticalPadding,
   };
 
   return (
     <section
       id={id}
       ref={ref}
-      style={{ ...containerStyle, flexDirection: "row" }}
+      style={{ ...containerStyle, flexDirection: "row", ...style }}
     >
       {children}
     </section>
