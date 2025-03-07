@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./PaymentOptions.css";
 import type { JSX } from "astro/jsx-runtime";
 import { CULQI_PLANS, getCulqiLink } from "../../utils/shipping";
+import { safeRedirect, isValidCulqiUrl } from "../../utils/cookies";
 
 interface PaymentOptionsProps {
   basePrice: number;
@@ -28,6 +29,7 @@ const PaymentOptions = ({
   const [loadingShipping, setLoadingShipping] = useState(false);
   const [shippingCost, setShippingCost] = useState(0);
   const [error, setError] = useState("");
+  const [isPaymentInProgress, setIsPaymentInProgress] = useState(false);
 
   const [activeOption, setActiveOption] = useState<string | null>(
     "culqi-option",
@@ -51,6 +53,11 @@ const PaymentOptions = ({
       }
     };
     fetchLocations();
+
+    const pendingPayment = sessionStorage.getItem("pendingPaymentUrl");
+    if (pendingPayment) {
+      setIsPaymentInProgress(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -60,6 +67,8 @@ const PaymentOptions = ({
       if (!selectedLocation) return;
 
       setLoadingShipping(true);
+      setError("");
+
       try {
         const endpoint =
           shippingType === "distrito"
@@ -69,16 +78,25 @@ const PaymentOptions = ({
           `/api/${endpoint}?location=${selectedLocation}&packageId=${packageId}`,
           { signal: controller.signal },
         );
+
+        if (!response.ok) {
+          throw new Error(`Error en la respuesta: ${response.status}`);
+        }
+
         const data = await response.json();
 
         if (data.success) {
           setShippingCost(data.shippingCost);
           const newTotal = basePrice + data.shippingCost;
           setTotalPrice(newTotal);
+        } else {
+          setError(data.message || "Error calculando el envío");
         }
       } catch (err) {
         if (!controller.signal.aborted) {
-          setError("Error calculando el envío");
+          setError(
+            "Error calculando el envío: " + (err.message || "Desconocido"),
+          );
         }
       } finally {
         if (!controller.signal.aborted) {
@@ -99,11 +117,50 @@ const PaymentOptions = ({
     setShippingType(type);
     setSelectedLocation("");
     setShippingCost(0);
+    setError("");
+  };
+
+  const handleCulqiPayment = (culqiLink: string) => {
+    if (!isValidCulqiUrl(culqiLink)) {
+      setError("No se encontró un método de pago válido para esta ubicación");
+      return;
+    }
+
+    setIsPaymentInProgress(true);
+
+    const redirectSuccess = safeRedirect(culqiLink, "_blank");
+
+    if (redirectSuccess) {
+      console.log("Redirección a Culqi exitosa");
+
+      try {
+        //@ts-ignore
+        if (typeof window !== "undefined" && window.gtag) {
+          //@ts-ignore
+          window.gtag("event", "payment_initiated", {
+            event_category: "payment",
+            event_label: selectedLocation,
+            value: totalPrice,
+          });
+        }
+      } catch (e) {
+        console.error("Error registrando evento de analítica", e);
+      }
+    } else {
+      setIsPaymentInProgress(false);
+    }
   };
 
   return (
     <div className="payment-section">
       <h2>Método de Pago</h2>
+
+      {isPaymentInProgress && (
+        <div className="payment-pending-alert">
+          ⚠️ Hay un intento de pago pendiente. Por favor, acepte las cookies
+          para continuar.
+        </div>
+      )}
 
       {/* Selector de ubicación */}
       <div className="shipping-selector">
@@ -111,12 +168,14 @@ const PaymentOptions = ({
           <button
             className={`location-type-btn ${shippingType === "distrito" ? "active" : ""}`}
             onClick={() => handleLocationTypeChange("distrito")}
+            disabled={isPaymentInProgress}
           >
             Envío Distrito Lima
           </button>
           <button
             className={`location-type-btn ${shippingType === "provincia" ? "active" : ""}`}
             onClick={() => handleLocationTypeChange("provincia")}
+            disabled={isPaymentInProgress}
           >
             Envío Provincia
           </button>
@@ -132,7 +191,7 @@ const PaymentOptions = ({
             <select
               value={selectedLocation}
               onChange={(e) => setSelectedLocation(e.target.value)}
-              disabled={loadingShipping}
+              disabled={loadingShipping || isPaymentInProgress}
             >
               <option value="">
                 {shippingType === "distrito"
@@ -187,30 +246,34 @@ const PaymentOptions = ({
                 {(() => {
                   const culqiLink = getCulqiLink(selectedLocation);
                   return (
-                    <a
-                      href={culqiLink}
-                      rel="noopener noreferrer"
-                      className={`culqi-button ${!culqiLink ? "disabled" : ""}`}
-                      onClick={(e) => {
-                        if (!culqiLink) {
-                          e.preventDefault();
-                          setError(
-                            "No se encontró un método de pago para esta ubicación",
-                          );
-                        }
-                      }}
+                    <button
+                      className={`culqi-button ${!isValidCulqiUrl(culqiLink) || isPaymentInProgress ? "disabled" : ""}`}
+                      onClick={() => handleCulqiPayment(culqiLink)}
+                      disabled={
+                        !isValidCulqiUrl(culqiLink) || isPaymentInProgress
+                      }
                     >
-                      Pagar con Culqi
+                      {isPaymentInProgress
+                        ? "Procesando..."
+                        : "Pagar con Culqi"}
                       <span className="external-icon" aria-hidden="true">
                         ↗
                       </span>
-                    </a>
+                    </button>
                   );
                 })()}
 
                 <div className="security-info">
                   <span className="lock-icon">🔒</span>
                   <span>Protegido por encriptación SSL de 256-bits</span>
+                </div>
+
+                <div className="cookies-info">
+                  <small>
+                    Este método de pago requiere cookies de terceros. Al hacer
+                    clic en "Pagar con Culqi", aceptas el uso de cookies
+                    necesarias para procesar el pago.
+                  </small>
                 </div>
               </div>
             ) : (
@@ -221,6 +284,8 @@ const PaymentOptions = ({
             )}
           </div>
         </div>
+
+        {error && <div className="error-message">{error}</div>}
       </div>
     </div>
   );
