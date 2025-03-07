@@ -25,6 +25,7 @@ const NavigationButtons = () => {
   const aStyling = {
     textDecoration: "none",
     color: "white",
+    textShadow: " 1px 1px 2px pink",
   };
 
   const handleSelect = (value: string) => {
@@ -44,13 +45,13 @@ const NavigationButtons = () => {
         flexDirection: "column",
         backgroundColor: "transparent",
         color: "white",
-        zIndex: "10",
+        zIndex: "12",
         gap: "20px",
 
         right: "4rem",
         top: "5rem",
 
-        fontSize: small ? "22px" : "30px",
+        fontSize: small ? "1.5vw" : "1vw",
         fontFamily: "Inter",
         fontWeight: "200",
         textAlign: "right",
@@ -115,7 +116,7 @@ const NavigationButtons = () => {
         {`
           .navigation > a:hover {
             opacity: 1 !important;
-            transition: .25s ease-in-out !important;
+            transition: opacity .25s ease-in-out !important;
           }
           `}
       </style>

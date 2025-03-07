@@ -5,6 +5,7 @@ import staticModel from "../../assets/model_static.png";
 import image1 from "../../assets/asset1.png?url";
 import image2 from "../../assets/asset2.png?url";
 import TestimonialCarousel from "../ReactComponents/TestimonialCarousel";
+import { useMediaQuery } from "react-responsive";
 
 interface LandingProps {
   id: string;
@@ -13,6 +14,11 @@ interface LandingProps {
 
 const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
   (props, ref) => {
+    const desktop = useMediaQuery({ query: "(min-width: 1080px)" });
+    if (!desktop) {
+      null;
+    }
+
     return (
       <SectionLayout id={props.id} ref={ref} horizontalPadding={0}>
         <div
@@ -27,15 +33,15 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
           <div
             style={{
               height: "fit-content",
-              maxWidth: "800px",
+              // maxWidth: desktop ? "950px" : "800px",
               borderRadius: "20px",
               overflow: "hidden",
               boxShadow: "1px 0px 40px rgba(0, 0, 0, 0.48)",
             }}
           >
             <iframe
-              width="800"
-              height="400"
+              width={desktop ? "850px" : "700px"}
+              height={desktop ? "450px" : "350px"}
               src="https://www.youtube.com/embed/qRTVg8HHzUo?si=oT9nLeT7KbVrjKc6"
               title="YouTube video player"
               frameBorder="0"
