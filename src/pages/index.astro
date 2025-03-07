@@ -11,10 +11,10 @@ const products = (await getProducts()).slice(0, 3);
 ---
 
 <Layout>
-  <Landing id="inicio" client:load />
+  <Landing id="landing" client:load />
   <About id="about" client:load />
-  <Testimonials id="testimonios" client:load />
+  <Testimonials id="testimonials" client:load />
   <Products id="products" client:load products={products} />
-  <FAQs id="faqs" client:load />
+  <FAQs id="frequently-asked-questions" client:load />
   <Chatbot client:load />
 </Layout>

@@ -3,6 +3,7 @@
 import React from "react";
 import ProductContainer from "../../components/ReactComponents/ProductContainer";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
+import useResponsiveness from "../../utils/useResponsiveness";
 
 interface Product {
   sku: string;
@@ -23,12 +24,18 @@ interface ProductsPageProps {
 }
 
 const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>((props, ref) => {
+
+  const { handleResponsiveness } = useResponsiveness();
+  let padding = handleResponsiveness([16, 10, 25, 10])
+
+
   return (
     <SectionLayout
       id={props.id}
       ref={ref}
-      height="auto"
       background="white"
+      horizontalPadding={padding}
+      height="100vh"
     >
       <div
         style={{
@@ -37,6 +44,7 @@ const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>((props, ref
           flexDirection: "column",
           padding: "2rem 1rem",
           alignItems: "center",
+          gap: "50px",
         }}
       >
         <h2

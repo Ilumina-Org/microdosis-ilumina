@@ -27,6 +27,10 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
     }
   }, []);
 
+  const handleClick = () => {
+    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+  }
+
   return (
     <SectionLayout id={props.id} ref={ref} horizontalPadding={padding}>
       <div
@@ -61,6 +65,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             gap: "15px",
           }}
           icon={<ShoppingCart size={30} color="black" />}
+          onClick={() => handleClick()}
         />
       </div>
       <div className="image-container">
