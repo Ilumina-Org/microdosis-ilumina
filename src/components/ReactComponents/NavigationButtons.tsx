@@ -203,12 +203,10 @@ const NavigationButtons = () => {
         gap: "20px",
         right: "3rem",
         top: "5rem",
-
         fontSize: small ? "1.5vw" : "1vw",
         fontFamily: "Inter",
         fontWeight: "200",
         textAlign: "right",
-        zIndex: 1000,
       }}
     >
       <a
