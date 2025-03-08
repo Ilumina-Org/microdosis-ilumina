@@ -24,7 +24,7 @@ const LandingSection = React.forwardRef<HTMLElement, LandingProps>(
     }, [small]);
 
     const handleClick = () => {
-      const productsSection = document.getElementById("products");
+      const productsSection = document.getElementById("products-section");
       if (productsSection) {
         productsSection.scrollIntoView({ behavior: "smooth" });
       }
