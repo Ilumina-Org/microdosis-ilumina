@@ -167,18 +167,24 @@ const ChatBot = () => {
   const [resultado, setResultado] = useState<string>("");
   const [showQuestionSection, setShowQuestionSection] = useState<boolean>(true);
   const [showTooltip, setShowTooltip] = useState<boolean>(true);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
-  {/*
+  // Detectar si estamos en un dispositivo móvil
   useEffect(() => {
-    if (showTooltip) {
-      const timeout = setTimeout(() => {
-        setShowTooltip(false);
-      }, 2000);
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
 
-      return () => clearTimeout(timeout);
-    }
-  }, [showTooltip]);
-*/}
+    // Comprobar inicialmente
+    checkIfMobile();
+
+    // Comprobar cada vez que la ventana cambia de tamaño
+    window.addEventListener("resize", checkIfMobile);
+
+    // Limpiar el eventListener
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
+
   // Manejadores de eventos
   const toggleChat = () => {
     setChatVisible(!chatVisible);
@@ -361,19 +367,22 @@ const ChatBot = () => {
 
   return (
     <>
-      <button onClick={() => toggleChat()} className="chat-toggle">
-        {showTooltip && (
+      <button
+        onClick={() => toggleChat()}
+        className="chat-toggle"
+        aria-label="Abrir asistente de microdosis"
+      >
+        {showTooltip && !isMobile && (
           <div className="tooltip-bubble">
             Simula tu microdosis de ayahuasca
           </div>
         )}
         <svg
-          width="80%"
+          width={isMobile ? "70%" : "80%"}
           height="85.044815mm"
           viewBox="0 0 141.92133 85.044815"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
-          style={{}}
         >
           <g transform="translate(-31.008006,-6.8815468)">
             <g
@@ -452,7 +461,11 @@ const ChatBot = () => {
       {chatVisible && (
         <div className="chat-container chat-slide-in">
           <div className="chat-box">
-            <button onClick={closeChat} className="close-button">
+            <button
+              onClick={closeChat}
+              className="close-button"
+              aria-label="Cerrar chat"
+            >
               ×
             </button>
             {showQuestionSection && (
