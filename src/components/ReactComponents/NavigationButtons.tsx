@@ -1,12 +1,47 @@
-import { Whatsapp } from "iconsax-react";
-import React, { useEffect, useRef, useState } from "react";
-import Button from "../ReactComponents/Button";
+import React, { useEffect, useState, useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 
-const NavigationButtons = () => {
-  const [active, setActive] = useState<string | null>();
+type NavLink = {
+  href: string;
+  label: string;
+  target: string;
+  transitionName?: string;
+};
+
+const NavigationButtons: React.FC = () => {
+  const [active, setActive] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const isLargeScreen = useMediaQuery({ query: "(min-width: 1400px)" }) ?? true;
+  const observersRef = useRef<IntersectionObserver[]>([]);
+
+  const navLinks: NavLink[] = [
+    { href: "#landing-section", label: "Inicio", target: "landing" },
+    {
+      href: "#content-section",
+      label: "¿Qué es?",
+      target: "about",
+      transitionName: "about-nav-link",
+    },
+    {
+      href: "#testimonials-section",
+      label: "Testimonios",
+      target: "testimonios",
+      transitionName: "testimonios-nav-link",
+    },
+    {
+      href: "#products-section",
+      label: "Productos",
+      target: "products",
+      transitionName: "products-nav-link",
+    },
+    {
+      href: "#faq-section",
+      label: "Preguntas frecuentes",
+      target: "faqs",
+      transitionName: "faqs-nav-link",
+    },
+  ];
 
   useEffect(() => {
     const checkMobile = () => {
@@ -14,33 +49,62 @@ const NavigationButtons = () => {
     };
 
     checkMobile();
-
     window.addEventListener("resize", checkMobile);
-
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const handleClick = (e: any, target: string) => {
-    let value = e.target.getAttribute("href");
-    if (`${value}`.includes(target)) {
-      setActive(`${target}`);
-      setIsMobileMenuOpen(false);
-    } else {
-      setActive(null);
+  useEffect(() => {
+    if (observersRef.current.length > 0) {
+      observersRef.current.forEach((observer) => observer.disconnect());
+      observersRef.current = [];
     }
-  };
 
-  const small = useMediaQuery({ query: "(min-width: 1400px)" });
+    const options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.5,
+    };
 
-  if (!small) {
-    // return <p>loading</p>;
-    return null;
-  }
+    navLinks.forEach((link) => {
+      const sectionId = link.href.replace("#", "");
+      const section = document.getElementById(sectionId);
+
+      if (section) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActive(link.target);
+            }
+          });
+        }, options);
+
+        observer.observe(section);
+        observersRef.current.push(observer);
+      }
+    });
+
+    return () => {
+      observersRef.current.forEach((observer) => observer.disconnect());
+    };
+  }, [navLinks]);
 
   const aStyling = {
     textDecoration: "none",
     color: "white",
-    textShadow: " 1px 1px 2px pink",
+    textShadow: "1px 1px 2px pink",
+  };
+
+  const handleClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    target: string,
+  ) => {
+    const href = e.currentTarget.getAttribute("href");
+    if (href?.includes(target)) {
+      setActive(target);
+      setIsMobileMenuOpen(false);
+    } else {
+      setActive(null);
+    }
   };
 
   const handleSelect = (value: string) => {
@@ -48,64 +112,6 @@ const NavigationButtons = () => {
       ? "-.5px -.5px 0 #ffffff, .5px -.5px 0 #ffffff, -.5px .5px 0 #ffffff, .5px .5px 0 #ffffff"
       : undefined;
   };
-
-  const navLinks = [
-    { href: "", label: "Inicio", target: "landing" },
-    {
-      href: "#about",
-      label: "¿Qué es?",
-      target: "about",
-      transitionName: "about-nav-link",
-    },
-    {
-      href: "#testimonials",
-      label: "Testimonios",
-      target: "testimonios",
-      transitionName: "testimonios-nav-link",
-    },
-    {
-      href: "#products",
-      label: "Productos",
-      target: "products",
-      transitionName: "products-nav-link",
-    },
-    {
-      href: "#frequently-asked-questions",
-      label: "Preguntas frecuentes",
-      target: "faqs",
-      transitionName: "faqs-nav-link",
-    },
-  ];
-
-  const renderNavLinks = () => (
-    <>
-      {navLinks.map((link) => (
-        <a
-          key={link.target}
-          href={link.href}
-          {...(link.transitionName
-            ? { "data-transition-name": link.transitionName }
-            : {})}
-          onClick={(e) => handleClick(e, link.target)}
-          style={{
-            ...aStyling,
-            textShadow: handleSelect(link.target),
-            opacity: active == link.target ? 1 : 0.5,
-            ...(isMobile
-              ? {
-                  fontSize: "20px",
-                  padding: "10px 0",
-                  textAlign: "center",
-                  width: "100%",
-                }
-              : {}),
-          }}
-        >
-          {link.label}
-        </a>
-      ))}
-    </>
-  );
 
   const MenuIcon = () => (
     <svg
@@ -142,6 +148,36 @@ const NavigationButtons = () => {
     </svg>
   );
 
+  const renderNavLinks = () => (
+    <>
+      {navLinks.map((link) => (
+        <a
+          key={link.target}
+          href={link.href}
+          {...(link.transitionName
+            ? { "data-transition-name": link.transitionName }
+            : {})}
+          onClick={(e) => handleClick(e, link.target)}
+          style={{
+            ...aStyling,
+            textShadow: handleSelect(link.target),
+            opacity: active === link.target ? 1 : 0.5,
+            ...(isMobile
+              ? {
+                  fontSize: "20px",
+                  padding: "10px 0",
+                  textAlign: "center",
+                  width: "100%",
+                }
+              : {}),
+          }}
+        >
+          {link.label}
+        </a>
+      ))}
+    </>
+  );
+
   if (isMobile) {
     return (
       <div
@@ -165,7 +201,6 @@ const NavigationButtons = () => {
         >
           {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
         </div>
-
         {isMobileMenuOpen && (
           <div
             style={{
@@ -199,78 +234,24 @@ const NavigationButtons = () => {
         flexDirection: "column",
         backgroundColor: "transparent",
         color: "white",
-        zIndex: "12",
+        zIndex: 12,
         gap: "20px",
         right: "3rem",
         top: "5rem",
-        fontSize: small ? "1.5vw" : "1vw",
+        fontSize: isLargeScreen ? "1.9vw" : "1.8vw",
         fontFamily: "Inter",
         fontWeight: "200",
         textAlign: "right",
       }}
     >
-      <a
-        href="#inicio"
-        onClick={(e) => handleClick(e, "inicio")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("inicio"),
-          opacity: active == "inicio" ? 1 : 0.5,
-        }}
-      >
-        Inicio
-      </a>
-      <a
-        href="#about"
-        onClick={(e) => handleClick(e, "about")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("about"),
-          opacity: active == "about" ? 1 : 0.5,
-        }}
-      >
-        ¿Qué es?
-      </a>
-      <a
-        href="#testimonios"
-        onClick={(e) => handleClick(e, "testimonios")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("testimonios"),
-          opacity: active == "testimonios" ? 1 : 0.5,
-        }}
-      >
-        Testimonios
-      </a>
-      <a
-        href="#products"
-        onClick={(e) => handleClick(e, "products")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("products"),
-          opacity: active == "products" ? 1 : 0.5,
-        }}
-      >
-        Productos
-      </a>
-      <a
-        href="#faqs"
-        onClick={(e) => handleClick(e, "faqs")}
-        style={{
-          ...aStyling,
-          textShadow: handleSelect("faqs"),
-          opacity: active == "faqs" ? 1 : 0.5,
-        }}
-      >
-        Preguntas <br /> frecuentes
-      </a>
+      {renderNavLinks()}
       <style>
         {`
           .navigation > a:hover {
             opacity: 1 !important;
             transition: opacity .25s ease-in-out !important;
           }
-          `}
+        `}
       </style>
     </div>
   );
