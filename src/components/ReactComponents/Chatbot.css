@@ -54,8 +54,6 @@
   max-width: 500px;
 }
 
-
-
 @keyframes chatSlideIn {
   0% {
     opacity: 0;
@@ -70,9 +68,8 @@
 }
 
 .chat-slide-in {
-  animation: chatSlideIn .25s ease-out forwards;
+  animation: chatSlideIn 0.25s ease-out forwards;
 }
-
 
 .chat-box {
   background: #ffffff;
@@ -400,22 +397,40 @@
 /* Estilos responsivos */
 @media (max-width: 768px) {
   .chat-container {
-    width: 80%;
-    right: 14.5%;
+    width: 85%;
+    max-width: 350px;
+    right: 1rem;
+    bottom: 4.5rem;
+  }
+
+  .chat-toggle {
+    bottom: 1rem;
+    right: 1rem;
+    width: 50px;
+    height: 50px;
   }
 
   .chat-box {
+    padding: 20px 16px;
+    max-height: 75vh;
     border-radius: 20px;
-    padding: 20px;
+  }
+
+  .button {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .tooltip-bubble {
+    font-size: 12px;
+    transform: translateX(-100%);
+    white-space: normal;
+    max-width: 150px;
+    text-align: center;
   }
 
   .chat-message p {
     font-size: 15px;
-  }
-
-  .button {
-    font-size: 14px;
-    padding: 14px 18px;
   }
 
   .result {
@@ -425,10 +440,19 @@
 }
 
 @media (max-width: 480px) {
+  .chat-container {
+    width: 90%;
+    max-width: 300px;
+    right: 0.8rem;
+    bottom: 4rem;
+  }
+
   .chat-toggle {
     width: 54px;
     height: 54px;
     border-radius: 16px;
+    bottom: 1.5rem;
+    right: 1.5rem;
   }
 
   .robot-icon {
@@ -437,6 +461,8 @@
   }
 
   .close-button {
+    top: 10px;
+    right: 10px;
     font-size: 14px;
     width: 30px;
     height: 30px;
@@ -444,16 +470,44 @@
 
   .options {
     max-height: 250px;
+    gap: 10px;
   }
-}
 
-@keyframes dropShadowPulse {
-  0%,
-  100% {
-    filter: drop-shadow(1px 1px 3px white);
+  .chat-message {
+    padding: 15px;
+    margin-bottom: 16px;
   }
-  50% {
-    filter: drop-shadow(6px 6px 12px white);
+
+  .chat-message p {
+    font-size: 14px;
+  }
+
+  .result {
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .multi-select {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .checkbox-option {
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+
+  @keyframes chatSlideIn {
+    0% {
+      opacity: 0;
+      bottom: 2.5rem;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 1;
+      bottom: 4rem;
+      transform: translateX(0);
+    }
   }
 }
 
@@ -474,22 +528,7 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 
-.tooltip-bubble:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  margin-left: 0;
-  border-left: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-top: 8px solid rgba(0, 0, 0, 0.8);
-  border-right: none; /* Quitamos el borde derecho */
-}
-
-keyframes fadeIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
     transform: translate(-50%, 10px);
@@ -498,4 +537,24 @@ keyframes fadeIn {
     opacity: 1;
     transform: translate(-50%, 0);
   }
+}
+
+/* Modificaciones responsivas para el botón flotante en mobile */
+.chat-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem; /* Reducido en mobile */
+  width: 55px;
+  height: 55px;
+  z-index: 1000;
+}
+
+/* Contenedor principal del chat - ajustes responsivos */
+.chat-container {
+  position: fixed;
+  bottom: 5rem;
+  right: 3.5rem; /* Cambiado de 1.5rem a 2.5rem para moverlo más a la izquierda */
+  z-index: 1000;
+  width: 75%;
+  max-width: 350px; /* Tamaño máximo más pequeño */
 }
