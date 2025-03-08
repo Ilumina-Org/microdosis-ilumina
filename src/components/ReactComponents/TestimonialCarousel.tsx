@@ -1,109 +1,145 @@
 import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import imageUrl from "../../assets/user1.png?url";
 import PlaceHolder from "./PlaceHolder";
 import { useMediaQuery } from "react-responsive";
+
+interface TestimonialItem {
+  name: string;
+  review: string;
+  image?: string;
+}
+
 const TestimonialCarousel = () => {
   const [opacityIndex, setOpacityIndex] = useState(0);
+
   const handleChange = (index: number) => {
     setOpacityIndex(index);
   };
+
   const formatText = (text: string, slice: number) => {
     return `${text.slice(0, slice)}...`;
   };
 
-  const laptop = useMediaQuery({ query: "(min-width: 1400px)" });
-  const smallerLaptop = useMediaQuery({ query: "(min-width: 1366px)" });
+  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
+  const isTablet = useMediaQuery({
+    query: "(min-width: 768px) and (max-width: 1023px)",
+  });
+  const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
-  const TestTestimonials = [
+  const TestTestimonials: TestimonialItem[] = [
     {
       name: "Sofia P.",
       review:
         "Tras sufrir de depresión por años, las microdosis de ayahuasca me han dado una nueva perspectiva de vida. Cada día me siento más conectada con mi alegría interior y con las personas a mi alrededor. Es como si hubiera encontrado la llave para desbloquear mi felicidad.",
+      image: "/assets/user1.png", // Ruta de ejemplo
     },
     {
       name: "Carlos M",
       review:
         "La claridad mental que he alcanzado desde que comencé con las microdosis es increíble. Puedo pensar con más profundidad y resolver problemas con una eficiencia que nunca antes había experimentado. Ha mejorado enormemente mi desempeño en el trabajo y mi satisfacción personal.",
+      image: "/assets/user1.png",
     },
     {
       name: "Elena Q",
       review:
         "Después de años luchando con trastornos de ansiedad, finalmente siento que tengo control sobre mi vida. Las microdosis me han ayudado a calmar mi mente y a enfrentar situaciones estresantes con una serenidad que nunca pensé posible.",
+      image: "/assets/user1.png",
     },
     {
       name: "Tomás R",
       review:
         "Como atleta, siempre estoy buscando mejorar mi rendimiento y recuperación. Las microdosis de ayahuasca han sido fundamentales para mejorar mi concentración durante las competencias y acelerar mi recuperación después de entrenamientos intensos. Es un cambio radical en mi rutina deportiva.",
+      image: "/assets/user1.png",
     },
   ];
 
-  const Testimonial = ({ name, review, index }: any) => {
+  const Testimonial = ({
+    name,
+    review,
+    image,
+    index,
+  }: TestimonialItem & { index: number }) => {
+    // Very short text for mobile
+    const textLength = isMobile ? 60 : isTablet ? 120 : 200;
+
     return (
       <div
-        className="override-width"
+        className="override-width testimonial-card"
         style={{
-          justifyContent: "center",
+          justifyContent: "space-between",
           alignItems: "center",
           display: "flex",
-          marginRight: "2rem",
-          marginLeft: "2rem",
-          height: !laptop ? (smallerLaptop ? "10rem" : "12rem") : "10rem", // here respo
+          flexDirection: "row",
+          margin: "0 auto",
+          height: isMobile ? "auto" : isTablet ? "180px" : "10rem",
           borderRadius: "30px",
           backgroundColor: "white",
-          padding: "2rem",
-          paddingLeft: "1.5rem",
+          padding: isMobile ? "0.75rem" : isTablet ? "1rem" : "2rem",
           opacity: opacityIndex === index ? 1 : 0.25,
           transform: `scale(${opacityIndex === index ? 1 : 0.9})`,
+          width: isMobile ? "85%" : "auto",
+          maxWidth: isMobile ? "280px" : "none",
+          boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.08)",
         }}
       >
-        {/*
-        <img
-          src={imageUrl}
-          alt=""
-          fetchPriority="high"
-          width="150"
-          height="150"
-          style={{
-            borderRadius: "15px",
-            maxWidth: "150px",
-          }}
-        />
-        */}
         <div
           style={{
-            width: "100%",
+            width: isMobile ? "60px" : isTablet ? "80px" : "150px",
+            height: isMobile ? "60px" : isTablet ? "80px" : "150px",
             overflow: "hidden",
             borderRadius: "15px",
-            maxWidth: "150px",
+            flexShrink: 0,
+            marginRight: isMobile ? "0.75rem" : "1rem",
           }}
         >
-          <PlaceHolder />
+          {image ? (
+            <img
+              src={image}
+              alt={`Foto de ${name}`}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+          ) : (
+            <PlaceHolder />
+          )}
         </div>
         <div
           style={{
-            flexDirection: "column",
-            marginLeft: "1rem",
-            alignItems: "center",
+            display: "flex",
+            flexDirection: "column" as "column",
+            justifyContent: "space-between",
+            height: "100%",
+            width: "100%",
+            overflow: "hidden",
           }}
         >
           <p
             style={{
-              marginTop: 0,
+              margin: 0,
               textAlign: "left",
               fontStyle: "italic",
               overflow: "hidden",
               textOverflow: "ellipsis",
+              fontSize: isMobile ? "10px" : isTablet ? "12px" : "14px",
+              lineHeight: isMobile ? "1.2" : "1.4",
+              color: "#666",
             }}
           >
-            {formatText(review, 200)}
+            {formatText(review, textLength)}
           </p>
           <p
             style={{
               textAlign: "right",
               fontWeight: 600,
-              marginBottom: 0,
+              margin: 0,
+              marginTop: "0.5rem",
+              fontSize: isMobile ? "11px" : isTablet ? "14px" : "16px",
+              width: "100%",
+              color: "#333",
             }}
           >
             {name}
@@ -125,9 +161,11 @@ const TestimonialCarousel = () => {
     >
       <p
         style={{
-          fontSize: "50px",
+          fontSize: isMobile ? "24px" : isTablet ? "34px" : "50px",
           fontWeight: 200,
           color: "#c1dc3a",
+          textAlign: "center",
+          margin: isMobile ? "0.5rem 0" : "1rem 0",
         }}
       >
         Opiniones de nuestros clientes
@@ -136,18 +174,22 @@ const TestimonialCarousel = () => {
         autoPlay={true}
         infiniteLoop={true}
         interval={2250}
-        centerSlidePercentage={50}
+        centerSlidePercentage={isMobile ? 90 : isTablet ? 70 : 50}
         showThumbs={false}
         showArrows={false}
-        showIndicators={false}
+        showIndicators={isMobile}
         showStatus={false}
         centerMode={true}
         onChange={(e) => handleChange(e)}
+        emulateTouch={true}
+        swipeScrollTolerance={5}
+        style={{ display: "flex", justifyContent: "center" }}
       >
         {TestTestimonials.map((testimonial, index) => (
           <Testimonial
             name={testimonial.name}
             review={testimonial.review}
+            image={testimonial.image}
             index={index}
             key={index}
           />
