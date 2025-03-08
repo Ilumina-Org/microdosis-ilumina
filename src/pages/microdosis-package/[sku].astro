@@ -7,17 +7,56 @@ import GuaranteeBox from "../../components/GuaranteeBox.astro";
 import OrderSummary from "../../components/OrderSummary.astro";
 import NotFound from "../../components/ReactComponents/NotFound";
 import { getStock } from "../../utils/stock";
+import { fallbackStockData } from "../../utils/constants";
 
 const { sku } = Astro.params;
 let packageData = null;
 let stockInfo = null;
+let usingFallback = false;
+
+console.log("Buscando SKU:", sku);
 
 try {
-  const stockData = await getStock();
+  let stockData = {};
 
-  if (stockData[sku]) {
+  try {
+    // Intentar obtener datos reales
+    stockData = await getStock();
+    console.log("Datos reales obtenidos correctamente");
+  } catch (apiError) {
+    console.warn("Error al obtener datos de stock:", apiError);
+    usingFallback = true;
+  }
+
+  // Si no tenemos datos reales o el SKU no está en ellos, intentar usar el fallback
+  if (!stockData || !stockData[sku]) {
+    console.log(
+      "Datos reales no disponibles o SKU no encontrado, intentando usar fallback",
+    );
+    usingFallback = true;
+  }
+
+  if (usingFallback) {
+    console.log("Usando datos fallback");
+    console.log(
+      "SKUs disponibles en fallback:",
+      Object.keys(fallbackStockData),
+    );
+
+    if (fallbackStockData[sku]) {
+      stockInfo = fallbackStockData[sku];
+      console.log("Producto encontrado en fallback:", sku);
+    } else {
+      console.warn(`SKU ${sku} no encontrado en datos fallback`);
+      throw new Error("Producto no encontrado o no tiene stock disponible.");
+    }
+  } else {
+    // Estamos usando datos reales
     stockInfo = stockData[sku];
+  }
 
+  // Si llegamos aquí, tenemos stockInfo de alguna fuente
+  if (stockInfo) {
     packageData = {
       title: stockInfo.title,
       price: stockInfo.price,
@@ -25,13 +64,14 @@ try {
       savings: Math.round(stockInfo.regularPrice - stockInfo.price),
       description: stockInfo.notas || `Paquete ${sku}`,
       availableStock: stockInfo.disponible,
+      isFallbackData: usingFallback,
     };
-
-    console.log("Stock Info", stockInfo);
+    console.log("Stock Info procesado correctamente");
   } else {
     throw new Error("Producto no encontrado o no tiene stock disponible.");
   }
 } catch (error) {
+  console.error("Error en el procesamiento:", error);
   if (error instanceof Error) {
     if (
       error.message === "Producto no encontrado o no tiene stock disponible."
@@ -50,6 +90,12 @@ try {
   packageData ? (
     <Layout>
       <div class="package-container">
+        {packageData.isFallbackData && (
+          <div class="fallback-notice">
+            Mostrando información de respaldo. Los datos pueden no estar
+            actualizados.
+          </div>
+        )}
         <div class="package-detail">
           <PackageHeader
             title={packageData.title}
@@ -75,7 +121,6 @@ try {
     </Layout>
   )
 }
-
 <style>
   html {
     font-size: 14px;
@@ -99,5 +144,14 @@ try {
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     overflow: hidden;
+  }
+  .fallback-notice {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    text-align: center;
+    grid-column: 1 / -1;
   }
 </style>
