@@ -3,7 +3,7 @@ export interface Location {
   name: string;
 }
 
-// Distritos de Lima (completo)
+// Distritos de Lima (completo - mantenido igual)
 export const DISTRICTS: Location[] = [
   // Lima Metropolitana
   { code: "LIM01", name: "Lima Cercado" },
@@ -50,145 +50,36 @@ export const DISTRICTS: Location[] = [
   { code: "SBART", name: "San Bartolo" },
 ];
 
-// Provincias (completo)
-export const PROVINCES: Location[] = [
-  // Principales capitales
+// Departamentos/Regiones (reemplazando provincias)
+export const DEPARTMENTS: Location[] = [
+  { code: "AMAZ", name: "Amazonas" },
+  { code: "ANCA", name: "Áncash" },
+  { code: "APURI", name: "Apurímac" },
   { code: "AREQ", name: "Arequipa" },
-  { code: "CUZC", name: "Cusco" },
-  { code: "TRUJ", name: "Trujillo" },
-  { code: "PIUR", name: "Piura" },
-  { code: "CHIC", name: "Chiclayo" },
-  // Más provincias por departamento
-  // Lima (provincias)
-  { code: "HUACHO", name: "Huacho" },
-  { code: "HUARAL", name: "Huaral" },
-  { code: "CANETE", name: "Cañete" },
-  { code: "HUAURA", name: "Huaura" },
-  { code: "YAUYOS", name: "Yauyos" },
-  { code: "CANTA", name: "Canta" },
-  { code: "HUAROCH", name: "Huarochirí" },
-  { code: "OYON", name: "Oyón" },
-  { code: "CAJATA", name: "Cajatambo" },
-  // Arequipa
-  { code: "CAYLL", name: "Caylloma" },
-  { code: "CARAV", name: "Caravelí" },
-  { code: "CAMANA", name: "Camaná" },
-  { code: "CASTI", name: "Castilla" },
-  { code: "CONDES", name: "Condesuyos" },
-  { code: "ISLAY", name: "Islay" },
-  { code: "LAUNI", name: "La Unión" },
-  // Cusco
-  { code: "ANTA", name: "Anta" },
-  { code: "CALCA", name: "Calca" },
-  { code: "CANAS", name: "Canas" },
-  { code: "CANCH", name: "Canchis" },
-  { code: "CHUMBI", name: "Chumbivilcas" },
-  { code: "ESPINA", name: "Espinar" },
-  { code: "LACONV", name: "La Convención" },
-  { code: "PARURO", name: "Paruro" },
-  { code: "PAUCAR", name: "Paucartambo" },
-  { code: "QUISP", name: "Quispicanchi" },
-  { code: "URUBA", name: "Urubamba" },
-  // La Libertad
-  { code: "ASCOP", name: "Ascope" },
-  { code: "BOLOG", name: "Bolívar" },
-  { code: "CHEPEN", name: "Chepén" },
-  { code: "JULCA", name: "Julcán" },
-  { code: "OTUZC", name: "Otuzco" },
-  { code: "PACAS", name: "Pacasmayo" },
-  { code: "PATAZ", name: "Pataz" },
-  { code: "SCHEZ", name: "Sánchez Carrión" },
-  { code: "STIAG", name: "Santiago de Chuco" },
-  { code: "GCHAO", name: "Gran Chimú" },
-  { code: "VIRU", name: "Virú" },
-  // Piura
-  { code: "AYABA", name: "Ayabaca" },
-  { code: "HUANC", name: "Huancabamba" },
-  { code: "MORR", name: "Morropón" },
-  { code: "PAITA", name: "Paita" },
-  { code: "SULLA", name: "Sullana" },
-  { code: "TALARA", name: "Talara" },
-  { code: "SECHU", name: "Sechura" },
-  // Lambayeque
-  { code: "FERR", name: "Ferreñafe" },
-  { code: "LAMBA", name: "Lambayeque" },
-  // Ancash
-  { code: "HUARA", name: "Huaraz" },
-  { code: "AIJA", name: "Aija" },
-  { code: "BOLG", name: "Bolognesi" },
-  { code: "CARHU", name: "Carhuaz" },
-  { code: "CASMA", name: "Casma" },
-  { code: "CORONG", name: "Corongo" },
-  { code: "HUARI", name: "Huari" },
-  { code: "HUAYL", name: "Huaylas" },
-  { code: "MARIS", name: "Mariscal Luzuriaga" },
-  { code: "PALLC", name: "Pallasca" },
-  { code: "POMAB", name: "Pomabamba" },
-  { code: "RCSANT", name: "Recuay" },
-  { code: "SANTA", name: "Santa" },
-  { code: "SIHUAS", name: "Sihuas" },
-  { code: "YUNGAY", name: "Yungay" },
-  // Cajamarca
+  { code: "AYAC", name: "Ayacucho" },
   { code: "CAJAM", name: "Cajamarca" },
-  { code: "CAJAB", name: "Cajabamba" },
-  { code: "CELEND", name: "Celendín" },
-  { code: "CHOTA", name: "Chota" },
-  { code: "CONTU", name: "Contumazá" },
-  { code: "CUTERV", name: "Cutervo" },
-  { code: "HUALGC", name: "Hualgayoc" },
-  { code: "JAEN", name: "Jaén" },
-  { code: "MIGUE", name: "San Miguel" },
-  { code: "SPABL", name: "San Pablo" },
-  { code: "SIGNA", name: "Santa Cruz" },
-  { code: "SCRUZ", name: "San Ignacio" },
-  // Ica
+  { code: "CALL", name: "Callao" },
+  { code: "CUSCO", name: "Cusco" },
+  { code: "HVANC", name: "Huancavelica" },
+  { code: "HUANU", name: "Huánuco" },
   { code: "ICA", name: "Ica" },
-  { code: "CHINC", name: "Chincha" },
-  { code: "NAZCA", name: "Nazca" },
-  { code: "PALPA", name: "Palpa" },
-  { code: "PISCO", name: "Pisco" },
-  // Junín
-  { code: "HUANC", name: "Huancayo" },
-  { code: "CONCP", name: "Concepción" },
-  { code: "CHANC", name: "Chanchamayo" },
-  { code: "JAUJA", name: "Jauja" },
   { code: "JUNIN", name: "Junín" },
-  { code: "SATIP", name: "Satipo" },
-  { code: "TARMA", name: "Tarma" },
-  { code: "YAULI", name: "Yauli" },
-  { code: "CHUPAC", name: "Chupaca" },
-  // Tacna
-  { code: "TACNA", name: "Tacna" },
-  { code: "CANDA", name: "Candarave" },
-  { code: "JORGE", name: "Jorge Basadre" },
-  { code: "TARATA", name: "Tarata" },
-  // Puno
+  { code: "LALIB", name: "La Libertad" },
+  { code: "LAMBA", name: "Lambayeque" },
+  { code: "LIMA", name: "Lima" },
+  { code: "LORET", name: "Loreto" },
+  { code: "MADRE", name: "Madre de Dios" },
+  { code: "MOQUE", name: "Moquegua" },
+  { code: "PASCO", name: "Pasco" },
+  { code: "PIURA", name: "Piura" },
   { code: "PUNO", name: "Puno" },
-  { code: "AZANG", name: "Azángaro" },
-  { code: "CARAB", name: "Carabaya" },
-  { code: "CHUCUI", name: "Chucuito" },
-  { code: "HUANC", name: "Huancané" },
-  { code: "LAMBA", name: "Lampa" },
-  { code: "MELGA", name: "Melgar" },
-  { code: "SANROM", name: "San Román" },
-  { code: "SANDIA", name: "Sandia" },
-  { code: "YUNGU", name: "Yunguyo" },
-  { code: "COLLS", name: "El Collao" },
-  { code: "MOHO", name: "Moho" },
-  // San Martín
-  { code: "MOYO", name: "Moyobamba" },
-  { code: "BELLA", name: "Bellavista" },
-  { code: "DORADO", name: "El Dorado" },
-  { code: "HUALLA", name: "Huallaga" },
-  { code: "LAMAS", name: "Lamas" },
-  { code: "MCACR", name: "Mariscal Cáceres" },
-  { code: "PICOTA", name: "Picota" },
-  { code: "RIOJA", name: "Rioja" },
-  { code: "SMARTN", name: "San Martín" },
-  { code: "TOCACH", name: "Tocache" },
+  { code: "SMART", name: "San Martín" },
+  { code: "TACNA", name: "Tacna" },
+  { code: "TUMBS", name: "Tumbes" },
+  { code: "UCAYA", name: "Ucayali" },
 ];
 
-// Tarifas de envío para distritos de Lima
+// Tarifas de envío para distritos de Lima (mantenido igual)
 export const DISTRICT_SHIPPING_RATES: { [code: string]: number } = {
   // Lima Metropolitana - tarifa estándar
   LIM01: 15.0,
@@ -235,93 +126,38 @@ export const DISTRICT_SHIPPING_RATES: { [code: string]: number } = {
   SBART: 25.0,
 };
 
-// Tarifas de envío para provincias
-export const PROVINCE_SHIPPING_RATES: { [code: string]: number } = {
-  // Principales ciudades
+// Tarifas de envío para departamentos (reemplazando provincias)
+export const DEPARTMENT_SHIPPING_RATES: { [code: string]: number } = {
+  // Departamentos
+  AMAZ: 40.0,
+  ANCA: 35.0,
+  APURI: 40.0,
   AREQ: 30.0,
-  CUZC: 35.0,
-  TRUJ: 30.0,
-  PIUR: 35.0,
-  CHIC: 30.0,
-  // Lima provincias
-  HUACHO: 25.0,
-  HUARAL: 25.0,
-  CANETE: 25.0,
-  HUAURA: 25.0,
-  YAUYOS: 35.0,
-  CANTA: 25.0,
-  HUAROCH: 25.0,
-  OYON: 30.0,
-  CAJATA: 30.0,
-  // Arequipa
-  CAYLL: 35.0,
-  CARAV: 35.0,
-  CAMANA: 35.0,
-  CASTI: 35.0,
-  CONDES: 35.0,
-  ISLAY: 30.0,
-  LAUNI: 35.0,
-  // Cusco
-  ANTA: 35.0,
-  CALCA: 35.0,
-  CANAS: 40.0,
-  CANCH: 40.0,
-  CHUMBI: 40.0,
-  ESPINA: 40.0,
-  LACONV: 40.0,
-  PARURO: 40.0,
-  PAUCAR: 40.0,
-  QUISP: 40.0,
-  URUBA: 35.0,
-  // La Libertad
-  ASCOP: 30.0,
-  BOLOG: 35.0,
-  CHEPEN: 30.0,
-  JULCA: 35.0,
-  OTUZC: 35.0,
-  PACAS: 30.0,
-  PATAZ: 40.0,
-  SCHEZ: 35.0,
-  STIAG: 35.0,
-  GCHAO: 35.0,
-  VIRU: 30.0,
-  // Piura
-  AYABA: 40.0,
-  HUANC: 40.0,
-  MORR: 35.0,
-  PAITA: 35.0,
-  SULLA: 35.0,
-  TALARA: 35.0,
-  SECHU: 35.0,
-  // Lambayeque
-  FERR: 30.0,
-  LAMBA: 30.0,
-  // Ancash
-  HUARA: 30.0,
-  AIJA: 35.0,
-  BOLG: 35.0,
-  CARHU: 35.0,
-  CASMA: 30.0,
-  CORONG: 35.0,
-  HUARI: 35.0,
-  HUAYL: 35.0,
-  MARIS: 35.0,
-  PALLC: 35.0,
-  POMAB: 35.0,
-  RCSANT: 35.0,
-  SANTA: 30.0,
-  SIHUAS: 35.0,
-  YUNGAY: 35.0,
-  // Otros departamentos igual estructura
+  AYAC: 40.0,
   CAJAM: 35.0,
+  CALL: 15.0,
+  CUSCO: 35.0,
+  HVANC: 40.0,
+  HUANU: 40.0,
   ICA: 25.0,
-  TACNA: 35.0,
+  JUNIN: 35.0,
+  LALIB: 30.0,
+  LAMBA: 30.0,
+  LIMA: 25.0,
+  LORET: 45.0,
+  MADRE: 45.0,
+  MOQUE: 35.0,
+  PASCO: 40.0,
+  PIURA: 35.0,
   PUNO: 40.0,
-  MOYO: 40.0,
+  SMART: 40.0,
+  TACNA: 35.0,
+  TUMBS: 40.0,
+  UCAYA: 45.0,
 };
 
 export const DEFAULT_DISTRICT_SHIPPING_COST = 15.0;
-export const DEFAULT_PROVINCE_SHIPPING_COST = 30.0;
+export const DEFAULT_DEPARTMENT_SHIPPING_COST = 35.0;
 
 export function calculateShippingCost(
   district: string | null,
@@ -337,15 +173,15 @@ export function calculateShippingCost(
   return DEFAULT_DISTRICT_SHIPPING_COST;
 }
 
-export function calculateProvinceShippingCost(
-  province: string | null,
+export function calculateDepartmentShippingCost(
+  department: string | null,
   packageId: string | null,
 ): number {
-  if (!province) return DEFAULT_PROVINCE_SHIPPING_COST;
-  if (PROVINCE_SHIPPING_RATES[province]) {
-    return PROVINCE_SHIPPING_RATES[province];
+  if (!department) return DEFAULT_DEPARTMENT_SHIPPING_COST;
+  if (DEPARTMENT_SHIPPING_RATES[department]) {
+    return DEPARTMENT_SHIPPING_RATES[department];
   }
-  return DEFAULT_PROVINCE_SHIPPING_COST;
+  return DEFAULT_DEPARTMENT_SHIPPING_COST;
 }
 
 export function getCulqiLink(locationCode: string): string {
@@ -373,12 +209,14 @@ export const CULQI_PLANS: { [key: string]: string } = {
   SLUI: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
   SAMI: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
 
-  // Provincias principales
+  // Departamentos principales (ejemplos)
   AREQ: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
-  CUZC: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
-  TRUJ: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
-  PIUR: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
-  CHIC: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
-
-  // Nota: Si deseas agregar enlaces distintos para cada localidad, puedes añadirlos aquí
+  CUSCO:
+    "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
+  LALIB:
+    "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
+  PIURA:
+    "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
+  LAMBA:
+    "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
 };

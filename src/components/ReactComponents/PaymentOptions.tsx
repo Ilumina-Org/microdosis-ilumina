@@ -16,12 +16,12 @@ const PaymentOptions = ({
   packageId,
 }: PaymentOptionsProps) => {
   const [shippingType, setShippingType] = useState<
-    "distrito" | "provincia" | null
+    "distrito" | "departamento" | null
   >(null);
   const [districts, setDistricts] = useState<
     Array<{ code: string; name: string }>
   >([]);
-  const [provinces, setProvinces] = useState<
+  const [departments, setDepartments] = useState<
     Array<{ code: string; name: string }>
   >([]);
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -38,16 +38,16 @@ const PaymentOptions = ({
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const [districtsResponse, provincesResponse] = await Promise.all([
+        const [districtsResponse, departmentsResponse] = await Promise.all([
           fetch("/api/districts"),
-          fetch("/api/provinces"),
+          fetch("/api/departments"),
         ]);
 
         const districtsData = await districtsResponse.json();
-        const provincesData = await provincesResponse.json();
+        const departmentsData = await departmentsResponse.json();
 
         setDistricts(districtsData);
-        setProvinces(provincesData);
+        setDepartments(departmentsData);
       } catch (err) {
         setError("Error cargando las ubicaciones");
       }
@@ -73,7 +73,7 @@ const PaymentOptions = ({
         const endpoint =
           shippingType === "distrito"
             ? "calculate-shipping"
-            : "calculate-province-shipping";
+            : "calculate-department-shipping";
         const response = await fetch(
           `/api/${endpoint}?location=${selectedLocation}&packageId=${packageId}`,
           { signal: controller.signal },
@@ -92,7 +92,7 @@ const PaymentOptions = ({
         } else {
           setError(data.message || "Error calculando el envío");
         }
-      } catch (err) {
+      } catch (err: any) {
         if (!controller.signal.aborted) {
           setError(
             "Error calculando el envío: " + (err.message || "Desconocido"),
@@ -113,7 +113,7 @@ const PaymentOptions = ({
     setActiveOption((prev) => (prev === optionId ? null : optionId));
   };
 
-  const handleLocationTypeChange = (type: "distrito" | "provincia") => {
+  const handleLocationTypeChange = (type: "distrito" | "departamento") => {
     setShippingType(type);
     setSelectedLocation("");
     setShippingCost(0);
@@ -173,11 +173,11 @@ const PaymentOptions = ({
             Envío Distrito Lima
           </button>
           <button
-            className={`location-type-btn ${shippingType === "provincia" ? "active" : ""}`}
-            onClick={() => handleLocationTypeChange("provincia")}
+            className={`location-type-btn ${shippingType === "departamento" ? "active" : ""}`}
+            onClick={() => handleLocationTypeChange("departamento")}
             disabled={isPaymentInProgress}
           >
-            Envío Provincia
+            Envío Departamento
           </button>
         </div>
 
@@ -186,7 +186,7 @@ const PaymentOptions = ({
             <label>
               {shippingType === "distrito"
                 ? "Seleccione su distrito:"
-                : "Seleccione su provincia:"}
+                : "Seleccione su departamento:"}
             </label>
             <select
               value={selectedLocation}
@@ -196,9 +196,9 @@ const PaymentOptions = ({
               <option value="">
                 {shippingType === "distrito"
                   ? "Seleccione distrito"
-                  : "Seleccione provincia"}
+                  : "Seleccione departamento"}
               </option>
-              {(shippingType === "distrito" ? districts : provinces).map(
+              {(shippingType === "distrito" ? districts : departments).map(
                 (location) => (
                   <option key={location.code} value={location.code}>
                     {location.name}
