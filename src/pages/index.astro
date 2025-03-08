@@ -8,8 +8,23 @@ import About from "../components/ReactPages/About";
 import FAQs from "../components/ReactPages/FAQs";
 import Products from "../components/ReactPages/Products";
 import { getProducts } from "../utils/stock";
+import { fallbackProducts } from "../utils/constants"; // Importa el fallback
 import CookieConsent from "../components/ReactComponents/CookiesConsent";
-const products = (await getProducts()).slice(0, 3);
+
+let products;
+try {
+  const fetchedProducts = await getProducts();
+  // Usa el fallback si no hay productos o si el array está vacío
+  products =
+    fetchedProducts && fetchedProducts.length > 0
+      ? fetchedProducts.slice(0, 3)
+      : fallbackProducts;
+} catch (error) {
+  console.error("Error obteniendo productos, usando fallback:", error);
+  products = fallbackProducts;
+}
+
+console.log("productos utilizados:", products);
 ---
 
 <Layout>
