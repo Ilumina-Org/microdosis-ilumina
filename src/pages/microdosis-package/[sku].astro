@@ -90,6 +90,12 @@ try {
   packageData ? (
     <Layout>
       <div class="package-container">
+        <div class="back-button-container">
+          <a href="/" class="back-button">
+            <span class="arrow">←</span> Volver a inicio
+          </a>
+        </div>
+        
         {packageData.isFallbackData && (
           <div class="fallback-notice">
             Mostrando información de respaldo. Los datos pueden no estar
@@ -153,5 +159,30 @@ try {
     border-radius: 0.25rem;
     text-align: center;
     grid-column: 1 / -1;
+  }
+  .back-button-container {
+    grid-column: 1 / -1;
+    margin-bottom: 1rem;
+  }
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #f8f9fa;
+    color: #444;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid #e0e0e0;
+  }
+  .back-button:hover {
+    background-color: #e9ecef;
+    color: #212529;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  }
+  .arrow {
+    font-size: 1.2rem;
+    margin-right: 0.3rem;
   }
 </style>
