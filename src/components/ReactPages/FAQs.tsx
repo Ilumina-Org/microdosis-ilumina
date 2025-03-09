@@ -31,7 +31,14 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
         <h4
           style={{
             textWrap: "wrap",
-            fontSize: "2.4rem",
+            // fontSize: desktop ? "1.5vw" : "2.4vw",
+            fontSize: handleResponsiveness(
+              "1.5rem",
+              "1.25rem",
+              "1.5rem",
+              "2rem",
+              ""
+            ),
             //</div>fontSize: mobile ? "2rem" : small ? "2rem" : "2.4rem",
             fontWeight: "500",
             color: "#c1dc3a",
@@ -46,7 +53,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             fontWeight: "200",
             color: "white",
             // lineHeight: "1.75rem",
-            lineHeight: mobile ? "auto" : "1.75vw",
+            lineHeight: mobile ? "auto" : "1.5vw",
             fontSize: small ? "1.2rem" : "1.25rem",
           }}
         >
@@ -70,7 +77,15 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
       <SectionLayout
         id={props.id}
         ref={ref}
-        horizontalPadding={desktop ? "26vw" : "20vw"}
+        // horizontalPadding={desktop ? "26vw" : "20vw"}
+        // horizontalPadding={desktop ? "22vw" : "17vw"}
+        horizontalPadding={handleResponsiveness(
+          "10rem",
+          "15rem",
+          "25rem",
+          "35rem",
+          ""
+        )}
         // style={{ position: "absolute" }}
         style={{ display: "flex", flexDirection: "column", height: "auto" }}
         // verticalPadding={"4rem"}
@@ -164,12 +179,13 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
           >
             <div
               style={{
-                width: "100%",
-                maxWidth: "100%",
-                minWidth: "100%",
+                width: "fit-content",
+                // width: "100%",
+                // maxWidth: "100%",
+                // minWidth: "100%",
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
+                alignItems: !mobile ? "baseline" : "center",
               }}
             >
               <img

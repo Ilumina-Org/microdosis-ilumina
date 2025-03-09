@@ -59,7 +59,7 @@ export const Testimonial = ({
         borderRadius: "30px",
         backgroundColor: "white",
         padding: !laptop ? (smallerLaptop ? "10rem" : ".5rem") : "10rem", // here respo
-        opacity: isInView ? 1 : 0.5,
+        opacity: isInView ? 1 : 0.25,
         flexDirection: "row",
         // gap: "20px",
 

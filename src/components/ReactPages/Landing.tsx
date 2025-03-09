@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef } from "react";
 import Button from "../ReactComponents/Button";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
@@ -96,7 +98,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           id="toggle-chat"
           label="Comprar ahora"
           //fontSize={30}
-          padding={15}
+          padding={small ? 12 : 15}
           styles={{
             backgroundColor: "#C1DC3A",
             paddingLeft: "1.5rem",
@@ -104,9 +106,11 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             alignItems: "center",
             borderRadius: "15px",
             gap: "15px",
-            fontSize: desktop ? "1.5vw" : "2vw",
+            fontSize: small ? "1.5vw" : "1.25vw",
           }}
-          icon={<ShoppingCart size={"2.5vw"} color="#484848" />}
+          icon={
+            <ShoppingCart size={small ? "1.5vw" : "1.25vw"} color="#484848" />
+          }
         />
       </div>
       <div className="image-container">
@@ -252,7 +256,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
           canvas {
             position: absolute !important;
-            bottom: ${responsiveHandler("", "1rem", "4rem", "13rem", "0rem")};
+            bottom: ${responsiveHandler("", "1rem", "4rem", "10rem", "0rem")};
             right: ${responsiveHandler("", "2rem", "9rem", "20rem", "0rem")};
             transform: scale(${mobile ? 10 : responsiveHandler(2.4, 2.5, 3, 4, 10)}) !important;
             max-height: 90vh;

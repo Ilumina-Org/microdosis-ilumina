@@ -28,7 +28,7 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
       background="white"
       // horizontalPadding={padding}
       // horizontalPadding={desktop ? "25vw" : "8vw"}
-      horizontalPadding={desktop ? "26vw" : "20vw"}
+      horizontalPadding={desktop ? "20vw" : "17vw"}
       verticalPadding={"5rem"}
       height="auto"
     >
@@ -162,7 +162,7 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
             .about-paragraph {
               font-size: 1.25rem;
-              line-height: ${mobile ? "auto" : "1.75ve"};
+              line-height: ${mobile ? "auto" : "1.75vw"};
               color: #1d1d1d;
             }
 

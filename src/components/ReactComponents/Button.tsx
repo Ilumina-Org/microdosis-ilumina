@@ -27,7 +27,7 @@ function Button({
         borderRadius: handleResponsiveness(
           "20px",
           "20px",
-          "30px",
+          "20px",
           "20px",
           "10px"
         ),

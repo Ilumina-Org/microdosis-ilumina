@@ -1,5 +1,8 @@
+"use client";
+
 import React, { useEffect, useState, useRef, type ReactNode } from "react";
 import { useMediaQuery } from "react-responsive";
+import useResponsiveness from "../../utils/useResponsiveness";
 
 type NavLink = {
   href: string;
@@ -15,6 +18,7 @@ const NavigationButtons: React.FC = () => {
   // const [isMobile, setIsMobile] = useState(false);
   const isLargeScreen = useMediaQuery({ query: "(min-width: 1400px)" }) ?? true;
   const observersRef = useRef<IntersectionObserver[]>([]);
+  const { handleResponsiveness } = useResponsiveness();
 
   const navLinks: NavLink[] = [
     { href: "#inicio", label: "Inicio", target: "inicio" },
@@ -49,16 +53,6 @@ const NavigationButtons: React.FC = () => {
       transitionName: "faqs-nav-link",
     },
   ];
-
-  // useEffect(() => {
-  // const checkMobile = () => {
-  //   setIsMobile(window.innerWidth <= 768);
-  // };
-
-  // checkMobile();
-  // window.addEventListener("resize", checkMobile);
-  // return () => window.removeEventListener("resize", checkMobile);
-  // }, []);
 
   useEffect(() => {
     if (observersRef.current.length > 0) {
@@ -265,7 +259,15 @@ const NavigationButtons: React.FC = () => {
         gap: "20px",
         right: "3rem",
         top: "5rem",
-        fontSize: isLargeScreen ? "1.9vw" : "1.8vw",
+        // fontSize: isLargeScreen ? "1.9vw" : "1.8vw",
+        fontSize: handleResponsiveness(
+          "1.5rem",
+          "1.25rem",
+          "1.5rem",
+          "2rem",
+          ""
+        ),
+        //isLargeScreen ? "1.9vw" : "1.8vw",
         fontFamily: "Inter",
         fontWeight: "200",
         textAlign: "right",
