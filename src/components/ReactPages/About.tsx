@@ -145,15 +145,8 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               gap: 4rem;
             }
 
-            .about-section:not(:nth-of-type(2)) {
-              display: flex;
-              flex-direction: column-reverse;
-              /*or hide the image*/
-            }
-
             .about-text {
               width: ${mobile ? "100%" : "55%"};
-              border:1px solid red;
             }
 
             .text{
@@ -184,7 +177,6 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               flex-direction: column;
               blockMargin: 0 !important;
               margin: 0;
-border: 1px solid blue;
               }
 
             .about-paragraph{
@@ -196,6 +188,17 @@ border: 1px solid blue;
               font-size: 1.5rem;
               margin-right: 1rem;
             }
+
+        ${
+          mobile &&
+          `.about-section:not(:nth-of-type(2)) {
+            display: flex;
+            flex-direction: column-reverse;
+            /*or hide the image*/
+          }`
+        }
+
+
           `}
       </style>
     </SectionLayout>

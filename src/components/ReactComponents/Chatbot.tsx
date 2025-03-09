@@ -170,7 +170,7 @@ const ChatBot = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [resultado, setResultado] = useState<string>("");
   const [showQuestionSection, setShowQuestionSection] = useState<boolean>(true);
-  const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const [showTooltip, setShowTooltip] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
   // Detectar si estamos en un dispositivo móvil
@@ -474,7 +474,7 @@ const ChatBot = () => {
           style={{
             right: mobile ? "0" : "1.5rem",
             bottom: mobile ? "2rem" : "6.5rem",
-            marginBottom: mobile ? "2rem" : "6.5rem",
+            marginBottom: mobile ? "2rem" : "0",
           }}
         >
           <div className="chat-box">
