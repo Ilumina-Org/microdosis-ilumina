@@ -1,5 +1,6 @@
 import React from "react";
 import useResponsiveness from "../../utils/useResponsiveness";
+import { useMediaQuery } from "react-responsive";
 
 export const SectionLayout = ({
   id,
@@ -24,6 +25,7 @@ export const SectionLayout = ({
         #013520 103.7%
       ),
       #013726`;
+  const mobile = useMediaQuery({ orientation: "portrait" });
 
   const containerStyle = {
     display: "flex",
@@ -31,8 +33,8 @@ export const SectionLayout = ({
     justifyContent: "center",
     // zIndex: 10,
     background: background ? background : gradientBackground,
-    paddingLeft: horizontalPadding,
-    paddingRight: horizontalPadding,
+    paddingLeft: !mobile ? horizontalPadding : "4rem",
+    paddingRight: !mobile ? horizontalPadding : "4rem",
     paddingTop: verticalPadding,
     paddingBottom: verticalPadding,
   };

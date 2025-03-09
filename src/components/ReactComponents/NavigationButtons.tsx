@@ -11,7 +11,8 @@ type NavLink = {
 const NavigationButtons: React.FC = () => {
   const [active, setActive] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useMediaQuery({ orientation: "portrait" });
+  // const [isMobile, setIsMobile] = useState(false);
   const isLargeScreen = useMediaQuery({ query: "(min-width: 1400px)" }) ?? true;
   const observersRef = useRef<IntersectionObserver[]>([]);
 
@@ -49,15 +50,15 @@ const NavigationButtons: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+  // useEffect(() => {
+  // const checkMobile = () => {
+  //   setIsMobile(window.innerWidth <= 768);
+  // };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  // checkMobile();
+  // window.addEventListener("resize", checkMobile);
+  // return () => window.removeEventListener("resize", checkMobile);
+  // }, []);
 
   useEffect(() => {
     if (observersRef.current.length > 0) {
@@ -114,9 +115,20 @@ const NavigationButtons: React.FC = () => {
   };
 
   const handleSelect = (value: string) => {
-    return active === value
-      ? "-.5px -.5px 0 #ffffff, .5px -.5px 0 #ffffff, -.5px .5px 0 #ffffff, .5px .5px 0 #ffffff"
-      : undefined;
+    let dark =
+      "-.5px -.5px 0 #171717, .5px -.5px 0 #171717, -.5px .5px 0 #171717, .5px .5px 0 #171717";
+    let light =
+      "-.5px -.5px 0 #ffffff, .5px -.5px 0 #ffffff, -.5px .5px 0 #ffffff, .5px .5px 0 #ffffff";
+
+    if (active === value) {
+      if (active === "products" || active == "about") {
+        return dark;
+      } else {
+        return light;
+      }
+    } else {
+      return undefined;
+    }
   };
 
   const MenuIcon = () => (
@@ -167,7 +179,12 @@ const NavigationButtons: React.FC = () => {
           style={{
             ...aStyling,
             textShadow: handleSelect(link.target),
+            // fontW/eight: handleSelect(link.target),
             opacity: active === link.target ? 1 : 0.5,
+            transition: ".25s ease-in-out",
+            color:
+              active === "about" || active === "products" ? "#171717" : "white",
+
             ...(isMobile
               ? {
                   fontSize: "20px",

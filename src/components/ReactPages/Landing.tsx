@@ -35,12 +35,13 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
     query: "(max-width: 1370px)",
   });
 
-  const responsiveHandler = (s, m, l, xl) => {
+  const responsiveHandler = (s, m, l, xl, mob) => {
     console.log("queso", small, medium, desktop, large);
     if (small) return s;
     if (medium) return m;
     if (desktop) return l;
     if (large) return xl;
+    if (mobile) return mob;
   };
 
   useEffect(() => {
