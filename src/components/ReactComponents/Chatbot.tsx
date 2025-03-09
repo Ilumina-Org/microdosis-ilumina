@@ -166,7 +166,7 @@ const ChatBot = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [resultado, setResultado] = useState<string>("");
   const [showQuestionSection, setShowQuestionSection] = useState<boolean>(true);
-  const [showTooltip, setShowTooltip] = useState<boolean>(true);
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
   // Detectar si estamos en un dispositivo móvil
@@ -177,6 +177,10 @@ const ChatBot = () => {
 
     // Comprobar inicialmente
     checkIfMobile();
+
+    setTimeout(() => {
+      setShowTooltip(true);
+    }, 1500);
 
     // Comprobar cada vez que la ventana cambia de tamaño
     window.addEventListener("resize", checkIfMobile);
@@ -375,11 +379,13 @@ const ChatBot = () => {
         {showTooltip && !isMobile && (
           <div className="tooltip-bubble">
             Simula tu microdosis de ayahuasca
+            <div className="tooltip-arrow-down"></div>
           </div>
         )}
         <svg
           width={isMobile ? "70%" : "80%"}
-          height="85.044815mm"
+          // height="85.044815mm"
+          height="auto"
           viewBox="0 0 141.92133 85.044815"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"

@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, type ReactNode } from "react";
 import { useMediaQuery } from "react-responsive";
 
 type NavLink = {
   href: string;
-  label: string;
+  label: string | ReactNode;
   target: string;
   transitionName?: string;
 };
@@ -16,29 +16,35 @@ const NavigationButtons: React.FC = () => {
   const observersRef = useRef<IntersectionObserver[]>([]);
 
   const navLinks: NavLink[] = [
-    { href: "#landing-section", label: "Inicio", target: "landing" },
+    { href: "#inicio", label: "Inicio", target: "inicio" },
     {
-      href: "#content-section",
+      href: "#about",
       label: "¿Qué es?",
       target: "about",
       transitionName: "about-nav-link",
     },
     {
-      href: "#testimonials-section",
+      href: "#testimonios",
       label: "Testimonios",
       target: "testimonios",
       transitionName: "testimonios-nav-link",
     },
     {
-      href: "#products-section",
+      href: "#products",
       label: "Productos",
       target: "products",
       transitionName: "products-nav-link",
     },
     {
-      href: "#faq-section",
-      label: "Preguntas frecuentes",
-      target: "faqs",
+      href: "#frequently-asked-questions",
+      label: (
+        <>
+          Preguntas
+          <br />
+          frecuentes
+        </>
+      ),
+      target: "frequently-asked-questions",
       transitionName: "faqs-nav-link",
     },
   ];
@@ -96,7 +102,7 @@ const NavigationButtons: React.FC = () => {
 
   const handleClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    target: string,
+    target: string
   ) => {
     const href = e.currentTarget.getAttribute("href");
     if (href?.includes(target)) {

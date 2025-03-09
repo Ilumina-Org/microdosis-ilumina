@@ -4,6 +4,7 @@ import React from "react";
 import ProductContainer from "../../components/ReactComponents/ProductContainer";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
 import useResponsiveness from "../../utils/useResponsiveness";
+import { useMediaQuery } from "react-responsive";
 
 interface Product {
   sku: string;
@@ -23,53 +24,55 @@ interface ProductsPageProps {
   ref: React.Ref<HTMLDivElement>;
 }
 
-const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>((props, ref) => {
+const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
+  (props, ref) => {
+    const { handleResponsiveness } = useResponsiveness();
+    let padding = handleResponsiveness([16, 10, 25, 10]);
+    const small = useMediaQuery({ query: "(min-width: 1366px)" });
 
-  const { handleResponsiveness } = useResponsiveness();
-  let padding = handleResponsiveness([16, 10, 25, 10])
-
-
-  return (
-    <SectionLayout
-      id={props.id}
-      ref={ref}
-      background="white"
-      horizontalPadding={padding}
-      height="100vh"
-    >
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          padding: "2rem 1rem",
-          alignItems: "center",
-          gap: "50px",
-        }}
+    return (
+      <SectionLayout
+        id={props.id}
+        ref={ref}
+        background="white"
+        horizontalPadding={padding}
+        verticalPadding={"2rem"}
+        height="auto"
       >
-        <h2
-          style={{
-            fontSize: "2rem",
-            marginBottom: "2rem",
-            textAlign: "center",
-          }}
-        >
-          Paquetes Disponibles
-        </h2>
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "30px",
-            maxWidth: "1200px",
             width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            padding: "2rem 1rem",
+            alignItems: "center",
+            gap: "50px",
           }}
         >
-          {
-            props.products.map((product: Product) => (
+          <h3
+            style={{
+              // fontSize: "3vw", //small ? "2.5rem" : "3.5rem",
+              fontSize: !small ? "3vw" : "2.5vw",
+              fontWeight: 200,
+              color: "black",
+              opacity: 1,
+            }}
+          >
+            Productos
+          </h3>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "30px",
+              maxWidth: "1200px",
+              width: "100%",
+            }}
+          >
+            {props.products.map((product: Product) => (
               <ProductContainer
                 key={product.sku}
                 sku={product.sku}
@@ -83,14 +86,12 @@ const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>((props, ref
                 purchaseType={product.tipo as any}
                 tier={product.tier}
               />
-            ))
-          }
-        </div >
-      </div >
-    </SectionLayout >
-  );
-
-});
-
+            ))}
+          </div>
+        </div>
+      </SectionLayout>
+    );
+  }
+);
 
 export default Products;

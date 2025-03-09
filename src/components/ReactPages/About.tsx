@@ -27,10 +27,10 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
       ref={ref}
       background="white"
       // horizontalPadding={padding}
-      horizontalPadding={desktop ? "20vw" : "10vw"}
+      // horizontalPadding={desktop ? "25vw" : "8vw"}
+      horizontalPadding={desktop ? "26vw" : "20vw"}
       verticalPadding={"5rem"}
       height="auto"
-      style={{ nprder: "10px solid red" }}
     >
       <div className="about-container">
         {/* First Section */}
@@ -59,7 +59,12 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             <PlaceHolderImage />
           </div>
           <div className="about-text">
-            <h2 className="about-title">Beneficios Principales</h2>
+            <h2
+              className="about-title"
+              style={{ transform: "translateX(35px)" }}
+            >
+              Beneficios Principales
+            </h2>
             <ul className="about-list">
               <li className="about-paragraph text">
                 <span className="about-check">✓</span>
@@ -126,9 +131,9 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         {`
             .about-container {
               display: flex;
-              flex-direction: rows;
+              flex-direction: column;
               justify-content: space-between;
-              gap: 4rem;
+              gap: 3rem;
             }
 
             .about-section {
@@ -141,11 +146,15 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             }
 
             .about-text {
-              width: 45%;
+              width: 55%;
+            }
+
+            .text{
+            font-size: 1.2rem !important;
             }
 
             .about-title {
-              font-size: 2.7rem;
+              font-size: 2.4rem;
               margin-top: 0;
               color: #013424;
             }
@@ -153,7 +162,7 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             .about-paragraph {
               font-size: 1.25rem;
 
-              line-height: 1.5rem;
+              line-height: 1.75vw;
               color: #1d1d1d;
             }
 
@@ -166,9 +175,12 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               list-style-type: none;
               display: flex;
               flex-direction: column;
-              gap: 20px;
-
             }
+
+            .about-paragraph{
+              font-size: 1.3vw;
+            }
+
             .about-check {
               color: #969628;
               font-size: 1.5rem;

@@ -19,17 +19,24 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   // Use useEffect to run the script after the component mounts
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mobile = useMediaQuery({ orientation: "portrait" });
-  const large = useMediaQuery({ query: "(min-width: 2400px)" });
+  const large = useMediaQuery({
+    query: "(min-width: 2400px)",
+  });
+
   const desktop = useMediaQuery({
     query: "(min-width: 1920px) and (max-width: 2399px)",
   });
+
   const medium = useMediaQuery({
-    query: "(min-width: 1400px) and (max-width: 1919px)",
+    query: "(min-width: 1250px) and (max-width: 1919px)",
   });
-  const small = useMediaQuery({ query: "(max-width: 1399px)" });
+
+  const small = useMediaQuery({
+    query: "(max-width: 1370px)",
+  });
 
   const responsiveHandler = (s, m, l, xl) => {
-    //console.log("queso", small, medium, desktop, large);
+    console.log("queso", small, medium, desktop, large);
     if (small) return s;
     if (medium) return m;
     if (desktop) return l;
@@ -43,8 +50,10 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   }, []);
 
   const handleClick = () => {
-    document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-  }
+    document
+      ?.getElementById("products")
+      ?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <SectionLayout
@@ -57,15 +66,27 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         style={{
           height: "auto",
           position: "absolute",
-          left: "4rem",
+          left: "2rem",
           top: "2rem",
         }}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="300.000000pt" height="129.000000pt" viewBox="0 0 300.000000 129.000000" preserveAspectRatio="xMidYMid meet">
+        <img src="" alt="" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          version="1.0"
+          width="300.000000pt"
+          height="129.000000pt"
+          viewBox="0 0 300.000000 129.000000"
+          preserveAspectRatio="xMidYMid meet"
+        >
           <metadata>
             Created by potrace 1.10, written by Peter Selinger 2001-2011
           </metadata>
-          <g transform="translate(0.000000,129.000000) scale(0.100000,-0.100000)" fill="#ffffff" stroke="none">
+          <g
+            transform="translate(0.000000,129.000000) scale(0.100000,-0.100000)"
+            fill="#ffffff"
+            stroke="none"
+          >
             <path d="M634 1049 c-4 -7 -12 -30 -19 -52 -6 -22 -18 -41 -26 -42 -8 -1 -68 -8 -134 -14 -149 -15 -155 -17 -126 -37 19 -13 39 -15 137 -7 62 4 114 6 114 3 1 -3 -27 -96 -62 -208 -58 -186 -65 -203 -88 -208 -82 -18 -118 -36 -129 -62 -31 -80 3 -131 73 -111 39 11 71 42 113 112 26 42 42 57 59 58 13 1 27 2 32 3 4 1 38 6 77 10 84 10 115 21 115 41 0 12 -5 13 -17 7 -21 -10 -212 -37 -218 -30 -2 2 25 92 60 199 l64 194 103 2 c57 0 104 4 106 7 2 4 -3 22 -10 42 -10 29 -16 34 -38 30 -66 -12 -140 -17 -140 -8 0 5 11 26 25 46 l24 36 -44 0 c-24 0 -47 -5 -51 -11z m-194 -595 c0 -17 -57 -94 -78 -105 -19 -11 -25 -10 -39 3 -13 14 -14 21 -4 46 9 21 24 33 59 44 55 19 62 20 62 12z" />
             <path d="M961 973 c-5 -10 -19 -52 -31 -93 -12 -41 -44 -144 -71 -227 -51 -160 -57 -191 -37 -211 30 -30 43 -13 70 101 32 131 132 420 147 425 26 9 8 22 -29 22 -27 0 -42 -5 -49 -17z" />
             <path d="M1841 890 l-19 -40 32 0 c27 0 37 7 59 40 l26 40 -39 0 c-36 0 -41 -3 -59 -40z" />
@@ -162,6 +183,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             display: flex;
             flex-direction: column;
             align-items: center;
+            z-index: 3 !important;
             }
 
             .bottom-action > p{
@@ -184,6 +206,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             scroll-snap-align: start;
             scroll-behavior: smooth;
             overflow: hidden !important;
+            z-index: 3 !important;
           }
 
 
@@ -234,7 +257,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             flexGrow: 1;
             right: 0;
             ${small ? "overflow: show" : "overflow: hidden"}
-            z-index: 1 !important;
+            z-index: 2 !important;
           }
 
           .image-container > img {
@@ -243,28 +266,35 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
           canvas {
             position: absolute !important;
-            bottom: 3rem;
-            right: ${small ? "0rem" : "5rem"};
-            transform: scale(${responsiveHandler(2.4, 2.4, 2.5, 4)}) !important;
+            bottom: ${responsiveHandler("", "1rem", "4rem", "13rem")};
+            right: ${responsiveHandler("", "2rem", "9rem", "20rem")};
+            transform: scale(${responsiveHandler(2.4, 2.5, 3, 4)}) !important;
             max-height: 90vh;
             max-width: 99vw;
-            z-index: 1 !important;
+            z-index: 2 !important;
           }
 
           .model-image {
             border: 1px solid white;
             height: 90%;
             position: absolute;
-            right: 0%;
             top: 10% !important;
-            z-index: 1 !important;
           }
 
-          @media only screen and (min-width: 1920px) {
-            canvas {
-              bottom: ${7} rem !important;
-              right: 10rem !important;
+
+          @media only screen and (min-width: 2530px) {
+              .content > h1{
+                font-size: 3.5rem;
               }
+              .content > h3{
+                font-size:2rem;
+              }
+              .bottom-action > p{
+                font-size: 2rem
+              }
+          }
+
+          @media screen and (min-width: 1920px) {
               .content > h1{
                 font-size: 4.5rem;
               }
@@ -275,23 +305,6 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
                 font-size: 2rem
               }
           }
-          @media
-           screen and (min-width: 1920px) {
-            canvas {
-              bottom:  ${7}rem !important;
-              right: 10rem !important;
-              }
-              .content > h1{
-                font-size: 4.5rem;
-              }
-              .content > h3{
-                font-size:2rem;
-              }
-              .bottom-action > p{
-                font-size: 2rem
-              }
-          }
-
         `}
       </style>
     </SectionLayout>
