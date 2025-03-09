@@ -27,7 +27,7 @@ interface ProductsPageProps {
 const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
   (props, ref) => {
     const { handleResponsiveness } = useResponsiveness();
-    let padding = handleResponsiveness([16, 10, 25, 10]);
+    let padding = handleResponsiveness(16, 10, 25, 10, undefined);
     const small = useMediaQuery({ query: "(min-width: 1366px)" });
 
     return (
@@ -52,7 +52,7 @@ const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
           <h3
             style={{
               // fontSize: "3vw", //small ? "2.5rem" : "3.5rem",
-              fontSize: !small ? "3vw" : "2.5vw",
+              fontSize: small ? "3vw" : "2.5rem",
               fontWeight: 200,
               color: "black",
               opacity: 1,

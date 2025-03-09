@@ -19,7 +19,7 @@ interface LandingProps {
 const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
   const small = useMediaQuery({ query: "(min-width: 1366px)" });
-  const mobile = useMediaQuery({ orientation: "portrait" });
+  const { mobile } = useResponsiveness();
 
   return (
     <SectionLayout
@@ -61,7 +61,7 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           <div className="about-text">
             <h2
               className="about-title"
-              style={{ transform: "translateX(35px)" }}
+              style={{ transform: mobile ? undefined : "translateX(35px)" }}
             >
               Beneficios Principales
             </h2>
@@ -138,15 +138,22 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
             .about-section {
               display: flex;
-              flex-direction: row;
+              flex-direction: ${mobile ? "column" : "row"};
               justify-content: center;
               align-items: center;
               height: fit-content;
               gap: 4rem;
             }
 
+            .about-section:not(:nth-of-type(2)) {
+              display: flex;
+              flex-direction: column-reverse;
+              /*or hide the image*/
+            }
+
             .about-text {
-              width: 55%;
+              width: ${mobile ? "100%" : "55%"};
+              border:1px solid red;
             }
 
             .text{
@@ -155,14 +162,14 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
             .about-title {
               font-size: 2.4rem;
+              lineHeight: ${mobile ? "auto" : "1.75vw"},
               margin-top: 0;
-              color: #013424;
+              color: #12623C;
             }
 
             .about-paragraph {
               font-size: 1.25rem;
-
-              line-height: 1.75vw;
+              line-height: ${mobile ? "auto" : "1.75ve"};
               color: #1d1d1d;
             }
 
@@ -175,7 +182,10 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               list-style-type: none;
               display: flex;
               flex-direction: column;
-            }
+              blockMargin: 0 !important;
+              margin: 0;
+border: 1px solid blue;
+              }
 
             .about-paragraph{
               font-size: 1.3vw;

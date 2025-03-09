@@ -122,7 +122,7 @@ const NavigationButtons: React.FC = () => {
 
     if (active === value) {
       if (active === "products" || active == "about") {
-        return dark;
+        return isMobile ? light : dark;
       } else {
         return light;
       }
@@ -183,7 +183,11 @@ const NavigationButtons: React.FC = () => {
             opacity: active === link.target ? 1 : 0.5,
             transition: ".25s ease-in-out",
             color:
-              active === "about" || active === "products" ? "#171717" : "white",
+              active === "about" || active === "products"
+                ? isMobile
+                  ? "white"
+                  : "#171717"
+                : "white",
 
             ...(isMobile
               ? {

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Chatbot.css";
+import { useMediaQuery } from "react-responsive";
+import useResponsiveness from "../../utils/useResponsiveness";
 
 interface Question {
   id: number;
@@ -14,6 +16,8 @@ interface EnfermedadData {
 }
 
 const ChatBot = () => {
+  const { mobile } = useResponsiveness();
+
   // Constantes
   const questions: Question[] = [
     {
@@ -465,7 +469,14 @@ const ChatBot = () => {
       </button>
 
       {chatVisible && (
-        <div className="chat-container chat-slide-in">
+        <div
+          className="chat-container chat-slide-in"
+          style={{
+            right: mobile ? "0" : "1.5rem",
+            bottom: mobile ? "2rem" : "6.5rem",
+            marginBottom: mobile ? "2rem" : "6.5rem",
+          }}
+        >
           <div className="chat-box">
             <button
               onClick={closeChat}

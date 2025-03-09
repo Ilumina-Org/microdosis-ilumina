@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import Button from "../ReactComponents/Button";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
 import staticModel from "../../assets/model_static.png";
-import logo from "../../assets/logo.png?url";
+// import logo from "../../assets/logo.png?url";
+import logo from "../../assets/ilumina-logo.svg?url";
 import TestimonialCarousel from "../ReactComponents/TestimonialCarousel";
 import useResponsiveness from "../../utils/useResponsiveness";
-import { Facebook, Whatsapp } from "iconsax-react";
+import { Facebook, Mobile, Whatsapp } from "iconsax-react";
 import { useMediaQuery } from "react-responsive";
 
 interface LandingProps {
@@ -15,25 +16,27 @@ interface LandingProps {
 
 const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
   (props, ref) => {
-    const { handleResponsiveness } = useResponsiveness();
-    let padding = handleResponsiveness([26, 10, 25, 10]);
+    const { handleResponsiveness, mobile } = useResponsiveness();
+    let padding = handleResponsiveness(26, 10, 25, 10, undefined);
     const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
     const small = useMediaQuery({ query: "(min-width: 1366px)" });
 
     const FAQ = ({ title, answer }) => (
       <div
         style={{
-          maxWidth: "calc(50%  - 40px)",
+          maxWidth: mobile ? "100%" : "calc(50%  - 40px)",
           boxSizing: "border-box",
         }}
       >
         <h4
           style={{
             textWrap: "wrap",
-            fontSize: small ? "2rem" : "2.4rem",
+            fontSize: "2.4rem",
+            //</div>fontSize: mobile ? "2rem" : small ? "2rem" : "2.4rem",
             fontWeight: "500",
             color: "#c1dc3a",
             margin: 0,
+            lineHeight: mobile ? "2.5rem" : "auto",
           }}
         >
           {title}
@@ -43,7 +46,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             fontWeight: "200",
             color: "white",
             // lineHeight: "1.75rem",
-            lineHeight: "1.75vw",
+            lineHeight: mobile ? "auto" : "1.75vw",
             fontSize: small ? "1.2rem" : "1.25rem",
           }}
         >
@@ -104,6 +107,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
               style={{
                 display: "flex",
                 flexWrap: "wrap",
+                flexDirection: mobile ? "column" : "row",
                 alignContent: "flex-start",
                 flexBasis: "50%",
                 gap: "30px",
@@ -158,14 +162,34 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
               zIndex: 1,
             }}
           >
-            <div>
-              <img src={logo} width={200} style={{ margin: "0" }} />
+            <div
+              style={{
+                width: "100%",
+                maxWidth: "100%",
+                minWidth: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src={logo}
+                width={200}
+                style={{
+                  margin: "0",
+                  filter: "invert(100%)",
+                }}
+              />
               <h4
                 style={{
                   margin: "0",
+                  marginTop: mobile ? "1rem" : "0",
                   color: "white",
                   fontWeight: "100",
-                  fontSize: "20px",
+                  fontSize: mobile ? "15px" : "20px",
+                  textAlign: mobile ? "center" : "left",
+                  width: "100%",
+                  minWidth: "100%",
                   opacity: "0.5",
                 }}
               >

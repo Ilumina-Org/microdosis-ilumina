@@ -33,8 +33,8 @@ export const SectionLayout = ({
     justifyContent: "center",
     // zIndex: 10,
     background: background ? background : gradientBackground,
-    paddingLeft: !mobile ? horizontalPadding : "4rem",
-    paddingRight: !mobile ? horizontalPadding : "4rem",
+    paddingLeft: !mobile ? horizontalPadding : "1.5rem",
+    paddingRight: !mobile ? horizontalPadding : "1.5rem",
     paddingTop: verticalPadding,
     paddingBottom: verticalPadding,
   };

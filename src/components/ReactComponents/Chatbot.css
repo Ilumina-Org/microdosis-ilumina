@@ -34,8 +34,6 @@
 .chat-container {
   position: fixed;
   /* bottom: 10%;*/
-  right: 1.5rem;
-  bottom: 6.5rem;
   z-index: 1000;
   /* width: 90%; */
   max-width: 500px;
