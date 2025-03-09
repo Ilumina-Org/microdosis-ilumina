@@ -74,7 +74,7 @@ const TestimonialCarousel = () => {
         Opiniones de nuestros clientes
       </p>
       <Carousel
-        autoPlay={true}
+        autoPlay={false}
         infiniteLoop={true}
         interval={2250}
         // centerSlidePercentage={isMobile ? 90 : isTablet ? 70 : 50}

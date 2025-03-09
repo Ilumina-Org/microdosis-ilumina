@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../ReactComponents/Button";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
 import staticModel from "../../assets/model_static.png";
@@ -20,6 +20,16 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
     let padding = handleResponsiveness(26, 10, 25, 10, undefined);
     const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
     const small = useMediaQuery({ query: "(min-width: 1366px)" });
+
+    const [hasMounted, setHasMounted] = useState(false);
+
+    useEffect(() => {
+      setHasMounted(true);
+    }, []);
+
+    if (!hasMounted) {
+      return null;
+    }
 
     const FAQ = ({ title, answer }) => (
       <div

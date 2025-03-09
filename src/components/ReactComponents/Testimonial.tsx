@@ -1,5 +1,6 @@
 import { useMediaQuery } from "react-responsive";
 import PlaceHolder from "./PlaceHolder";
+import { useEffect, useState } from "react";
 
 interface TestimonialItem {
   name: string;
@@ -32,55 +33,26 @@ export const Testimonial = ({
 
   return (
     <div
-      // className="override-width testimonial-card"
-      // style={{
-      //   justifyContent: "space-between",
-      //   alignItems: "center",
-      //   display: "flex",
-      //   flexDirection: "row",
-      //   // margin: "auto",
-      //   height: isMobile ? "auto" : isTablet ? "180px" : "10rem",
-      //   borderRadius: "30px",
-      //   backgroundColor: "white",
-      //   padding: isMobile ? "0.75rem" : isTablet ? "1rem" : "2rem",
-      //   opacity: opacityIndex === index ? 1 : 0.25,
-      //   // transform: `scale(${opacityIndex === index ? 1 : 0.9})`,
-      //   // width: isMobile ? "85%" : "40rem",
-      //   maxWidth: isMobile ? "280px" : "none",
-      //   boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.08)",
-      // }}
       style={{
         justifyContent: "center",
         alignItems: "center",
         display: "flex",
         marginRight: "2rem",
         marginLeft: "2rem",
-        height: !laptop ? (smallerLaptop ? "10rem" : "10rem") : "10rem",
         borderRadius: "30px",
         backgroundColor: "white",
-        padding: !laptop ? (smallerLaptop ? "10rem" : ".5rem") : "10rem", // here respo
+        height: !laptop ? (smallerLaptop ? "10rem" : "10rem") : "10rem",
+        padding: !laptop ? (smallerLaptop ? ".5rem" : ".5rem") : "1rem", // resp
         opacity: isInView ? 1 : 0.25,
         flexDirection: "row",
-        // gap: "20px",
-
-        // width: "50%",
-        // opacity: opacityIndex === index ? 1 : 0.25,
-        // transform: `scale(${opacityIndex === index ? 1 : 0.9})`,
       }}
     >
       <div
         style={{
           width: "100%",
+          borderRadius: "20px",
           overflow: "hidden",
-          borderRadius: "15px",
           maxWidth: "150px",
-
-          // width: isMobile ? "60px" : isTablet ? "80px" : "150px",
-          // height: isMobile ? "60px" : isTablet ? "80px" : "150px",
-          // overflow: "hidden",
-          // borderRadius: "15px",
-          // flexShrink: 0,
-          // marginRight: isMobile ? "0.75rem" : "1rem",
         }}
       >
         {image ? (
@@ -88,11 +60,12 @@ export const Testimonial = ({
             src={image}
             alt={`Foto de ${name}`}
             style={{
-              height: !laptop ? (smallerLaptop ? "10rem" : "8rem") : "10rem", // here respo
-              width: !laptop ? (smallerLaptop ? "10rem" : "8rem") : "10rem", // here respo
+              height: !laptop ? (smallerLaptop ? "8rem" : "8rem") : "8rem", // here respo
+              width: !laptop ? (smallerLaptop ? "8rem" : "8rem") : "8rem", // here respo
               // width: "100%",
               // height: "100%",
               objectFit: "cover",
+              borderRadius: "20px",
             }}
           />
         ) : (
@@ -102,11 +75,11 @@ export const Testimonial = ({
       <div
         style={{
           display: "flex",
-          flexDirection: "column" as "column",
+          flexDirection: "column",
           justifyContent: "center",
           marginRight: "10px",
           marginLeft: "10px",
-          height: "100%",
+          // height: "100%",
           width: "100%",
           overflow: "hidden",
         }}

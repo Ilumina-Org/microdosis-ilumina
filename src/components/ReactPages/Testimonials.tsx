@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
 import TestimonialCarousel from "../ReactComponents/TestimonialCarousel";
 import { useMediaQuery } from "react-responsive";
@@ -12,8 +12,15 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
   (props, ref) => {
     const desktop = useMediaQuery({ query: "(min-width: 1080px)" });
     const small = useMediaQuery({ query: "(max-width: 1399px)" });
-    if (!desktop) {
-      null;
+
+    const [hasMounted, setHasMounted] = useState(false);
+
+    useEffect(() => {
+      setHasMounted(true);
+    }, []);
+
+    if (!hasMounted) {
+      return null;
     }
 
     return (

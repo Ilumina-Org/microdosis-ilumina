@@ -20,6 +20,16 @@ const NavigationButtons: React.FC = () => {
   const observersRef = useRef<IntersectionObserver[]>([]);
   const { handleResponsiveness } = useResponsiveness();
 
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  const formatText = (text: string, slice: number) => {
+    return `${text.slice(0, slice)}...`;
+  };
+
   const navLinks: NavLink[] = [
     { href: "#inicio", label: "Inicio", target: "inicio" },
     {
@@ -124,6 +134,10 @@ const NavigationButtons: React.FC = () => {
       return undefined;
     }
   };
+
+  if (!hasMounted) {
+    return null; // or return a loading spinner or placeholder
+  }
 
   const MenuIcon = () => (
     <svg
