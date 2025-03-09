@@ -1,6 +1,7 @@
 import { useMediaQuery } from "react-responsive";
 import PlaceHolder from "./PlaceHolder";
 import { useEffect, useState } from "react";
+import useResponsiveness from "../../utils/useResponsiveness";
 
 interface TestimonialItem {
   name: string;
@@ -30,6 +31,7 @@ export const Testimonial = ({
   });
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
   const textLength = isMobile ? 60 : isTablet ? 120 : 150;
+  const { mobile, handleResponsiveness } = useResponsiveness();
 
   return (
     <div
@@ -41,7 +43,7 @@ export const Testimonial = ({
         marginLeft: "2rem",
         borderRadius: "30px",
         backgroundColor: "white",
-        height: !laptop ? (smallerLaptop ? "10rem" : "10rem") : "10rem",
+        height: handleResponsiveness("10rem", "10rem", "10rem", "10rem", "0"), //!laptop ? (smallerLaptop ? "10rem" : "10rem") : "10rem",
         padding: !laptop ? (smallerLaptop ? ".5rem" : ".5rem") : "1rem", // resp
         opacity: isInView ? 1 : 0.25,
         flexDirection: "row",

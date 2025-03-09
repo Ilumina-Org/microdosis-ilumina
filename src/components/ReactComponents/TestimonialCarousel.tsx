@@ -54,11 +54,12 @@ const TestimonialCarousel = () => {
   return (
     <div
       style={{
-        width: "100%",
+        width: "100vw",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        // border: "10px solid blue",
       }}
     >
       <p
