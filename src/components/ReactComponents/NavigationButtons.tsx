@@ -12,6 +12,7 @@ const NavigationButtons: React.FC = () => {
   const [active, setActive] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const isLargeScreen = useMediaQuery({ query: "(min-width: 1400px)" }) ?? true;
   const observersRef = useRef<IntersectionObserver[]>([]);
 
@@ -50,10 +51,14 @@ const NavigationButtons: React.FC = () => {
 
     checkMobile();
     window.addEventListener("resize", checkMobile);
+    setIsMounted(true); // Se marca como montado
+
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   useEffect(() => {
+    if (!isMounted) return;
+
     if (observersRef.current.length > 0) {
       observersRef.current.forEach((observer) => observer.disconnect());
       observersRef.current = [];
@@ -86,7 +91,9 @@ const NavigationButtons: React.FC = () => {
     return () => {
       observersRef.current.forEach((observer) => observer.disconnect());
     };
-  }, [navLinks]);
+  }, [navLinks, isMounted]);
+
+  if (!isMounted) return null; // No renderizar nada hasta que esté montado
 
   const aStyling = {
     textDecoration: "none",

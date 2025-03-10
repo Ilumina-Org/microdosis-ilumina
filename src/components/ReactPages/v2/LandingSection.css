@@ -1,5 +1,4 @@
 /* Landing.css */
-
 .landing-section {
   min-height: 100vh;
   height: auto;
@@ -32,6 +31,7 @@
   flex-wrap: wrap;
   flex: 1;
   gap: 2rem;
+  align-items: flex-start;
 }
 
 .content {
@@ -41,20 +41,27 @@
   min-width: 300px;
   gap: 20px;
   justify-content: center;
+  padding-top: 5vh;
 }
 
 .image-container {
-  flex: 1;
-  min-width: 300px;
+  flex: 1.2;
+  min-width: 350px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   overflow: visible;
+  margin-top: -10vh;
+  position: relative;
 }
 
 canvas#model-image {
-  max-height: 90vh;
-  max-width: 100%;
+  max-height: 100vh;
+  max-width: 120%;
+  width: 120%;
+  height: auto;
+  transform: translateY(-5%) scale(1.3);
+  display: block;
 }
 
 .image-container img {
@@ -68,8 +75,8 @@ canvas#model-image {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
 }
 
 .social-buttons {
@@ -96,6 +103,7 @@ canvas#model-image {
   margin-bottom: 0.5rem;
 }
 
+/* Typography */
 h1 {
   font-weight: 800;
   font-size: 4vw;
@@ -116,6 +124,7 @@ h3 {
   opacity: 0.5;
 }
 
+/* Animations */
 @keyframes fadeInSlideFromLeft {
   0% {
     opacity: 0;
@@ -135,7 +144,8 @@ h3 {
   animation: fadeInSlideFromLeft 1.5s ease-in forwards;
 }
 
-/* Media queries para responsividad */
+/* Media Queries for Responsiveness */
+/* Small Screens */
 @media (max-width: 1399px) {
   h1 {
     font-size: 2.5rem;
@@ -146,14 +156,25 @@ h3 {
   .landing-container {
     padding: 1rem 2rem;
   }
+  .image-container {
+    margin-top: -5vh; /* Less negative margin on smaller screens */
+  }
+  canvas#model-image {
+    transform: translateY(-5%) scale(1.1);
+  }
 }
 
+/* Medium Screens */
 @media (min-width: 1400px) and (max-width: 1919px) {
   h1 {
     font-size: 3rem;
   }
+  canvas#model-image {
+    transform: translateY(-8%) scale(1.2);
+  }
 }
 
+/* Large Screens */
 @media (min-width: 1920px) {
   h1 {
     font-size: 4.5rem;
@@ -165,19 +186,29 @@ h3 {
     font-size: 2rem;
   }
   canvas#model-image {
-    transform: scale(1.2);
+    transform: translateY(-10%) scale(1.4);
   }
 }
 
+/* Extra Large Screens */
 @media (min-width: 2400px) {
   canvas#model-image {
-    transform: scale(1.5);
+    transform: translateY(-12%) scale(1.8);
   }
 }
 
+/* Portrait Orientation */
 @media (orientation: portrait) {
   .main-content {
     flex-direction: column;
+  }
+  .image-container {
+    margin-top: -5vh;
+    align-items: center;
+  }
+  canvas#model-image {
+    transform: translateY(0) scale(1.2);
+    max-height: 60vh;
   }
   .image-container img {
     max-height: 50vh;
