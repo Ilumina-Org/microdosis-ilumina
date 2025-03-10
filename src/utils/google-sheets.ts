@@ -32,6 +32,7 @@ const API_KEY = import.meta.env.GOOGLE_SHEET_API_KEY as string;
  * @param range Rango de celdas (por defecto: "A1:Z1000")
  * @returns Valores de la hoja
  */
+
 async function getSheetData(
   sheetName: string,
   range: SheetRange = "A1:Z1000",
@@ -42,19 +43,18 @@ async function getSheetData(
       "SPREADSHEET_ID no está configurado en las variables de entorno",
     );
   }
-
-  if (!API_KEY) {
-    console.error("Error: API_KEY no está definido");
-    throw new Error("API_KEY no está configurado en las variables de entorno");
-  }
-
   try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(sheetName)}!${encodeURIComponent(range)}?key=${API_KEY}`;
-
-    console.log(`Fetching sheet data from: ${sheetName}!${range}`);
-
-    const response = await fetch(url);
-
+    // Properly encode the sheet name and range
+    const encodedSheetName = encodeURIComponent(sheetName);
+    const encodedRange = encodeURIComponent(range);
+    // URL usando el método gviz que ha funcionado
+    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodedSheetName}&range=${encodedRange}`;
+    console.log(`Fetching sheet data from: ${sheetName}!${range}, URL: ${url}`);
+    const response = await fetch(url, {
+      headers: {
+        Accept: "text/csv,application/json",
+      },
+    });
     if (!response.ok) {
       const errorText = await response.text();
       console.error(
@@ -64,15 +64,18 @@ async function getSheetData(
         `Error fetching sheet data: ${response.statusText} (${response.status})`,
       );
     }
-
-    const data = (await response.json()) as SheetResponse;
-
-    if (!data.values) {
+    const csvText = await response.text();
+    const values = csvText
+      .split("\n")
+      .filter((line) => line.trim() !== "") // Remove empty lines
+      .map((line) => {
+        return parseCSVLine(line);
+      });
+    if (values.length === 0) {
       console.warn(`No values found in ${sheetName}!${range}`);
       return [];
     }
-
-    return data.values;
+    return values;
   } catch (error) {
     console.error(
       `Error completo al obtener datos de la hoja ${sheetName}:`,
@@ -80,6 +83,32 @@ async function getSheetData(
     );
     throw error;
   }
+}
+
+function parseCSVLine(line: string): string[] {
+  const result = [];
+  let current = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      if (i + 1 < line.length && line[i + 1] === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === "," && !inQuotes) {
+      // End of field
+      result.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+  // Add the last field
+  result.push(current);
+  return result;
 }
 
 /**
