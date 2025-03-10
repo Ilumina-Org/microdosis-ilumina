@@ -1,3 +1,5 @@
+export const INVENTORY_SHEET = "Inventario";
+
 export const fallbackProducts = [
   {
     sku: "5678sku",
@@ -41,6 +43,19 @@ export const fallbackProducts = [
     quienes_pueden_usarlo: "Usuarios experimentados con guía certificada",
     uso_diario: "Solo bajo supervisión durante ceremonias",
   },
+  {
+    sku: "5690sku",
+    title: "Kit Ceremonial Ayahuasca",
+    productDetail: "Precio Regular $520.00",
+    productPrice: "$480.00",
+    productDeal: "(Ahorra 8%)",
+    stock: false,
+    tipo: "package",
+    tier: 3,
+    beneficio_general: "Transformación espiritual profunda",
+    quienes_pueden_usarlo: "Usuarios experimentados con guía certificada",
+    uso_diario: "Solo bajo supervisión durante ceremonias",
+  },
 ];
 
 export const fallbackStockData = {
@@ -49,7 +64,7 @@ export const fallbackStockData = {
     price: 140.0,
     regularPrice: 180.0,
     notas:
-      "El Kit de Iniciación Ayahuasca Microdosis es perfecto para principiantes...",
+      "Fórmula ancestral para principiantes con microdosis equilibradas. Incluye guía de inicio y soporte básico.",
     disponible: true,
     tipo: "package",
     tier: 0,
@@ -64,7 +79,7 @@ export const fallbackStockData = {
     price: 250.0,
     regularPrice: 290.0,
     notas:
-      "El Kit Premium Equilibrio Mental ofrece una experiencia más avanzada...",
+      "Mezcla tradicional purificada para uso diario. Mejora concentración y calidad del sueño con extracto natural certificado.",
     disponible: true,
     tipo: "package",
     tier: 1,
@@ -78,10 +93,23 @@ export const fallbackStockData = {
     price: 360.0,
     regularPrice: 400.0,
     notas:
-      "La Experiencia Completa Ayahuasca es nuestro paquete más completo...",
+      "Kit completo para 30 días con extracto potenciado. Incluye rituales guiados, gotero premium y asesoramiento personalizado.",
     disponible: false,
     tipo: "package",
     tier: 2,
+    beneficio_general: "Transformación espiritual profunda",
+    quienes_pueden_usarlo: "Usuarios experimentados con guía certificada",
+    uso_diario: "Solo bajo supervisión durante ceremonias",
+  },
+  "5690sku": {
+    title: "Kit Ceremonial Ayahuasca",
+    price: 480.0,
+    regularPrice: 520.0,
+    notas:
+      "Nuestra formulación más potente con ingredientes seleccionados de la Amazonía. Incluye certificado de origen, guía ceremonial y soporte prioritario.",
+    disponible: false,
+    tipo: "package",
+    tier: 3,
     beneficio_general: "Transformación espiritual profunda",
     quienes_pueden_usarlo: "Usuarios experimentados con guía certificada",
     uso_diario: "Solo bajo supervisión durante ceremonias",
