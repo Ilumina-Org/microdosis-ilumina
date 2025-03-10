@@ -41,9 +41,9 @@ export const Testimonial = ({
         display: "flex",
         marginRight: "2rem",
         marginLeft: "2rem",
-        borderRadius: "30px",
+        borderRadius: mobile ? "20px" : "30px",
         backgroundColor: "white",
-        height: handleResponsiveness("10rem", "10rem", "10rem", "10rem", "0"), //!laptop ? (smallerLaptop ? "10rem" : "10rem") : "10rem",
+        height: mobile ? "7rem" : "10rem", //handleResponsiveness("10rem", "10rem", "10rem", "10rem", ""), //!laptop ? (smallerLaptop ? "10rem" : "10rem") : "10rem",
         padding: !laptop ? (smallerLaptop ? ".5rem" : ".5rem") : "1rem", // resp
         opacity: isInView ? 1 : 0.25,
         flexDirection: "row",
@@ -62,12 +62,12 @@ export const Testimonial = ({
             src={image}
             alt={`Foto de ${name}`}
             style={{
-              height: !laptop ? (smallerLaptop ? "8rem" : "8rem") : "8rem", // here respo
-              width: !laptop ? (smallerLaptop ? "8rem" : "8rem") : "8rem", // here respo
+              height: mobile ? "5rem" : "8rem", //!laptop ? (smallerLaptop ? "8rem" : "8rem") : "8rem", // here respo
+              width: mobile ? "5rem" : "8rem", //!laptop ? (smallerLaptop ? "8rem" : "8rem") : "8rem", // here respo
               // width: "100%",
               // height: "100%",
               objectFit: "cover",
-              borderRadius: "20px",
+              borderRadius: mobile ? "10px" : "20px",
             }}
           />
         ) : (
@@ -93,7 +93,7 @@ export const Testimonial = ({
             fontStyle: "italic",
             overflow: "hidden",
             textOverflow: "ellipsis",
-            fontSize: isMobile ? "16px" : isTablet ? "12px" : "16px",
+            fontSize: isMobile ? "13px" : isTablet ? "12px" : "16px",
             lineHeight: isMobile ? "1.2" : "1.4",
             color: "#666",
           }}

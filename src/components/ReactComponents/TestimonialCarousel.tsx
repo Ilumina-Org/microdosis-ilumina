@@ -3,6 +3,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useMediaQuery } from "react-responsive";
 import { Testimonial } from "./Testimonial";
+import useResponsiveness from "../../utils/useResponsiveness";
 
 interface TestimonialItem {
   name: string;
@@ -12,6 +13,7 @@ interface TestimonialItem {
 
 const TestimonialCarousel = () => {
   const [opacityIndex, setOpacityIndex] = useState(0);
+  const { handleResponsiveness } = useResponsiveness();
 
   const handleChange = (index: number) => {
     setOpacityIndex(index);
@@ -79,7 +81,9 @@ const TestimonialCarousel = () => {
         infiniteLoop={true}
         interval={2250}
         // centerSlidePercentage={isMobile ? 90 : isTablet ? 70 : 50}
-        centerSlidePercentage={isMobile ? 90 : isTablet ? 70 : 30}
+        centerSlidePercentage={
+          isMobile ? 100 : handleResponsiveness("60", "50", "40", "30", "")
+        }
         showThumbs={false}
         showArrows={false}
         showIndicators={isMobile}
