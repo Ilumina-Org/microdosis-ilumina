@@ -7,80 +7,53 @@ import GuaranteeBox from "../../components/GuaranteeBox.astro";
 import OrderSummary from "../../components/OrderSummary.astro";
 import NotFound from "../../components/ReactComponents/NotFound";
 import { getStock } from "../../utils/stock";
-import { fallbackStockData } from "../../utils/constants";
 
 const { sku } = Astro.params;
 let packageData = null;
 let stockInfo = null;
-let usingFallback = false;
+let errorType = null; // Nueva variable para indicar tipo de error
 
 console.log("Buscando SKU:", sku);
-
 try {
-  let stockData = {};
+  const stockData = await getStock();
+  console.log("Datos reales obtenidos correctamente");
 
-  try {
-    // Intentar obtener datos reales
-    stockData = await getStock();
-    console.log("Datos reales obtenidos correctamente");
-  } catch (apiError) {
-    console.warn("Error al obtener datos de stock:", apiError);
-    usingFallback = true;
-  }
+  if (stockData && stockData[sku]) {
+    stockInfo = stockData[sku];
 
-  // Si no tenemos datos reales o el SKU no está en ellos, intentar usar el fallback
-  if (!stockData || !stockData[sku]) {
-    console.log(
-      "Datos reales no disponibles o SKU no encontrado, intentando usar fallback",
-    );
-    usingFallback = true;
-  }
-
-  if (usingFallback) {
-    console.log("Usando datos fallback");
-    console.log(
-      "SKUs disponibles en fallback:",
-      Object.keys(fallbackStockData),
-    );
-
-    if (fallbackStockData[sku]) {
-      stockInfo = fallbackStockData[sku];
-      console.log("Producto encontrado en fallback:", sku);
+    // Verificar si tiene stock disponible
+    if (stockInfo.disponible > 0) {
+      packageData = {
+        title: stockInfo.title,
+        price: stockInfo.price,
+        originalPrice: stockInfo.regularPrice,
+        savings: Math.round(stockInfo.regularPrice - stockInfo.price),
+        description: stockInfo.notas || `Paquete ${sku}`,
+        availableStock: stockInfo.disponible,
+      };
+      console.log("Stock Info procesado correctamente");
     } else {
-      console.warn(`SKU ${sku} no encontrado en datos fallback`);
-      throw new Error("Producto no encontrado o no tiene stock disponible.");
+      errorType = "sin_stock";
+      throw new Error("Producto encontrado pero sin stock disponible.");
     }
   } else {
-    // Estamos usando datos reales
-    stockInfo = stockData[sku];
-  }
-
-  // Si llegamos aquí, tenemos stockInfo de alguna fuente
-  if (stockInfo) {
-    packageData = {
-      title: stockInfo.title,
-      price: stockInfo.price,
-      originalPrice: stockInfo.regularPrice,
-      savings: Math.round(stockInfo.regularPrice - stockInfo.price),
-      description: stockInfo.notas || `Paquete ${sku}`,
-      availableStock: stockInfo.disponible,
-      isFallbackData: usingFallback,
-    };
-    console.log("Stock Info procesado correctamente");
-  } else {
-    throw new Error("Producto no encontrado o no tiene stock disponible.");
+    console.warn(`SKU ${sku} no encontrado en datos reales`);
+    errorType = "no_existe";
+    throw new Error("Producto no encontrado en el catálogo.");
   }
 } catch (error) {
   console.error("Error en el procesamiento:", error);
   if (error instanceof Error) {
-    if (
-      error.message === "Producto no encontrado o no tiene stock disponible."
-    ) {
-      console.warn(`Paquete con SKU ${sku} no encontrado o sin stock.`);
+    if (errorType === "sin_stock") {
+      console.warn(`Paquete con SKU ${sku} sin stock disponible.`);
+      Astro.response.status = 404;
+    } else if (errorType === "no_existe") {
+      console.warn(`Paquete con SKU ${sku} no encontrado en catálogo.`);
       Astro.response.status = 404;
     } else {
       console.error("Error inesperado:", error);
       Astro.response.status = 500;
+      errorType = "error_general";
     }
   }
 }
@@ -95,13 +68,6 @@ try {
             <span class="arrow">←</span> Volver a inicio
           </a>
         </div>
-        
-        {packageData.isFallbackData && (
-          <div class="fallback-notice">
-            Mostrando información de respaldo. Los datos pueden no estar
-            actualizados.
-          </div>
-        )}
         <div class="package-detail">
           <PackageHeader
             title={packageData.title}
@@ -114,7 +80,7 @@ try {
             client:load
             basePrice={packageData.price}
             title={packageData.title}
-            packageId={sku}
+            packageId={sku!}
           />
           {/*          <GuaranteeBox />*/}
         </div>
@@ -123,7 +89,7 @@ try {
     </Layout>
   ) : (
     <Layout>
-      <NotFound client:load />
+      <NotFound client:load errorType={errorType} sku={sku} />
     </Layout>
   )
 }
@@ -150,15 +116,6 @@ try {
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     overflow: hidden;
-  }
-  .fallback-notice {
-    background-color: #fff3cd;
-    color: #856404;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border-radius: 0.25rem;
-    text-align: center;
-    grid-column: 1 / -1;
   }
   .back-button-container {
     grid-column: 1 / -1;
