@@ -48,11 +48,9 @@ const NavigationButtons: React.FC = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-
     checkMobile();
     window.addEventListener("resize", checkMobile);
-    setIsMounted(true); // Se marca como montado
-
+    setIsMounted(true);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
@@ -73,7 +71,6 @@ const NavigationButtons: React.FC = () => {
     navLinks.forEach((link) => {
       const sectionId = link.href.replace("#", "");
       const section = document.getElementById(sectionId);
-
       if (section) {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
@@ -82,7 +79,6 @@ const NavigationButtons: React.FC = () => {
             }
           });
         }, options);
-
         observer.observe(section);
         observersRef.current.push(observer);
       }
@@ -93,7 +89,7 @@ const NavigationButtons: React.FC = () => {
     };
   }, [navLinks, isMounted]);
 
-  if (!isMounted) return null; // No renderizar nada hasta que esté montado
+  if (!isMounted) return null;
 
   const aStyling = {
     textDecoration: "none",
@@ -108,9 +104,13 @@ const NavigationButtons: React.FC = () => {
     const href = e.currentTarget.getAttribute("href");
     if (href?.includes(target)) {
       setActive(target);
-      setIsMobileMenuOpen(false);
     } else {
       setActive(null);
+    }
+
+    // Cerrar el menú móvil cuando se hace clic en un enlace
+    if (isMobile) {
+      setIsMobileMenuOpen(false);
     }
   };
 
@@ -131,6 +131,7 @@ const NavigationButtons: React.FC = () => {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      style={{ filter: "drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.8))" }}
     >
       <line x1="3" y1="12" x2="21" y2="12"></line>
       <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -149,6 +150,7 @@ const NavigationButtons: React.FC = () => {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      style={{ filter: "drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.8))" }}
     >
       <line x1="18" y1="6" x2="6" y2="18"></line>
       <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -185,6 +187,10 @@ const NavigationButtons: React.FC = () => {
     </>
   );
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   if (isMobile) {
     return (
       <div
@@ -203,8 +209,16 @@ const NavigationButtons: React.FC = () => {
             right: "1rem",
             zIndex: 1100,
             cursor: "pointer",
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
+            borderRadius: "50%",
+            width: "40px",
+            height: "40px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)",
           }}
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onClick={toggleMobileMenu}
         >
           {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
         </div>
