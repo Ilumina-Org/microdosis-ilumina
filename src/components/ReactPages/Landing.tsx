@@ -135,12 +135,14 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             src={staticImage}
             style={{
               position: "relative",
-              right: mobile ? "12rem" : "14rem",
+              right: mobile ? "-50%" : "14rem",
               top: mobile ? "5rem" : "10rem",
               width: "100%",
               height: "100%",
               objectFit: "contain",
-              transform: mobile ? "scale(25)" : "scale(3) rotate(0.2deg)",
+              transform: mobile
+                ? "scale(10) translate(-25%, 0%)"
+                : "scale(3) rotate(0.2deg)",
             }}
           />
         )}
