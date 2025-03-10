@@ -1,7 +1,7 @@
 .products-section {
   width: 100%;
   padding: 4rem 1rem;
-  background: white;
+  background: linear-gradient(135deg, #ffffff 0%, #e8f4f0 50%, #d5ebe2 100%);
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -18,10 +18,26 @@
 }
 
 .products-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   text-align: center;
   color: #013424;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.products-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #013424, transparent);
 }
 
 .products-grid {

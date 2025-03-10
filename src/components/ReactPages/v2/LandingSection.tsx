@@ -18,10 +18,27 @@ const LandingSection = React.forwardRef<HTMLElement, LandingProps>(
     const small = useMediaQuery({ query: "(max-width: 1399px)" });
 
     useEffect(() => {
-      if (canvasRef.current && !small) {
-        initializeAnimation(canvasRef.current);
+      console.log("Canvas ref:", canvasRef.current);
+
+      if (canvasRef.current) {
+        console.log("Initializing animation...");
+        try {
+          // Make sure the canvas has proper dimensions before initializing
+          const canvas = canvasRef.current;
+          const width = canvas.clientWidth || canvas.offsetWidth;
+          const height = canvas.clientHeight || canvas.offsetHeight;
+
+          // Set the canvas dimensions explicitly
+          canvas.width = width;
+          canvas.height = height;
+
+          initializeAnimation(canvasRef.current);
+          console.log("Animation initialized successfully");
+        } catch (error) {
+          console.error("Error initializing animation:", error);
+        }
       }
-    }, [small]);
+    }, []); // Remove small from the dependency array
 
     const handleClick = () => {
       const productsSection = document.getElementById("products-section");
@@ -34,11 +51,22 @@ const LandingSection = React.forwardRef<HTMLElement, LandingProps>(
       <section id={props.id} ref={ref} className="landing-section">
         <div className="landing-container">
           <div className="logo">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="300.000000pt" height="129.000000pt" viewBox="0 0 300.000000 129.000000" preserveAspectRatio="xMidYMid meet">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.0"
+              width="300.000000pt"
+              height="129.000000pt"
+              viewBox="0 0 300.000000 129.000000"
+              preserveAspectRatio="xMidYMid meet"
+            >
               <metadata>
                 Created by potrace 1.10, written by Peter Selinger 2001-2011
               </metadata>
-              <g transform="translate(0.000000,129.000000) scale(0.100000,-0.100000)" fill="#ffffff" stroke="none">
+              <g
+                transform="translate(0.000000,129.000000) scale(0.100000,-0.100000)"
+                fill="#ffffff"
+                stroke="none"
+              >
                 <path d="M634 1049 c-4 -7 -12 -30 -19 -52 -6 -22 -18 -41 -26 -42 -8 -1 -68 -8 -134 -14 -149 -15 -155 -17 -126 -37 19 -13 39 -15 137 -7 62 4 114 6 114 3 1 -3 -27 -96 -62 -208 -58 -186 -65 -203 -88 -208 -82 -18 -118 -36 -129 -62 -31 -80 3 -131 73 -111 39 11 71 42 113 112 26 42 42 57 59 58 13 1 27 2 32 3 4 1 38 6 77 10 84 10 115 21 115 41 0 12 -5 13 -17 7 -21 -10 -212 -37 -218 -30 -2 2 25 92 60 199 l64 194 103 2 c57 0 104 4 106 7 2 4 -3 22 -10 42 -10 29 -16 34 -38 30 -66 -12 -140 -17 -140 -8 0 5 11 26 25 46 l24 36 -44 0 c-24 0 -47 -5 -51 -11z m-194 -595 c0 -17 -57 -94 -78 -105 -19 -11 -25 -10 -39 3 -13 14 -14 21 -4 46 9 21 24 33 59 44 55 19 62 20 62 12z" />
                 <path d="M961 973 c-5 -10 -19 -52 -31 -93 -12 -41 -44 -144 -71 -227 -51 -160 -57 -191 -37 -211 30 -30 43 -13 70 101 32 131 132 420 147 425 26 9 8 22 -29 22 -27 0 -42 -5 -49 -17z" />
                 <path d="M1841 890 l-19 -40 32 0 c27 0 37 7 59 40 l26 40 -39 0 c-36 0 -41 -3 -59 -40z" />
@@ -80,15 +108,7 @@ const LandingSection = React.forwardRef<HTMLElement, LandingProps>(
               />
             </div>
             <div className="image-container">
-              {!small ? (
-                <canvas id="model-image" ref={canvasRef}></canvas>
-              ) : (
-                <img
-                  className="fadeInImage"
-                  src={staticImage}
-                  alt="Ayahuasca microdosis"
-                />
-              )}
+              <canvas id="model-image" ref={canvasRef}></canvas>
             </div>
           </div>
           <div className="bottom-section">
