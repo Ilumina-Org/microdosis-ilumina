@@ -30,7 +30,7 @@ export const Testimonial = ({
     query: "(min-width: 768px) and (max-width: 1023px)",
   });
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
-  const textLength = isMobile ? 60 : isTablet ? 120 : 150;
+  const textLength = isMobile ? 120 : isTablet ? 120 : 150;
   const { mobile, handleResponsiveness } = useResponsiveness();
 
   return (
@@ -82,7 +82,7 @@ export const Testimonial = ({
           marginRight: "10px",
           marginLeft: "10px",
           // height: "100%",
-          width: "100%",
+          width: mobile ? "auto" : "100%",
           overflow: "hidden",
         }}
       >
@@ -93,7 +93,7 @@ export const Testimonial = ({
             fontStyle: "italic",
             overflow: "hidden",
             textOverflow: "ellipsis",
-            fontSize: isMobile ? "102px" : isTablet ? "12px" : "16px",
+            fontSize: isMobile ? "16px" : isTablet ? "12px" : "16px",
             lineHeight: isMobile ? "1.2" : "1.4",
             color: "#666",
           }}

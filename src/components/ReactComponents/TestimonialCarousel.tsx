@@ -54,7 +54,7 @@ const TestimonialCarousel = () => {
   return (
     <div
       style={{
-        width: "100vw",
+        width: isMobile ? "100vw !important" : "100vw !important",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -88,6 +88,7 @@ const TestimonialCarousel = () => {
         onChange={(e) => handleChange(e)}
         emulateTouch={true}
         swipeScrollTolerance={5}
+        width={"100vw"}
         // style={{ display: "flex", justifyContent: "center" }}
       >
         {TestTestimonials.map((testimonial, index) => (
