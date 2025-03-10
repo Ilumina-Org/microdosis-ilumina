@@ -43,19 +43,6 @@ export const fallbackProducts = [
     quienes_pueden_usarlo: "Usuarios experimentados con guía certificada",
     uso_diario: "Solo bajo supervisión durante ceremonias",
   },
-  {
-    sku: "5690sku",
-    title: "Kit Ceremonial Ayahuasca",
-    productDetail: "Precio Regular $520.00",
-    productPrice: "$480.00",
-    productDeal: "(Ahorra 8%)",
-    stock: false,
-    tipo: "package",
-    tier: 3,
-    beneficio_general: "Transformación espiritual profunda",
-    quienes_pueden_usarlo: "Usuarios experimentados con guía certificada",
-    uso_diario: "Solo bajo supervisión durante ceremonias",
-  },
 ];
 
 export const fallbackStockData = {

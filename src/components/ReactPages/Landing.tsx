@@ -107,6 +107,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           id="toggle-chat"
           label="Comprar ahora"
           //fontSize={30}
+          onClick={handleClick}
           padding={small ? 12 : 15}
           styles={{
             backgroundColor: "#C1DC3A",
