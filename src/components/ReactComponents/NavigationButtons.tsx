@@ -56,18 +56,15 @@ const NavigationButtons: React.FC = () => {
 
   useEffect(() => {
     if (!isMounted) return;
-
     if (observersRef.current.length > 0) {
       observersRef.current.forEach((observer) => observer.disconnect());
       observersRef.current = [];
     }
-
     const options = {
       root: null,
       rootMargin: "0px",
       threshold: 0.5,
     };
-
     navLinks.forEach((link) => {
       const sectionId = link.href.replace("#", "");
       const section = document.getElementById(sectionId);
@@ -83,7 +80,6 @@ const NavigationButtons: React.FC = () => {
         observersRef.current.push(observer);
       }
     });
-
     return () => {
       observersRef.current.forEach((observer) => observer.disconnect());
     };
@@ -91,10 +87,11 @@ const NavigationButtons: React.FC = () => {
 
   if (!isMounted) return null;
 
+  // Mejorado el estilo base para todos los enlaces de navegación
   const aStyling = {
     textDecoration: "none",
     color: "white",
-    textShadow: "1px 1px 2px pink",
+    textShadow: "0px 0px 4px rgba(0, 0, 0, 0.9)", // Sombra más fuerte para mejor visibilidad
   };
 
   const handleClick = (
@@ -107,16 +104,16 @@ const NavigationButtons: React.FC = () => {
     } else {
       setActive(null);
     }
-
     // Cerrar el menú móvil cuando se hace clic en un enlace
     if (isMobile) {
       setIsMobileMenuOpen(false);
     }
   };
 
+  // Mejorada la función para resaltar el enlace activo
   const handleSelect = (value: string) => {
     return active === value
-      ? "-.5px -.5px 0 #ffffff, .5px -.5px 0 #ffffff, -.5px .5px 0 #ffffff, .5px .5px 0 #ffffff"
+      ? "0px 0px 6px rgba(0, 0, 0, 1)" // Sombra más fuerte para el enlace activo
       : undefined;
   };
 
@@ -169,8 +166,9 @@ const NavigationButtons: React.FC = () => {
           onClick={(e) => handleClick(e, link.target)}
           style={{
             ...aStyling,
-            textShadow: handleSelect(link.target),
-            opacity: active === link.target ? 1 : 0.5,
+            textShadow: handleSelect(link.target) || aStyling.textShadow,
+            opacity: active === link.target ? 1 : 0.8, // Aumentada la opacidad para mejor visibilidad
+            fontWeight: active === link.target ? "400" : "300", // Peso de fuente más evidente para el activo
             ...(isMobile
               ? {
                   fontSize: "20px",
@@ -261,21 +259,26 @@ const NavigationButtons: React.FC = () => {
         top: "5rem",
         fontSize: isLargeScreen ? "1.9vw" : "1.8vw",
         fontFamily: "Inter",
-        fontWeight: "200",
+        fontWeight: "300", // Cambiado a 300 para mejor legibilidad
         textAlign: "right",
       }}
     >
       {renderNavLinks()}
       <style>
         {`
+          .navigation > a {
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
           .navigation > a:hover {
             opacity: 1 !important;
-            transition: opacity .25s ease-in-out !important;
+            transition: opacity .2s ease-in-out !important;
+            text-shadow: 0px 0px 6px rgba(0, 0, 0, 1) !important;
           }
         `}
       </style>
     </div>
   );
 };
-
 export default NavigationButtons;
