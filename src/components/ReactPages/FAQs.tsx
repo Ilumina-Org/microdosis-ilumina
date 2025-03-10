@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../ReactComponents/Button";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
 import staticModel from "../../assets/model_static.png";
-import logo from "../../assets/logo.png?url";
+// import logo from "../../assets/logo.png?url";
+import logo from "../../assets/ilumina-logo.svg?url";
 import TestimonialCarousel from "../ReactComponents/TestimonialCarousel";
 import useResponsiveness from "../../utils/useResponsiveness";
-import { Facebook, Whatsapp } from "iconsax-react";
+import { Facebook, Mobile, Whatsapp } from "iconsax-react";
 import { useMediaQuery } from "react-responsive";
 
 interface LandingProps {
@@ -15,29 +16,44 @@ interface LandingProps {
 
 const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
   (props, ref) => {
-    const { handleResponsiveness } = useResponsiveness();
-    let padding = handleResponsiveness([26, 10, 25, 10]);
+    const { handleResponsiveness, mobile } = useResponsiveness();
+    let padding = handleResponsiveness(26, 10, 25, 10, undefined);
     const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
-    const small = useMediaQuery({ query: "(min-width: 1366px)" });
+    const small = useMediaQuery({ query: "(max-width: 1399px)" });
 
-    if (!desktop && !small) {
-      return <p>loading</p>;
+    const [hasMounted, setHasMounted] = useState(false);
+
+    useEffect(() => {
+      setHasMounted(true);
+    }, []);
+
+    if (!hasMounted) {
+      return null;
     }
 
     const FAQ = ({ title, answer }) => (
       <div
         style={{
-          maxWidth: "calc(50%  - 40px)",
+          maxWidth: mobile ? "100%" : "calc(50%  - 40px)",
           boxSizing: "border-box",
         }}
       >
         <h4
           style={{
             textWrap: "wrap",
-            fontSize: small ? "2rem" : "2.4rem",
+            // fontSize: desktop ? "1.5vw" : "2.4vw",
+            fontSize: handleResponsiveness(
+              "1.5rem",
+              "1.25rem",
+              "1.5rem",
+              "2rem",
+              ""
+            ),
+            //</div>fontSize: mobile ? "2rem" : small ? "2rem" : "2.4rem",
             fontWeight: "500",
             color: "#c1dc3a",
             margin: 0,
+            lineHeight: mobile ? "2.5rem" : "auto",
           }}
         >
           {title}
@@ -46,7 +62,8 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
           style={{
             fontWeight: "200",
             color: "white",
-            lineHeight: "1.75rem",
+            // lineHeight: "1.75rem",
+            lineHeight: mobile ? "auto" : "1.5vw",
             fontSize: small ? "1.2rem" : "1.25rem",
           }}
         >
@@ -55,11 +72,30 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
       </div>
     );
 
+    const socialButtonStyles = {
+      margin: 0,
+      display: "flex",
+      FlexDirection: "row",
+      alignItems: "center",
+      gap: "5px",
+      color: "white",
+      textDecoration: "none",
+      opacity: "0.5",
+    };
+
     return (
       <SectionLayout
         id={props.id}
         ref={ref}
-        horizontalPadding={desktop ? "20vw" : "15vw"}
+        // horizontalPadding={desktop ? "26vw" : "20vw"}
+        // horizontalPadding={desktop ? "22vw" : "17vw"}
+        horizontalPadding={handleResponsiveness(
+          "10rem",
+          "15rem",
+          "25rem",
+          "35rem",
+          ""
+        )}
         // style={{ position: "absolute" }}
         style={{ display: "flex", flexDirection: "column", height: "auto" }}
         // verticalPadding={"4rem"}
@@ -84,7 +120,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
           >
             <h3
               style={{
-                fontSize: small ? "2.5rem" : "3.5rem",
+                fontSize: mobile ? "2rem" : small ? "3vw" : "2.5rem",
                 fontWeight: 200,
                 color: "white",
                 opacity: 1,
@@ -96,6 +132,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
               style={{
                 display: "flex",
                 flexWrap: "wrap",
+                flexDirection: mobile ? "column" : "row",
                 alignContent: "flex-start",
                 flexBasis: "50%",
                 gap: "30px",
@@ -132,7 +169,8 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
         <div
           style={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
+            gap: ".5rem",
             marginTop: "5rem",
             marginBottom: "1.5rem",
           }}
@@ -149,14 +187,35 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
               zIndex: 1,
             }}
           >
-            <div>
-              <img src={logo} width={200} style={{ margin: "0" }} />
+            <div
+              style={{
+                width: "fit-content",
+                // width: "100%",
+                // maxWidth: "100%",
+                // minWidth: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: !mobile ? "baseline" : "center",
+              }}
+            >
+              <img
+                src={logo}
+                width={200}
+                style={{
+                  margin: "0",
+                  filter: "invert(100%)",
+                }}
+              />
               <h4
                 style={{
                   margin: "0",
+                  marginTop: mobile ? "1rem" : "0",
                   color: "white",
                   fontWeight: "100",
-                  fontSize: "20px",
+                  fontSize: mobile ? "15px" : "20px",
+                  textAlign: mobile ? "center" : "left",
+                  width: "100%",
+                  minWidth: "100%",
                   opacity: "0.5",
                 }}
               >
@@ -169,22 +228,29 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             style={{
               display: "flex",
               flexDirection: "row",
+              // flexDirection: "column",
               alignItems: "center",
               width: "fit-content",
               // paddingRight: desktop ? "5rem" : "6rem",
               gap: "20px",
             }}
           >
-            <Button
-              styles={{ backgroundColor: "white" }}
-              icon={<Whatsapp size="40" color="#013726" variant="Bold" />}
-              padding={10}
-            />
-            <Button
-              styles={{ backgroundColor: "white" }}
-              icon={<Facebook size="40" color="#013726" variant="Bold" />}
-              padding={10}
-            />
+            <a
+              style={{ ...socialButtonStyles }}
+              href="google.com"
+              target="blank"
+            >
+              <Whatsapp size="30" color="white" variant="Bold" />
+              @31488226
+            </a>
+            <a
+              style={{ ...socialButtonStyles }}
+              href="google.com"
+              target="blank"
+            >
+              <Facebook size="30" color="white" variant="Bold" />
+              @illumina
+            </a>
           </div>
         </div>
       </SectionLayout>

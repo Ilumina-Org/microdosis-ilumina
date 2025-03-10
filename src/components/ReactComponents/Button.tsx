@@ -1,5 +1,6 @@
 import React from "react";
 import useResponsiveness from "../../utils/useResponsiveness";
+import { useMediaQuery } from "react-responsive";
 
 function Button({
   id,
@@ -10,6 +11,7 @@ function Button({
   onClick = () => alert("click"),
 }: any) {
   const { handleResponsiveness } = useResponsiveness();
+  const mobile = useMediaQuery({ orientation: "portrait" });
   return (
     <button
       id={id}
@@ -20,9 +22,15 @@ function Button({
         height: "fit-content",
         padding: padding,
         border: "none",
-        fontSize: handleResponsiveness(["35px", "30px", "30px", "20px"]),
+        fontSize: handleResponsiveness("35px", "30px", "30px", "20px", "20px"),
         boxShadow: "2px 4px 7.7px rgba(0, 0, 0, 0.13)",
-        borderRadius: handleResponsiveness(["20px", "20px", "30px", "20px"]),
+        borderRadius: handleResponsiveness(
+          "20px",
+          "20px",
+          "20px",
+          "20px",
+          "10px"
+        ),
         fontFamily: "Inter",
         fontWeight: "200",
         cursor: "pointer",

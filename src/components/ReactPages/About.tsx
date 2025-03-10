@@ -19,7 +19,7 @@ interface LandingProps {
 const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
   const small = useMediaQuery({ query: "(min-width: 1366px)" });
-  const mobile = useMediaQuery({ orientation: "portrait" });
+  const { mobile } = useResponsiveness();
 
   return (
     <SectionLayout
@@ -27,10 +27,10 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
       ref={ref}
       background="white"
       // horizontalPadding={padding}
-      horizontalPadding={desktop ? "20vw" : "10vw"}
+      // horizontalPadding={desktop ? "25vw" : "8vw"}
+      horizontalPadding={desktop ? "20vw" : "17vw"}
       verticalPadding={"5rem"}
       height="auto"
-      style={{ nprder: "10px solid red" }}
     >
       <div className="about-container">
         {/* First Section */}
@@ -59,7 +59,12 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             <PlaceHolderImage />
           </div>
           <div className="about-text">
-            <h2 className="about-title">Beneficios Principales</h2>
+            <h2
+              className="about-title"
+              style={{ transform: mobile ? undefined : "translateX(35px)" }}
+            >
+              Beneficios Principales
+            </h2>
             <ul className="about-list">
               <li className="about-paragraph text">
                 <span className="about-check">✓</span>
@@ -126,14 +131,14 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         {`
             .about-container {
               display: flex;
-              flex-direction: rows;
+              flex-direction: column;
               justify-content: space-between;
-              gap: 4rem;
+              gap: 3rem;
             }
 
             .about-section {
               display: flex;
-              flex-direction: row;
+              flex-direction: ${mobile ? "column" : "row"};
               justify-content: center;
               align-items: center;
               height: fit-content;
@@ -141,19 +146,23 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             }
 
             .about-text {
-              width: 45%;
+              width: ${mobile ? "100%" : "55%"};
+            }
+
+            .text{
+            font-size: 1.2rem !important;
             }
 
             .about-title {
-              font-size: 2.7rem;
+              font-size: 2.4rem;
+              lineHeight: ${mobile ? "auto" : "1.75vw"},
               margin-top: 0;
-              color: #013424;
+              color: #12623C;
             }
 
             .about-paragraph {
               font-size: 1.25rem;
-
-              line-height: 1.5rem;
+              line-height: ${mobile ? "auto" : "1.75vw"};
               color: #1d1d1d;
             }
 
@@ -166,14 +175,30 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               list-style-type: none;
               display: flex;
               flex-direction: column;
-              gap: 20px;
+              blockMargin: 0 !important;
+              margin: 0;
+              }
 
+            .about-paragraph{
+              font-size: 1.3vw;
             }
+
             .about-check {
               color: #969628;
               font-size: 1.5rem;
               margin-right: 1rem;
             }
+
+        ${
+          mobile &&
+          `.about-section:not(:nth-of-type(2)) {
+            display: flex;
+            flex-direction: column-reverse;
+            /*or hide the image*/
+          }`
+        }
+
+
           `}
       </style>
     </SectionLayout>

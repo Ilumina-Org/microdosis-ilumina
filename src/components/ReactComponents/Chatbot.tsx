@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./Chatbot.css";
+import { useMediaQuery } from "react-responsive";
+import useResponsiveness from "../../utils/useResponsiveness";
+
 import Button from "./Button";
+
 
 interface Question {
   id: number;
@@ -16,6 +20,8 @@ interface EnfermedadData {
 }
 
 const ChatBot = () => {
+  const { mobile } = useResponsiveness();
+
   // Constantes
   const questions: Question[] = [
     {
@@ -185,6 +191,10 @@ const ChatBot = () => {
 
     // Comprobar inicialmente
     checkIfMobile();
+
+    setTimeout(() => {
+      setShowTooltip(true);
+    }, 1500);
 
     // Comprobar cada vez que la ventana cambia de tamaño
     window.addEventListener("resize", checkIfMobile);
@@ -388,11 +398,13 @@ const ChatBot = () => {
         {showTooltip && !isMobile && (
           <div className="tooltip-bubble">
             Simula tu microdosis de ayahuasca
+            <div className="tooltip-arrow-down"></div>
           </div>
         )}
         <svg
           width={isMobile ? "70%" : "80%"}
-          height="85.044815mm"
+          // height="85.044815mm"
+          height="auto"
           viewBox="0 0 141.92133 85.044815"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -472,7 +484,14 @@ const ChatBot = () => {
       </button>
 
       {chatVisible && (
-        <div className="chat-container chat-slide-in">
+        <div
+          className="chat-container chat-slide-in"
+          style={{
+            right: mobile ? "0" : "1.5rem",
+            bottom: mobile ? "2rem" : "6.5rem",
+            marginBottom: mobile ? "2rem" : "0",
+          }}
+        >
           <div className="chat-box">
             <button
               onClick={closeChat}
