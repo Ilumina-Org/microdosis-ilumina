@@ -229,14 +229,25 @@ async function deleteSheetRow(
  */
 async function ensureSheetExists(
   sheetName: string,
-  headers: string[],
+  headers: string[] = [
+    "SKU",
+    "Título",
+    "Precio",
+    "Precio Regular",
+    "Stock",
+    "Total",
+    "Notas",
+    "Featured",
+    "Tipo",
+    "Tier",
+    "Beneficio General",
+    "Quienes Pueden Usarlo",
+    "Uso Diario",
+  ],
 ): Promise<void> {
   try {
-    // Primero verificamos si la hoja existe
     await getSheetData(sheetName, "A1:A2");
-
-    // Luego verificamos los encabezados
-    const headerData = await getSheetData(sheetName, "A1:Z1");
+    const headerData = await getSheetData(sheetName, "A1:M1");
 
     if (!headerData || !headerData.length) {
       console.log(`Creando encabezados en la hoja ${sheetName}`);
