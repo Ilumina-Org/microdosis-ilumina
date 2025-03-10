@@ -27,7 +27,7 @@ interface ProductsPageProps {
 const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
   (props, ref) => {
     const { handleResponsiveness } = useResponsiveness();
-    let padding = handleResponsiveness(16, 10, 25, 10, undefined);
+    let padding = handleResponsiveness(16, 15, 25, 15, undefined);
     const small = useMediaQuery({ query: "(min-width: 1366px)" });
 
     return (
@@ -73,23 +73,34 @@ const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
             }}
           >
             {props.products.map((product: Product) => (
-              <ProductContainer
-                key={product.sku}
-                sku={product.sku}
-                link={"microdosis-package/" + product.sku}
-                imageUrl={"products/" + product.sku + "-card.svg"}
-                productTitle={product.title}
-                productDetail={product.productDetail}
-                productPrice={product.productPrice}
-                productDeal={product.productDeal}
-                stock={product.stock}
-                purchaseType={product.tipo as any}
-                tier={product.tier}
-              />
+              <div className="product-container-details">
+                <ProductContainer
+                  key={product.sku}
+                  sku={product.sku}
+                  link={"microdosis-package/" + product.sku}
+                  imageUrl={"products/" + product.sku + "-card.svg"}
+                  productTitle={product.title}
+                  productDetail={product.productDetail}
+                  productPrice={product.productPrice}
+                  productDeal={product.productDeal}
+                  stock={product.stock}
+                  purchaseType={product.tipo as any}
+                  tier={product.tier}
+                />
+                <div style={{ flexDirection: "column" }}>
+                  <h3 className="about-title">Descripcion del producto</h3>
+                  <h4 className="about-title">
+                    Quienes pueden usarlo?
+                  </h4>
+                  <h5 className="about-text">
+                    Por la compra de este product, usted se estará llevando un taller gratuito
+                  </h5>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-      </SectionLayout>
+        </div >
+      </SectionLayout >
     );
   }
 );
