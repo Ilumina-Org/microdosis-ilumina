@@ -4,6 +4,9 @@ import type { JSX } from "astro/jsx-runtime";
 import { CULQI_PLANS, getCulqiLink } from "../../utils/shipping";
 import { safeRedirect, isValidCulqiUrl } from "../../utils/cookies";
 
+type LocationType = "distrito" | "departamento" | "pais" | null;
+type LocationData = Array<{ code: string; name: string }>;
+
 interface PaymentOptionsProps {
   basePrice: number;
   title: string;
@@ -15,68 +18,82 @@ const PaymentOptions = ({
   title,
   packageId,
 }: PaymentOptionsProps) => {
-  const [shippingType, setShippingType] = useState<
-    "distrito" | "departamento" | null
-  >(null);
-  const [districts, setDistricts] = useState<
-    Array<{ code: string; name: string }>
-  >([]);
-  const [departments, setDepartments] = useState<
-    Array<{ code: string; name: string }>
-  >([]);
+  const [shippingType, setShippingType] = useState<LocationType>(null);
+  const [districts, setDistricts] = useState<LocationData>([]);
+  const [departments, setDepartments] = useState<LocationData>([]);
+  const [countries, setCountries] = useState<LocationData>([]);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [totalPrice, setTotalPrice] = useState(basePrice);
   const [loadingShipping, setLoadingShipping] = useState(false);
   const [shippingCost, setShippingCost] = useState(0);
   const [error, setError] = useState("");
   const [isPaymentInProgress, setIsPaymentInProgress] = useState(false);
+  const [activeOption, setActiveOption] = useState<string | null>("culqi-option");
 
-  const [activeOption, setActiveOption] = useState<string | null>(
-    "culqi-option",
-  );
-
+  // Cargar ubicaciones al inicio
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const [districtsResponse, departmentsResponse] = await Promise.all([
+        const [districtsResponse, departmentsResponse, countriesResponse] = await Promise.all([
           fetch("/api/districts"),
           fetch("/api/departments"),
+          fetch("/api/countries"),
         ]);
+
+        if (!districtsResponse.ok || !departmentsResponse.ok || !countriesResponse.ok) {
+          throw new Error("Error al cargar ubicaciones");
+        }
 
         const districtsData = await districtsResponse.json();
         const departmentsData = await departmentsResponse.json();
+        const countriesData = await countriesResponse.json();
 
         setDistricts(districtsData);
         setDepartments(departmentsData);
+        setCountries(countriesData);
       } catch (err) {
-        setError("Error cargando las ubicaciones");
+        setError("Error cargando las ubicaciones. Por favor, intente nuevamente.");
       }
     };
+    
     fetchLocations();
 
+    // Verificar si hay un pago pendiente
     const pendingPayment = sessionStorage.getItem("pendingPaymentUrl");
     if (pendingPayment) {
       setIsPaymentInProgress(true);
     }
   }, []);
 
+  // Calcular costo de envío cuando cambia la ubicación
   useEffect(() => {
+    if (!selectedLocation || !shippingType) return;
+
     const controller = new AbortController();
-
+    
     const calculateShipping = async () => {
-      if (!selectedLocation) return;
-
       setLoadingShipping(true);
       setError("");
 
       try {
-        const endpoint =
-          shippingType === "distrito"
-            ? "calculate-shipping"
-            : "calculate-department-shipping";
+        let endpoint;
+        switch (shippingType) {
+          case "distrito":
+            endpoint = "calculate-shipping";
+            break;
+          case "departamento":
+            endpoint = "calculate-department-shipping";
+            break;
+          case "pais":
+            endpoint = "calculate-country-shipping";
+            break;
+          default:
+            throw new Error("Tipo de ubicación no válido");
+        }
+
         const response = await fetch(
           `/api/${endpoint}?location=${selectedLocation}&packageId=${packageId}`,
-          { signal: controller.signal },
+          { signal: controller.signal }
         );
 
         if (!response.ok) {
@@ -87,15 +104,14 @@ const PaymentOptions = ({
 
         if (data.success) {
           setShippingCost(data.shippingCost);
-          const newTotal = basePrice + data.shippingCost;
-          setTotalPrice(newTotal);
+          setTotalPrice(basePrice + data.shippingCost);
         } else {
           setError(data.message || "Error calculando el envío");
         }
       } catch (err: any) {
         if (!controller.signal.aborted) {
           setError(
-            "Error calculando el envío: " + (err.message || "Desconocido"),
+            "Error calculando el envío: " + (err.message || "Desconocido")
           );
         }
       } finally {
@@ -113,7 +129,9 @@ const PaymentOptions = ({
     setActiveOption((prev) => (prev === optionId ? null : optionId));
   };
 
-  const handleLocationTypeChange = (type: "distrito" | "departamento") => {
+  const handleLocationTypeChange = (type: LocationType) => {
+    if (!type) return;
+    
     setShippingType(type);
     setSelectedLocation("");
     setShippingCost(0);
@@ -127,16 +145,13 @@ const PaymentOptions = ({
     }
 
     setIsPaymentInProgress(true);
-
     const redirectSuccess = safeRedirect(culqiLink, "_blank");
 
     if (redirectSuccess) {
       console.log("Redirección a Culqi exitosa");
 
       try {
-        //@ts-ignore
         if (typeof window !== "undefined" && window.gtag) {
-          //@ts-ignore
           window.gtag("event", "payment_initiated", {
             event_category: "payment",
             event_label: selectedLocation,
@@ -148,6 +163,47 @@ const PaymentOptions = ({
       }
     } else {
       setIsPaymentInProgress(false);
+    }
+  };
+
+  // Obtener las opciones de ubicación según el tipo seleccionado
+  const getLocationOptions = () => {
+    switch (shippingType) {
+      case "distrito":
+        return districts;
+      case "departamento":
+        return departments;
+      case "pais":
+        return countries;
+      default:
+        return [];
+    }
+  };
+
+  // Obtener el texto adecuado para el selector de ubicación
+  const getLocationLabel = () => {
+    switch (shippingType) {
+      case "distrito":
+        return "Seleccione su distrito:";
+      case "departamento":
+        return "Seleccione su departamento:";
+      case "pais":
+        return "Seleccione su país:";
+      default:
+        return "Seleccione ubicación:";
+    }
+  };
+
+  const getLocationPlaceholder = () => {
+    switch (shippingType) {
+      case "distrito":
+        return "Seleccione distrito";
+      case "departamento":
+        return "Seleccione departamento";
+      case "pais":
+        return "Seleccione país";
+      default:
+        return "Seleccione ubicación";
     }
   };
 
@@ -179,32 +235,29 @@ const PaymentOptions = ({
           >
             Envío Departamento
           </button>
+          <button
+            className={`location-type-btn ${shippingType === "pais" ? "active" : ""}`}
+            onClick={() => handleLocationTypeChange("pais")}
+            disabled={isPaymentInProgress}
+          >
+            Envío País
+          </button>
         </div>
 
         {shippingType && (
           <div className="location-selector">
-            <label>
-              {shippingType === "distrito"
-                ? "Seleccione su distrito:"
-                : "Seleccione su departamento:"}
-            </label>
+            <label>{getLocationLabel()}</label>
             <select
               value={selectedLocation}
               onChange={(e) => setSelectedLocation(e.target.value)}
               disabled={loadingShipping || isPaymentInProgress}
             >
-              <option value="">
-                {shippingType === "distrito"
-                  ? "Seleccione distrito"
-                  : "Seleccione departamento"}
-              </option>
-              {(shippingType === "distrito" ? districts : departments).map(
-                (location) => (
-                  <option key={location.code} value={location.code}>
-                    {location.name}
-                  </option>
-                ),
-              )}
+              <option value="">{getLocationPlaceholder()}</option>
+              {getLocationOptions().map((location) => (
+                <option key={location.code} value={location.code}>
+                  {location.name}
+                </option>
+              ))}
             </select>
           </div>
         )}
@@ -231,8 +284,8 @@ const PaymentOptions = ({
             <span className="payment-icon">
               <img
                 src="/icons/culqi_icon.svg"
-                width="25px"
-                height="25px"
+                width="25"
+                height="25"
                 alt="Culqi"
               />
             </span>
@@ -257,7 +310,7 @@ const PaymentOptions = ({
                         ? "Procesando..."
                         : "Pagar con Culqi"}
                       <span className="external-icon" aria-hidden="true">
-                        ↗
+                        →
                       </span>
                     </button>
                   );
