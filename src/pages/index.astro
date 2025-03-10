@@ -1,10 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Landing from "../components/ReactPages/Landing";
+import About from "../components/ReactPages/About";
+import Testimonials from "../components/ReactPages/Testimonials";
 import Content from "../components/ReactPages/Content";
-import Testimonial from "../components/ReactPages/Testimonial";
 import Products from "../components/ReactPages/Products";
-import FrequentlyAsked from "../components/ReactPages/FrequentlyAsked";
+import FAQs from "../components/ReactPages/FAQs";
 import { fallbackProducts } from "../utils/constants";
 import ChatBot from "../components/ReactComponents/Chatbot";
 import CookieConsent from "../components/ReactComponents/CookiesConsent";
@@ -30,7 +31,7 @@ try {
   <Testimonials id="testimonios" client:load />
   <Products id="products" client:load products={products} />
   <FAQs id="frequently-asked-questions" client:load />
-  <Chatbot client:load />
+  <ChatBot client:load />
 
   <NavigationButtons client:load />
   <CookieConsent client:load />

@@ -95,9 +95,9 @@ const NavigationButtons: React.FC = () => {
     return () => {
       observersRef.current.forEach((observer) => observer.disconnect());
     };
-  }, [navLinks, isMounted]);
+  }, [navLinks, hasMounted]);
 
-  if (!isMounted) return null;
+  if (!hasMounted) return null;
 
   // Mejorado el estilo base para todos los enlaces de navegación
   const aStyling = {
@@ -199,11 +199,11 @@ const NavigationButtons: React.FC = () => {
 
             ...(isMobile
               ? {
-                  fontSize: "20px",
-                  padding: "10px 0",
-                  textAlign: "center",
-                  width: "100%",
-                }
+                fontSize: "20px",
+                padding: "10px 0",
+                textAlign: "center",
+                width: "100%",
+              }
               : {}),
           }}
         >
