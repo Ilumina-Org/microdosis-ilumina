@@ -6,22 +6,25 @@ import Testimonials from "../components/ReactPages/Testimonials";
 import Content from "../components/ReactPages/Content";
 import Products from "../components/ReactPages/Products";
 import FAQs from "../components/ReactPages/FAQs";
-import { fallbackProducts } from "../utils/constants";
 import ChatBot from "../components/ReactComponents/Chatbot";
 import CookieConsent from "../components/ReactComponents/CookiesConsent";
 import NavigationButtons from "../components/ReactComponents/NavigationButtons";
 import { getProducts } from "../utils/stock";
 
-let products;
+let products = [];
+let productsError = false;
+
 try {
   const fetchedProducts = await getProducts();
-  products =
-    fetchedProducts && fetchedProducts.length > 0
-      ? fetchedProducts.slice(0, 3)
-      : fallbackProducts;
+  console.log("fetchedProducts:", fetchedProducts);
+  if (fetchedProducts && fetchedProducts.length > 0) {
+    products = fetchedProducts.slice(0, 3);
+  } else {
+    productsError = true;
+  }
 } catch (error) {
-  console.error("Error obteniendo productos, usando fallback:", error);
-  products = fallbackProducts;
+  console.error("Error obteniendo productos:", error);
+  productsError = true;
 }
 ---
 
@@ -29,10 +32,14 @@ try {
   <Landing id="inicio" client:load />
   <About id="about" client:load />
   <Testimonials id="testimonios" client:load />
-  <Products id="products" client:load products={products} />
+  <Products
+    id="products"
+    client:load
+    products={products}
+    productsError={productsError}
+  />
   <FAQs id="frequently-asked-questions" client:load />
   <ChatBot client:load />
-
   <NavigationButtons client:load />
   <CookieConsent client:load />
 </Layout>
