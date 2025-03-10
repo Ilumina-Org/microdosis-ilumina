@@ -1,9 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+"use client";
+
+import React, { useEffect, useState, useRef, type ReactNode } from "react";
 import { useMediaQuery } from "react-responsive";
+import useResponsiveness from "../../utils/useResponsiveness";
 
 type NavLink = {
   href: string;
-  label: string;
+  label: string | ReactNode;
   target: string;
   transitionName?: string;
 };
@@ -11,51 +14,60 @@ type NavLink = {
 const NavigationButtons: React.FC = () => {
   const [active, setActive] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+
+  const isMobile = useMediaQuery({ orientation: "portrait" });
+  // const [isMobile, setIsMobile] = useState(false);
+
   const isLargeScreen = useMediaQuery({ query: "(min-width: 1400px)" }) ?? true;
   const observersRef = useRef<IntersectionObserver[]>([]);
+  const { handleResponsiveness } = useResponsiveness();
+
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  const formatText = (text: string, slice: number) => {
+    return `${text.slice(0, slice)}...`;
+  };
 
   const navLinks: NavLink[] = [
-    { href: "#landing-section", label: "Inicio", target: "landing" },
+    { href: "#inicio", label: "Inicio", target: "inicio" },
     {
-      href: "#content-section",
+      href: "#about",
       label: "¿Qué es?",
       target: "about",
       transitionName: "about-nav-link",
     },
     {
-      href: "#testimonials-section",
+      href: "#testimonios",
       label: "Testimonios",
       target: "testimonios",
       transitionName: "testimonios-nav-link",
     },
     {
-      href: "#products-section",
+      href: "#products",
       label: "Productos",
       target: "products",
       transitionName: "products-nav-link",
     },
     {
-      href: "#faq-section",
-      label: "Preguntas frecuentes",
-      target: "faqs",
+      href: "#frequently-asked-questions",
+      label: (
+        <>
+          Preguntas
+          <br />
+          frecuentes
+        </>
+      ),
+      target: "frequently-asked-questions",
       transitionName: "faqs-nav-link",
     },
   ];
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    setIsMounted(true);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
-  useEffect(() => {
-    if (!isMounted) return;
     if (observersRef.current.length > 0) {
       observersRef.current.forEach((observer) => observer.disconnect());
       observersRef.current = [];
@@ -83,9 +95,9 @@ const NavigationButtons: React.FC = () => {
     return () => {
       observersRef.current.forEach((observer) => observer.disconnect());
     };
-  }, [navLinks, isMounted]);
+  }, [navLinks, hasMounted]);
 
-  if (!isMounted) return null;
+  if (!hasMounted) return null;
 
   // Mejorado el estilo base para todos los enlaces de navegación
   const aStyling = {
@@ -96,7 +108,7 @@ const NavigationButtons: React.FC = () => {
 
   const handleClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    target: string,
+    target: string
   ) => {
     const href = e.currentTarget.getAttribute("href");
     if (href?.includes(target)) {
@@ -112,10 +124,22 @@ const NavigationButtons: React.FC = () => {
 
   // Mejorada la función para resaltar el enlace activo
   const handleSelect = (value: string) => {
-    return active === value
-      ? "0px 0px 6px rgba(0, 0, 0, 1)" // Sombra más fuerte para el enlace activo
-      : undefined;
+    let dark =
+      "-.5px -.5px 0 #171717, .5px -.5px 0 #171717, -.5px .5px 0 #171717, .5px .5px 0 #171717";
+    let light =
+      "-.5px -.5px 0 #f2b130, .5px -.5px 0 #f2b130, -.5px .5px 0 #f2b130, .5px .5px 0 #f2b130";
+
+    if (active === value) {
+      return light;
+    } else {
+      return undefined;
+    }
+
   };
+
+  if (!hasMounted) {
+    return null; // or return a loading spinner or placeholder
+  }
 
   const MenuIcon = () => (
     <svg
@@ -124,7 +148,7 @@ const NavigationButtons: React.FC = () => {
       height="32"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="white"
+      stroke="#f2b130"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -143,7 +167,7 @@ const NavigationButtons: React.FC = () => {
       height="32"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="white"
+      stroke="#f2b130"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -166,16 +190,20 @@ const NavigationButtons: React.FC = () => {
           onClick={(e) => handleClick(e, link.target)}
           style={{
             ...aStyling,
-            textShadow: handleSelect(link.target) || aStyling.textShadow,
-            opacity: active === link.target ? 1 : 0.8, // Aumentada la opacidad para mejor visibilidad
-            fontWeight: active === link.target ? "400" : "300", // Peso de fuente más evidente para el activo
+            textShadow: handleSelect(link.target),
+            // fontW/eight: handleSelect(link.target),
+            opacity: active === link.target ? 1 : 0.5,
+            transition: ".25s ease-in-out",
+            color: "#f2b130",
+
+
             ...(isMobile
               ? {
-                  fontSize: "20px",
-                  padding: "10px 0",
-                  textAlign: "center",
-                  width: "100%",
-                }
+                fontSize: "20px",
+                padding: "10px 0",
+                textAlign: "center",
+                width: "100%",
+              }
               : {}),
           }}
         >
@@ -257,7 +285,15 @@ const NavigationButtons: React.FC = () => {
         gap: "20px",
         right: "3rem",
         top: "5rem",
-        fontSize: isLargeScreen ? "1.9vw" : "1.8vw",
+        // fontSize: isLargeScreen ? "1.9vw" : "1.8vw",
+        fontSize: handleResponsiveness(
+          "1.5rem",
+          "1.25rem",
+          "1.5rem",
+          "2rem",
+          ""
+        ),
+        //isLargeScreen ? "1.9vw" : "1.8vw",
         fontFamily: "Inter",
         fontWeight: "300", // Cambiado a 300 para mejor legibilidad
         textAlign: "right",
