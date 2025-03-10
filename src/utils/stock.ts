@@ -16,7 +16,7 @@ type StockData = Record<string, StockItem>;
 export const getStock = async (): Promise<StockData> => {
   try {
     console.log("Obteniendo datos de stock desde la hoja:", INVENTORY_SHEET);
-    const data = await getSheetData(INVENTORY_SHEET, "A2:J");
+    const data = await getSheetData(INVENTORY_SHEET, "A2:M"); // Cambiado a M para incluir nuevas columnas
 
     console.log(`Datos obtenidos: ${data.length} filas`);
 
@@ -25,8 +25,8 @@ export const getStock = async (): Promise<StockData> => {
 
     if (data && data.length > 0) {
       data.forEach((row, index) => {
-        if (row.length < 10) {
-          // Cambiado a 10 porque son 10 columnas (A-J)
+        if (row.length < 13) {
+          // Actualizado a 13 columnas
           console.warn(`Fila ${index + 2} inválida (incompleta). Omitiendo.`);
           return;
         }
@@ -42,9 +42,11 @@ export const getStock = async (): Promise<StockData> => {
           featured,
           tipo,
           tier,
+          beneficio_general,
+          quienes_pueden_usarlo,
+          uso_diario,
         ] = row;
 
-        // Verificación SKU
         const cleanSku = String(sku).trim();
         if (!cleanSku) {
           console.warn(`Fila ${index + 2} sin SKU válido. Omitiendo.`);
@@ -57,33 +59,27 @@ export const getStock = async (): Promise<StockData> => {
         }
         seenSkus.add(cleanSku);
 
-        const numDisponible = Math.max(0, Number(disponible) || 0);
-        const numTotal = Math.max(numDisponible, Number(total) || 0);
-        const numPrice = Math.max(0, Number(price) || 0);
-        const numRegularPrice = Math.max(0, Number(regularPrice) || 0);
-        const numTier = Math.max(0, Number(tier) || 0);
-
         stockData[cleanSku] = {
           sku: cleanSku,
           title: String(title),
-          price: numPrice,
-          regularPrice: numRegularPrice,
-          disponible: numDisponible,
-          total: numTotal,
+          price: Math.max(0, Number(price) || 0),
+          regularPrice: Math.max(0, Number(regularPrice) || 0),
+          disponible: Math.max(0, Number(disponible) || 0),
+          total: Math.max(0, Number(total) || 0),
           notas: String(notas),
           featured: String(featured).toUpperCase() === "TRUE",
           tipo:
             String(tipo).toLowerCase() === "subscription"
               ? "subscription"
               : "package",
-          tier: numTier,
+          tier: Math.max(0, Number(tier) || 0),
+          beneficio_general: String(beneficio_general),
+          quienes_pueden_usarlo: String(quienes_pueden_usarlo),
+          uso_diario: String(uso_diario),
         };
-
-        console.log(`Procesado SKU: ${cleanSku}, Stock: ${numDisponible}`);
       });
     }
 
-    console.log(`Stock procesado: ${Object.keys(stockData).length} SKUs`);
     return stockData;
   } catch (error) {
     console.error("Error obteniendo stock:", error);

@@ -1,6 +1,3 @@
-export const INVENTORY_SHEET = "Inventario";
-export const ORDERS_SHEET = "Ordenes";
-
 export const fallbackProducts = [
   {
     sku: "5678sku",
@@ -11,6 +8,11 @@ export const fallbackProducts = [
     stock: true,
     tipo: "package",
     tier: 0,
+    beneficio_general:
+      "Fórmula ancestral para principiantes con microdosis equilibradas",
+    quienes_pueden_usarlo:
+      "Personas mayores de 18 años sin condiciones médicas preexistentes",
+    uso_diario: "1 a 3 gotas por la mañana",
   },
   {
     sku: "5679sku",
@@ -21,6 +23,10 @@ export const fallbackProducts = [
     stock: true,
     tipo: "package",
     tier: 1,
+    beneficio_general: "Mejora concentración y calidad del sueño",
+    quienes_pueden_usarlo:
+      "Adultos con estrés laboral o estudiantes universitarios",
+    uso_diario: "2 gotas al despertar y 2 antes de dormir",
   },
   {
     sku: "5680sku",
@@ -31,12 +37,11 @@ export const fallbackProducts = [
     stock: false,
     tipo: "package",
     tier: 2,
+    beneficio_general: "Transformación espiritual profunda",
+    quienes_pueden_usarlo: "Usuarios experimentados con guía certificada",
+    uso_diario: "Solo bajo supervisión durante ceremonias",
   },
 ];
-
-// Archivo: src/utils/fallbackStockData.js
-// Primero, asegúrate de que el archivo fallbackStockData.js tiene la estructura correcta:
-// src/utils/fallbackStockData.js
 
 export const fallbackStockData = {
   "5678sku": {
@@ -44,29 +49,41 @@ export const fallbackStockData = {
     price: 140.0,
     regularPrice: 180.0,
     notas:
-      "El Kit de Iniciación Ayahuasca Microdosis es perfecto para principiantes. Incluye todo lo necesario para comenzar tu viaje de autodescubrimiento de manera segura y controlada.",
+      "El Kit de Iniciación Ayahuasca Microdosis es perfecto para principiantes...",
     disponible: true,
     tipo: "package",
     tier: 0,
+    beneficio_general:
+      "Fórmula ancestral para principiantes con microdosis equilibradas",
+    quienes_pueden_usarlo:
+      "Personas mayores de 18 años sin condiciones médicas preexistentes",
+    uso_diario: "1 a 3 gotas por la mañana",
   },
   "5679sku": {
     title: "Kit Premium Equilibrio Mental",
     price: 250.0,
     regularPrice: 290.0,
     notas:
-      "El Kit Premium Equilibrio Mental ofrece una experiencia más avanzada. Incluye ingredientes de alta calidad y guías detalladas para optimizar tu bienestar mental.",
+      "El Kit Premium Equilibrio Mental ofrece una experiencia más avanzada...",
     disponible: true,
     tipo: "package",
     tier: 1,
+    beneficio_general: "Mejora concentración y calidad del sueño",
+    quienes_pueden_usarlo:
+      "Adultos con estrés laboral o estudiantes universitarios",
+    uso_diario: "2 gotas al despertar y 2 antes de dormir",
   },
   "5680sku": {
     title: "Experiencia Completa Ayahuasca",
     price: 360.0,
     regularPrice: 400.0,
     notas:
-      "La Experiencia Completa Ayahuasca es nuestro paquete más completo. Incluye todo lo que necesitas para una experiencia profunda y transformadora.",
+      "La Experiencia Completa Ayahuasca es nuestro paquete más completo...",
     disponible: false,
     tipo: "package",
     tier: 2,
+    beneficio_general: "Transformación espiritual profunda",
+    quienes_pueden_usarlo: "Usuarios experimentados con guía certificada",
+    uso_diario: "Solo bajo supervisión durante ceremonias",
   },
 };
