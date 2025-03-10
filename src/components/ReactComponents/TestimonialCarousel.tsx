@@ -65,7 +65,7 @@ const TestimonialCarousel = () => {
       <p
         style={{
           // fontSize: isMobile ? "24px" : isTablet ? "34px" : "50px",
-          fontSize: small ? "3vw" : "2.5rem",
+          fontSize: isMobile ? "2rem" : small ? "3vw" : "2.5rem",
           fontWeight: 200,
           color: "#c1dc3a",
           textAlign: "center",

@@ -87,12 +87,21 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
         />
       </div>
       <div className="content fade-in-slide-left">
-        <h1>
-          Descubre el poder <br /> sanador de la <br />
-          <span className="highlight">
-            Ayahuasca <br /> en Microdosis.
-          </span>
-        </h1>
+        {mobile ? (
+          <h1>
+            Descubre <br /> el poder <br /> sanador de la <br />
+            <span className="highlight">
+              Ayahuasca <br /> en Microdosis.
+            </span>
+          </h1>
+        ) : (
+          <h1>
+            Descubre el poder <br /> sanador de la <br />
+            <span className="highlight">
+              Ayahuasca <br /> en Microdosis.
+            </span>
+          </h1>
+        )}
         <h3>100% ingredientes naturales</h3>
         <Button
           id="toggle-chat"
@@ -106,10 +115,14 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             alignItems: "center",
             borderRadius: "15px",
             gap: "15px",
-            fontSize: small ? "1.5vw" : "1.25vw",
+            fontSize: mobile ? "1.5rem" : small ? "1.5vw" : "1.25vw",
+            color: "#484848",
           }}
           icon={
-            <ShoppingCart size={small ? "1.5vw" : "1.25vw"} color="#484848" />
+            <ShoppingCart
+              size={mobile ? "1.5rem" : small ? "1.5vw" : "1.25vw"}
+              color="#484848"
+            />
           }
         />
       </div>
@@ -122,12 +135,12 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             src={staticImage}
             style={{
               position: "relative",
-              right: "14rem",
-              top: "10rem",
+              right: mobile ? "12rem" : "14rem",
+              top: mobile ? "5rem" : "10rem",
               width: "100%",
               height: "100%",
               objectFit: "contain",
-              transform: "scale(3) rotate(0.2deg)",
+              transform: mobile ? "scale(25)" : "scale(3) rotate(0.2deg)",
             }}
           />
         )}
@@ -194,12 +207,11 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             /* flex:2/3; */
             flexGrow: 1;
             gap: 20px;
-            justify-content: center;
+            justify-content: ${mobile ? "flex-start" : "center"};
+            ${mobile && "transform: translateY(15%);"}
             scroll-snap-align: start;
             scroll-behavior: smooth;
             overflow: hidden !important;
-
-
             z-index: 3 !important;
           }
 
@@ -207,11 +219,19 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           @keyframes fadeInSlideFromLeft {
             0% {
               opacity: 0;
+            }
+            100% {
+              opacity: 1;
+            }
+          }
+          @keyframes fadeInSlideFromLeftImage {
+            0% {
+              opacity: 0;
               filter: blur(10px);
             }
             100% {
               opacity: 1;
-              filter: blur(00px);
+              filter: blur(0px);
             }
           }
 
@@ -220,7 +240,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           }
 
           .fadeInIMage{
-          animation: fadeInSlideFromLeft 1.5s ease-in forwards
+          animation: fadeInSlideFromLeftImage 1.5s ease-in forwards;
           }
 
           h1 {
@@ -237,15 +257,16 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
           h3 {
             margin: 0;
-            font-size: ${mobile ? "2rem" : "30px"};
+            font-size: ${mobile ? "1.75rem" : "30px"};
             font-weight: 200;
             color: white;
             opacity: 0.5;
           }
 
           .image-container {
-            ${mobile && "transform: scale(2.5)"}
-            position:relative,
+            ${mobile && "transform: scale(1.25);"}
+            ${mobile && "filter: blur(5px);"}
+            position:relative;
             border: 1px solid transparent;
             flex: 1;
             flexGrow: 1;

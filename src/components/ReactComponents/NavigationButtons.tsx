@@ -122,14 +122,10 @@ const NavigationButtons: React.FC = () => {
     let dark =
       "-.5px -.5px 0 #171717, .5px -.5px 0 #171717, -.5px .5px 0 #171717, .5px .5px 0 #171717";
     let light =
-      "-.5px -.5px 0 #ffffff, .5px -.5px 0 #ffffff, -.5px .5px 0 #ffffff, .5px .5px 0 #ffffff";
+      "-.5px -.5px 0 #f2b130, .5px -.5px 0 #f2b130, -.5px .5px 0 #f2b130, .5px .5px 0 #f2b130";
 
     if (active === value) {
-      if (active === "products" || active == "about") {
-        return isMobile ? light : dark;
-      } else {
-        return light;
-      }
+      return light;
     } else {
       return undefined;
     }
@@ -164,7 +160,7 @@ const NavigationButtons: React.FC = () => {
       height="32"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="white"
+      stroke="#f2b130"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -190,12 +186,7 @@ const NavigationButtons: React.FC = () => {
             // fontW/eight: handleSelect(link.target),
             opacity: active === link.target ? 1 : 0.5,
             transition: ".25s ease-in-out",
-            color:
-              active === "about" || active === "products"
-                ? isMobile
-                  ? "white"
-                  : "#171717"
-                : "white",
+            color: "#f2b130",
 
             ...(isMobile
               ? {

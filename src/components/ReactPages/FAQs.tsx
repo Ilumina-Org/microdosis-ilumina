@@ -19,7 +19,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
     const { handleResponsiveness, mobile } = useResponsiveness();
     let padding = handleResponsiveness(26, 10, 25, 10, undefined);
     const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
-    const small = useMediaQuery({ query: "(min-width: 1366px)" });
+    const small = useMediaQuery({ query: "(max-width: 1399px)" });
 
     const [hasMounted, setHasMounted] = useState(false);
 
@@ -120,7 +120,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
           >
             <h3
               style={{
-                fontSize: small ? "3vw" : "2.5rem",
+                fontSize: mobile ? "2rem" : small ? "3vw" : "2.5rem",
                 fontWeight: 200,
                 color: "white",
                 opacity: 1,
