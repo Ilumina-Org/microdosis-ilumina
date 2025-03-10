@@ -230,7 +230,9 @@ const ChatBot = () => {
   };
 
   const handleClickProduct = () => {
-    setShowResult(false);
+    setChatVisible(false);
+
+
     document
       ?.getElementById("products")
       ?.scrollIntoView({ behavior: "smooth" });
