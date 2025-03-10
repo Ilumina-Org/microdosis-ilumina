@@ -18,27 +18,10 @@ const LandingSection = React.forwardRef<HTMLElement, LandingProps>(
     const small = useMediaQuery({ query: "(max-width: 1399px)" });
 
     useEffect(() => {
-      console.log("Canvas ref:", canvasRef.current);
-
-      if (canvasRef.current) {
-        console.log("Initializing animation...");
-        try {
-          // Make sure the canvas has proper dimensions before initializing
-          const canvas = canvasRef.current;
-          const width = canvas.clientWidth || canvas.offsetWidth;
-          const height = canvas.clientHeight || canvas.offsetHeight;
-
-          // Set the canvas dimensions explicitly
-          canvas.width = width;
-          canvas.height = height;
-
-          initializeAnimation(canvasRef.current);
-          console.log("Animation initialized successfully");
-        } catch (error) {
-          console.error("Error initializing animation:", error);
-        }
+      if (canvasRef.current && !small) {
+        initializeAnimation(canvasRef.current);
       }
-    }, []); // Remove small from the dependency array
+    }, [small]);
 
     const handleClick = () => {
       const productsSection = document.getElementById("products-section");
@@ -108,7 +91,15 @@ const LandingSection = React.forwardRef<HTMLElement, LandingProps>(
               />
             </div>
             <div className="image-container">
-              <canvas id="model-image" ref={canvasRef}></canvas>
+              {!small ? (
+                <canvas id="model-image" ref={canvasRef}></canvas>
+              ) : (
+                <img
+                  className="fadeInImage"
+                  src={staticImage}
+                  alt="Ayahuasca microdosis"
+                />
+              )}
             </div>
           </div>
           <div className="bottom-section">
