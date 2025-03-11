@@ -6,14 +6,12 @@ import useResponsiveness from "../../utils/useResponsiveness";
 interface TestimonialItem {
   name: string;
   review: string;
-  image?: string;
   isInView?: boolean;
 }
 
 export const Testimonial = ({
   name,
   review,
-  image,
   index,
   isInView,
 }: TestimonialItem & { index: number }) => {
@@ -49,6 +47,7 @@ export const Testimonial = ({
         flexDirection: "row",
       }}
     >
+      {/*
       <div
         style={{
           width: "100%",
@@ -57,6 +56,7 @@ export const Testimonial = ({
           maxWidth: "150px",
         }}
       >
+
         {image ? (
           <img
             src={image}
@@ -74,6 +74,7 @@ export const Testimonial = ({
           <PlaceHolder />
         )}
       </div>
+      */}
       <div
         style={{
           display: "flex",
@@ -114,6 +115,6 @@ export const Testimonial = ({
           {name}
         </p>
       </div>
-    </div>
+    </div >
   );
 };
