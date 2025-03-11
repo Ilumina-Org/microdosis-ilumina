@@ -27,31 +27,31 @@ const TestimonialCarousel = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
   const TestTestimonials: TestimonialItem[] = [
-  {
-    name: "Sofia P.",
-    review:
-      "Las microdosis de ayahuasca me han dado una nueva perspectiva. Ahora me siento más conectada con mi alegría y con los demás. Es como encontrar la llave de mi felicidad.",
-    image: "/assets/user1.png",
-  },
-  {
-    name: "Carlos M",
-    review:
-      "Desde que uso microdosis, mi mente está más clara. Pienso mejor, resuelvo problemas rápido y rindo más en el trabajo. Ha mejorado mucho mi vida.",
-    image: "/assets/user1.png",
-  },
-  {
-    name: "Elena Q",
-    review:
-      "Las microdosis me ayudaron a calmar mi ansiedad. Ahora enfrento el estrés con tranquilidad, algo que antes no creía posible.",
-    image: "/assets/user1.png",
-  },
-  {
-    name: "Tomás R",
-    review:
-      "Como atleta, las microdosis mejoraron mi concentración y recuperación. Ahora entreno y compito mejor. Es un cambio total para mí.",
-    image: "/assets/user1.png",
-  },
-];
+    {
+      name: "Sofia P.",
+      review:
+        "Las microdosis de ayahuasca me han dado una nueva perspectiva. Ahora me siento más conectada con mi alegría y con los demás. Es como encontrar la llave de mi felicidad.",
+      image: "/assets/user1.png",
+    },
+    {
+      name: "Carlos M",
+      review:
+        "Desde que uso microdosis, mi mente está más clara. Pienso mejor, resuelvo problemas rápido y rindo más en el trabajo. Ha mejorado mucho mi vida.",
+      image: "/assets/user1.png",
+    },
+    {
+      name: "Elena Q",
+      review:
+        "Las microdosis me ayudaron a calmar mi ansiedad. Ahora enfrento el estrés con tranquilidad, algo que antes no creía posible.",
+      image: "/assets/user1.png",
+    },
+    {
+      name: "Tomás R",
+      review:
+        "Como atleta, las microdosis mejoraron mi concentración y recuperación. Ahora entreno y compito mejor. Es un cambio total para mí.",
+      image: "/assets/user1.png",
+    },
+  ];
 
 
   return (
@@ -78,15 +78,15 @@ const TestimonialCarousel = () => {
         Opiniones de nuestros clientes
       </p>
       <Carousel
-        autoPlay={false}
+        autoPlay={true}
         infiniteLoop={true}
-        interval={2250}
+        interval={5000}
         // centerSlidePercentage={isMobile ? 90 : isTablet ? 70 : 50}
         centerSlidePercentage={
           isMobile ? 100 : handleResponsiveness("60", "50", "40", "30", "")
         }
         showThumbs={false}
-        showArrows={false}
+        showArrows={true}
         showIndicators={isMobile}
         showStatus={false}
         centerMode={true}
