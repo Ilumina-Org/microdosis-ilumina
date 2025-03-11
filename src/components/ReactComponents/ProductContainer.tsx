@@ -54,6 +54,21 @@ export default function ProductContainer({
   };
 
   return (
+    <div className="product-container" style={dynamicStyles}>
+      <div>
+        <img src={imageUrl} alt={productTitle} className="product-image" />
+        <div>
+          <div>sub</div>
+          <div>sale</div>
+          <div>price</div>
+          <div>discount</div>
+          <div>purchase</div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
     <div
       className="product-container"
       style={dynamicStyles}

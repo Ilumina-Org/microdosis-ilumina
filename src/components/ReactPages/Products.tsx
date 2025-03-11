@@ -37,7 +37,7 @@ const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
         background="white"
         horizontalPadding={padding}
         verticalPadding={"2rem"}
-        height="auto"
+        // height=""
       >
         <div
           style={{
@@ -47,11 +47,13 @@ const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
             padding: "2rem 1rem",
             alignItems: "center",
             gap: "50px",
+            border: "1px solid blue",
           }}
         >
           <h3
             style={{
               // fontSize: "3vw", //small ? "2.5rem" : "3.5rem",
+              border: "1px solid blue",
               fontSize: small ? "3vw" : "2.5rem",
               fontWeight: 200,
               color: "black",
@@ -87,20 +89,19 @@ const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
                   purchaseType={product.tipo as any}
                   tier={product.tier}
                 />
-                <div style={{ flexDirection: "column" }}>
+                {/* <div style={{ flexDirection: "column" }}>
                   <h3 className="about-title">Descripcion del producto</h3>
-                  <h4 className="about-title">
-                    Quienes pueden usarlo?
-                  </h4>
+                  <h4 className="about-title">Quienes pueden usarlo?</h4>
                   <h5 className="about-text">
-                    Por la compra de este product, usted se estará llevando un taller gratuito
+                    Por la compra de este product, usted se estará llevando un
+                    taller gratuito
                   </h5>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>
-        </div >
-      </SectionLayout >
+        </div>
+      </SectionLayout>
     );
   }
 );
