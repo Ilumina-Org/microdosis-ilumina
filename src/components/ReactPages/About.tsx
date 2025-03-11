@@ -162,7 +162,7 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
             .about-paragraph {
               font-size: 1.25rem;
-              line-height: ${mobile ? "auto" : "1.75vw"};
+              line-height: ${mobile ? "auto" : "auto"};
               color: #1d1d1d;
             }
 
