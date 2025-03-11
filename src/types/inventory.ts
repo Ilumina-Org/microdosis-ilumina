@@ -9,7 +9,7 @@ export type StockItem = {
   featured: boolean;
   tipo: "package" | "subscription";
   tier: number;
-  beneficio_general: string;
+  benefitGeneral: string;
   quienes_pueden_usarlo: string;
   uso_diario: string;
 };

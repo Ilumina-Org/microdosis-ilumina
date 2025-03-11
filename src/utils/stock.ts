@@ -38,7 +38,7 @@ export const getStock = async (): Promise<StockData> => {
           featured,
           tipo,
           tier,
-          beneficio_general,
+          benefitGeneral,
           quienes_pueden_usarlo,
           uso_diario,
         ] = row;
@@ -69,7 +69,7 @@ export const getStock = async (): Promise<StockData> => {
               ? "subscription"
               : "package",
           tier: Math.max(0, Number(tier) || 0),
-          beneficio_general: String(beneficio_general),
+          benefitGeneral: String(benefitGeneral),
           quienes_pueden_usarlo: String(quienes_pueden_usarlo),
           uso_diario: String(uso_diario),
         };
@@ -93,7 +93,7 @@ export interface ProductUI extends StockItem {
   productPrice: string;
   productDeal: string;
   stock: boolean;
-  beneficioGeneral: string;
+  benefitGeneral: string;
   quienesPuedenUsarlo: string;
   usoDiario: string;
 }
@@ -122,12 +122,12 @@ export const getProducts = async (): Promise<ProductUI[]> => {
 
       return {
         ...item, // Mantener todos los campos originales de StockItem
-        productDetail: `Precio Regular $${item.regularPrice.toFixed(2)}`,
-        productPrice: `$${item.price.toFixed(2)}`,
+        productDetail: `Antes: S/. ${item.regularPrice.toFixed(2)}`,
+        productPrice: `S/. ${item.price.toFixed(2)}`,
         productDeal:
           discountPercentage > 0 ? `(Ahorra ${discountPercentage}%)` : "",
         stock: item.disponible > 0,
-        beneficioGeneral: item.beneficio_general,
+        benefitGeneral: item.benefitGeneral,
         quienesPuedenUsarlo: item.quienes_pueden_usarlo,
         usoDiario: item.uso_diario,
       };

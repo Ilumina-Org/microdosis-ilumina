@@ -9,6 +9,7 @@ interface ProductContainerProps {
   productDetail: string;
   productPrice: string;
   productDeal?: string;
+  benefitGeneral?: string;
   tier?: number;
   stock?: boolean;
   purchaseType?: "package" | "subscription";
@@ -22,6 +23,7 @@ export default function ProductContainer({
   productDetail,
   productPrice,
   productDeal,
+  benefitGeneral,
   tier = 0,
   stock = true,
   purchaseType = "package",
@@ -29,7 +31,7 @@ export default function ProductContainer({
   const [isHovered, setIsHovered] = useState(false);
 
   const tierStyles = {
-    0: "radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 4%, #9f7928 15%, #8A6E2F 20%, transparent 50%), radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 4%, #D1B464 12.5%, #5d4a1f 31.25%, #5d4a1f 40%)",
+    0: "linear-gradient(-72deg, #FDB931, #FEDB37 8%, #FDB931 10.5%, #FEDB37 12%, #9f7928 13.5%, #FDB931 18%, #FEDB37 22.5%, #FEDB37 30%, #FDB931 36%, #FEDB37 40%, #FDB931 42%, #8A6E2F)",
     1: "linear-gradient(-40deg,#dedede,#ffffff 8%,#dedede 10.5%,#ffffff 12%,#454545 13.5%,#dedede 18%,#ffffff 22.5%,#ffffff 30%,#dedede 36%,#ffffff 40%,#dedede 42%,#a1a1a1)",
     2: "linear-gradient(-72deg, #ca7345, #ffdeca 8%, #ca7345 10.5%, #ffdeca 12%, #a14521 13.5%, #ca7345 18%, #ffdeca 22.5%, #ffdeca 30%, #ca7345 36%, #ffdeca 40%, #ca7345 42%, #732100)",
   };
@@ -65,8 +67,10 @@ export default function ProductContainer({
 
         <div className="product-info">
           <h3 className="product-title">{productTitle}</h3>
+          <p className="benefit-general">{benefitGeneral}</p>
           <p className="product-detail">{productDetail}</p>
-          <p className="product-price">{productPrice}</p>
+          <p className="product-price">Ahora: {productPrice}</p>
+
 
           {productDeal && <p className="product-deal">{productDeal}</p>}
 
@@ -79,11 +83,11 @@ export default function ProductContainer({
             {purchaseType === "subscription"
               ? "Suscripción mensual"
               : stock
-                ? "Comprar ahora"
+                ? "Quiero mi kit!"
                 : "AGOTADO"}
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

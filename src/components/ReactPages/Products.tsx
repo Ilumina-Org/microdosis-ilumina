@@ -10,6 +10,7 @@ interface Product {
   title: string;
   productDetail: string;
   productPrice: string;
+  benefitGeneral: string;
   stock: boolean;
   productDeal: string;
   tipo: string;
@@ -99,33 +100,24 @@ const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
               }}
             >
               {props.products.map((product: Product) => (
-                <div className="product-container-details" key={product.sku}>
-                  <ProductContainer
-                    sku={product.sku}
-                    link={"microdosis-package/" + product.sku}
-                    imageUrl={"products/" + product.sku + "-card.svg"}
-                    productTitle={product.title}
-                    productDetail={product.productDetail}
-                    productPrice={product.productPrice}
-                    productDeal={product.productDeal}
-                    stock={product.stock}
-                    purchaseType={product.tipo as any}
-                    tier={product.tier}
-                  />
-                  <div style={{ flexDirection: "column" }}>
-                    <h3 className="about-title">Descripcion del producto</h3>
-                    <h4 className="about-title">Quienes pueden usarlo?</h4>
-                    <h5 className="about-text">
-                      Por la compra de este product, usted se estará llevando un
-                      taller gratuito
-                    </h5>
-                  </div>
-                </div>
+                <ProductContainer
+                  sku={product.sku}
+                  link={"microdosis-package/" + product.sku}
+                  imageUrl={"products/" + product.sku + "-card.svg"}
+                  productTitle={product.title}
+                  productDetail={product.productDetail}
+                  benefitGeneral={product.benefitGeneral}
+                  productPrice={product.productPrice}
+                  productDeal={product.productDeal}
+                  stock={product.stock}
+                  purchaseType={product.tipo as any}
+                  tier={product.tier}
+                />
               ))}
             </div>
           )}
         </div>
-      </SectionLayout>
+      </SectionLayout >
     );
   },
 );

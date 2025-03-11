@@ -4,8 +4,8 @@ export const fallbackProducts = [
   {
     sku: "5678sku",
     title: "Kit Iniciación Ayahuasca Microdosis",
-    productDetail: "Precio Regular $180.00",
-    productPrice: "$140.00",
+    productDetail: "Precio Regular S/. 180.00",
+    productPrice: "S/. 140.00",
     productDeal: "(Ahorra 22%)",
     stock: true,
     tipo: "package",
@@ -19,8 +19,8 @@ export const fallbackProducts = [
   {
     sku: "5679sku",
     title: "Kit Premium Equilibrio Mental",
-    productDetail: "Precio Regular $290.00",
-    productPrice: "$250.00",
+    productDetail: "Precio Regular S/. 290.00",
+    productPrice: "S/. 250.00",
     productDeal: "(Ahorra 14%)",
     stock: true,
     tipo: "package",
@@ -33,8 +33,8 @@ export const fallbackProducts = [
   {
     sku: "5680sku",
     title: "Experiencia Completa Ayahuasca",
-    productDetail: "Precio Regular $400.00",
-    productPrice: "$360.00",
+    productDetail: "Precio Regular S/. 400.00",
+    productPrice: "S/. 360.00",
     productDeal: "(Ahorra 10%)",
     stock: false,
     tipo: "package",

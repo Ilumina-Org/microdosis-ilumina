@@ -265,7 +265,7 @@ async function ensureSheetExists(
     "Featured",
     "Tipo",
     "Tier",
-    "Beneficio General",
+    "BenefitGeneral",
     "Quienes Pueden Usarlo",
     "Uso Diario",
   ],
