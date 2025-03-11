@@ -14,8 +14,10 @@ type NavLink = {
 const NavigationButtons: React.FC = () => {
   const [active, setActive] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const isMobile = useMediaQuery({ orientation: "portrait" });
   // const [isMobile, setIsMobile] = useState(false);
+
   const isLargeScreen = useMediaQuery({ query: "(min-width: 1400px)" }) ?? true;
   const observersRef = useRef<IntersectionObserver[]>([]);
   const { handleResponsiveness } = useResponsiveness();
@@ -65,21 +67,19 @@ const NavigationButtons: React.FC = () => {
   ];
 
   useEffect(() => {
+
     if (observersRef.current.length > 0) {
       observersRef.current.forEach((observer) => observer.disconnect());
       observersRef.current = [];
     }
-
     const options = {
       root: null,
       rootMargin: "0px",
       threshold: 0.5,
     };
-
     navLinks.forEach((link) => {
       const sectionId = link.href.replace("#", "");
       const section = document.getElementById(sectionId);
-
       if (section) {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
@@ -88,21 +88,22 @@ const NavigationButtons: React.FC = () => {
             }
           });
         }, options);
-
         observer.observe(section);
         observersRef.current.push(observer);
       }
     });
-
     return () => {
       observersRef.current.forEach((observer) => observer.disconnect());
     };
-  }, [navLinks]);
+  }, [navLinks, hasMounted]);
 
+  if (!hasMounted) return null;
+
+  // Mejorado el estilo base para todos los enlaces de navegación
   const aStyling = {
     textDecoration: "none",
     color: "white",
-    textShadow: "1px 1px 2px pink",
+    textShadow: "0px 0px 4px rgba(0, 0, 0, 0.9)", // Sombra más fuerte para mejor visibilidad
   };
 
   const handleClick = (
@@ -112,12 +113,16 @@ const NavigationButtons: React.FC = () => {
     const href = e.currentTarget.getAttribute("href");
     if (href?.includes(target)) {
       setActive(target);
-      setIsMobileMenuOpen(false);
     } else {
       setActive(null);
     }
+    // Cerrar el menú móvil cuando se hace clic en un enlace
+    if (isMobile) {
+      setIsMobileMenuOpen(false);
+    }
   };
 
+  // Mejorada la función para resaltar el enlace activo
   const handleSelect = (value: string) => {
     let dark =
       "-.5px -.5px 0 #171717, .5px -.5px 0 #171717, -.5px .5px 0 #171717, .5px .5px 0 #171717";
@@ -129,6 +134,7 @@ const NavigationButtons: React.FC = () => {
     } else {
       return undefined;
     }
+
   };
 
   if (!hasMounted) {
@@ -146,6 +152,7 @@ const NavigationButtons: React.FC = () => {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      style={{ filter: "drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.8))" }}
     >
       <line x1="3" y1="12" x2="21" y2="12"></line>
       <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -164,6 +171,7 @@ const NavigationButtons: React.FC = () => {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      style={{ filter: "drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.8))" }}
     >
       <line x1="18" y1="6" x2="6" y2="18"></line>
       <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -188,13 +196,14 @@ const NavigationButtons: React.FC = () => {
             transition: ".25s ease-in-out",
             color: "#f2b130",
 
+
             ...(isMobile
               ? {
-                  fontSize: "20px",
-                  padding: "10px 0",
-                  textAlign: "center",
-                  width: "100%",
-                }
+                fontSize: "20px",
+                padding: "10px 0",
+                textAlign: "center",
+                width: "100%",
+              }
               : {}),
           }}
         >
@@ -203,6 +212,10 @@ const NavigationButtons: React.FC = () => {
       ))}
     </>
   );
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   if (isMobile) {
     return (
@@ -222,8 +235,16 @@ const NavigationButtons: React.FC = () => {
             right: "1rem",
             zIndex: 1100,
             cursor: "pointer",
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
+            borderRadius: "50%",
+            width: "40px",
+            height: "40px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)",
           }}
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onClick={toggleMobileMenu}
         >
           {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
         </div>
@@ -274,21 +295,26 @@ const NavigationButtons: React.FC = () => {
         ),
         //isLargeScreen ? "1.9vw" : "1.8vw",
         fontFamily: "Inter",
-        fontWeight: "200",
+        fontWeight: "300", // Cambiado a 300 para mejor legibilidad
         textAlign: "right",
       }}
     >
       {renderNavLinks()}
       <style>
         {`
+          .navigation > a {
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
           .navigation > a:hover {
             opacity: 1 !important;
-            transition: opacity .25s ease-in-out !important;
+            transition: opacity .2s ease-in-out !important;
+            text-shadow: 0px 0px 6px rgba(0, 0, 0, 1) !important;
           }
         `}
       </style>
     </div>
   );
 };
-
 export default NavigationButtons;

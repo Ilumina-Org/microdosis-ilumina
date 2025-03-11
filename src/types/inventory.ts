@@ -1,4 +1,4 @@
-export interface StockItem {
+export type StockItem = {
   sku: string;
   title: string;
   price: number;
@@ -9,7 +9,10 @@ export interface StockItem {
   featured: boolean;
   tipo: "package" | "subscription";
   tier: number;
-}
+  beneficio_general: string;
+  quienes_pueden_usarlo: string;
+  uso_diario: string;
+};
 
 export interface Order {
   orderId: string;

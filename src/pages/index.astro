@@ -1,20 +1,20 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Chatbot from "../components/ReactComponents/Chatbot";
-import NavigationButtons from "../components/ReactComponents/NavigationButtons";
 import Landing from "../components/ReactPages/Landing";
-import Testimonials from "../components/ReactPages/Testimonials";
 import About from "../components/ReactPages/About";
-import FAQs from "../components/ReactPages/FAQs";
+import Testimonials from "../components/ReactPages/Testimonials";
+import Content from "../components/ReactPages/Content";
 import Products from "../components/ReactPages/Products";
-import { getProducts } from "../utils/stock";
-import { fallbackProducts } from "../utils/constants"; // Importa el fallback
+import FAQs from "../components/ReactPages/FAQs";
+import { fallbackProducts } from "../utils/constants";
+import ChatBot from "../components/ReactComponents/Chatbot";
 import CookieConsent from "../components/ReactComponents/CookiesConsent";
+import NavigationButtons from "../components/ReactComponents/NavigationButtons";
+import { getProducts } from "../utils/stock";
 
 let products;
 try {
   const fetchedProducts = await getProducts();
-  // Usa el fallback si no hay productos o si el array está vacío
   products =
     fetchedProducts && fetchedProducts.length > 0
       ? fetchedProducts.slice(0, 3)
@@ -23,8 +23,6 @@ try {
   console.error("Error obteniendo productos, usando fallback:", error);
   products = fallbackProducts;
 }
-
-console.log("productos utilizados:", products);
 ---
 
 <Layout>
@@ -33,7 +31,8 @@ console.log("productos utilizados:", products);
   <Testimonials id="testimonios" client:load />
   <Products id="products" client:load products={products} />
   <FAQs id="frequently-asked-questions" client:load />
-  <Chatbot client:load />
+  <ChatBot client:load />
+
   <NavigationButtons client:load />
   <CookieConsent client:load />
 </Layout>

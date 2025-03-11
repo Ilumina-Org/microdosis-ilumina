@@ -3,6 +3,9 @@ import "./Chatbot.css";
 import { useMediaQuery } from "react-responsive";
 import useResponsiveness from "../../utils/useResponsiveness";
 
+import Button from "./Button";
+
+
 interface Question {
   id: number;
   text: string;
@@ -13,6 +16,7 @@ interface Question {
 interface EnfermedadData {
   ajuste: number;
   horas: number;
+  meses: number[];
 }
 
 const ChatBot = () => {
@@ -129,30 +133,35 @@ const ChatBot = () => {
 
   // Valores de ajuste por enfermedad con horas de espera
   const enfermedadData: Record<string, EnfermedadData> = {
-    Ansiedad: { ajuste: 1, horas: 1 },
-    Depresión: { ajuste: 1, horas: 1 },
-    Diabetes: { ajuste: 2, horas: 2 },
-    Migraña: { ajuste: 1, horas: 1 },
-    "Presión Alta": { ajuste: 2, horas: 2 },
-    "Presión Baja": { ajuste: 2, horas: 2 },
-    Insomnio: { ajuste: 1, horas: 1 },
-    Gastritis: { ajuste: 3, horas: 2 },
-    Hipertiroidismo: { ajuste: 3, horas: 2 },
-    Hipotiroidismo: { ajuste: 3, horas: 2 },
-    Cáncer: { ajuste: 3, horas: 3 },
-    Artritis: { ajuste: 3, horas: 2 },
-    Artrosis: { ajuste: 3, horas: 2 },
-    Parkinson: { ajuste: 4, horas: 1 },
-    Alzheimer: { ajuste: 4, horas: 1 },
-    Asma: { ajuste: 2, horas: 1 },
-    Próstata: { ajuste: 2, horas: 1 },
-    Dermatitis: { ajuste: 2, horas: 1 },
-    Hepatitis: { ajuste: 3, horas: 1 },
-    "Colon Irritable": { ajuste: 3, horas: 1 },
-    ETS: { ajuste: 4, horas: 3 },
-    Esquizofrenia: { ajuste: -1, horas: 2 },
-    Paranoia: { ajuste: -1, horas: 2 },
-    Demencia: { ajuste: -2, horas: 2 },
+    Ansiedad: { ajuste: 1, horas: 1, meses: [3, 4] },
+    Depresión: { ajuste: 1, horas: 1, meses: [3, 4] },
+    Diabetes: { ajuste: 2, horas: 2, meses: [4, 7] },
+    Migraña: { ajuste: 1, horas: 1, meses: [4, 7] },
+    "Presión Alta": { ajuste: 2, horas: 2, meses: [8, 10] },
+    "Presión Baja": { ajuste: 2, horas: 2, meses: [8, 10] },
+    Insomnio: { ajuste: 1, horas: 1, meses: [3, 4] },
+    Gastritis: { ajuste: 3, horas: 2, meses: [3, 4] },
+    Hipertiroidismo: { ajuste: 3, horas: 2, meses: [8, 10] },
+    Hipotiroidismo: { ajuste: 3, horas: 2, meses: [8, 10] },
+    Cáncer: {
+      ajuste: 3, horas: 3, meses: [12]
+    },
+    Artritis: { ajuste: 3, horas: 2, meses: [12] },
+    Artrosis: { ajuste: 3, horas: 2, meses: [12] },
+    Parkinson: { ajuste: 4, horas: 1, meses: [12] },
+    Alzheimer: { ajuste: 4, horas: 1, meses: [12] },
+    Asma: { ajuste: 2, horas: 1, meses: [4, 7] },
+    Próstata: { ajuste: 2, horas: 1, meses: [8, 10] },
+    Dermatitis: { ajuste: 2, horas: 1, meses: [4, 7] },
+    Hepatitis: { ajuste: 3, horas: 1, meses: [8, 10] },
+    "Colon Irritable": { ajuste: 3, horas: 1, meses: [4, 7] },
+    ETS: { ajuste: 4, horas: 3, meses: [12] },
+    Esquizofrenia: { ajuste: -1, horas: 2, meses: [12] },
+    Paranoia: { ajuste: -1, horas: 2, meses: [12] },
+    Demencia: { ajuste: -2, horas: 2, meses: [12] },
+    TDH: { ajuste: 1, horas: 1, meses: [12] },
+    TLP: { ajuste: 1, horas: 1, meses: [12] },
+    Bipolaridad: { ajuste: 1, horas: 1, meses: [12] },
   };
 
   // Estados
@@ -172,6 +181,7 @@ const ChatBot = () => {
   const [showQuestionSection, setShowQuestionSection] = useState<boolean>(true);
   const [showTooltip, setShowTooltip] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [mesesRecomando, setMesesRecomando] = useState<number[]>([]);
 
   // Detectar si estamos en un dispositivo móvil
   useEffect(() => {
@@ -263,9 +273,10 @@ const ChatBot = () => {
     } else if (step === 4 && tieneEnfermedad) {
       // Tipo de diagnóstico
       setDiagnosticoSeleccionado(answer);
-      const data = enfermedadData[answer] || { ajuste: 0, horas: 1 };
+      const data = enfermedadData[answer] || { ajuste: 0, horas: 1, meses: [12] };
       setGotasCalculadas((prev) => prev + data.ajuste);
       setHorasEspera(data.horas);
+      setMesesRecomando(data.meses);
     } else if (step === 5) {
       // ¿Toma medicamentos?
       const tomaMeds = answer === "Sí";
@@ -357,6 +368,9 @@ const ChatBot = () => {
       // Instrucciones de conservación y dieta
       let conservacion = `\n🌿 Mantener la microdosis en un lugar fresco. El frasco abierto tiene vencimiento en 6 meses.\n`;
       let dieta = `\n🌿 Durante la toma de las microdosis hay que tener coherencia en la alimentación, evitar en lo máximo la carne de res y chancho, no café, no gaseosas, no comida chatarra, comidas bajas en azúcar y harinas.\n`;
+      let mesesRecomendados = `\n🌿 Recomendamos tomar la microdosis de ayahuasca entre ${mesesRecomando.join(
+        ", "
+      )}.\n`;
 
       instrucciones =
         instruccionesBasicas +
@@ -367,7 +381,8 @@ const ChatBot = () => {
         restricciones +
         instruccionesDiagnostico +
         conservacion +
-        dieta;
+        dieta +
+        mesesRecomendados;
     }
 
     setResultado(instrucciones);
@@ -540,6 +555,10 @@ const ChatBot = () => {
                 <button onClick={restartChat} className="restart-button">
                   Realizar otra consulta
                 </button>
+                <button onClick={closeChat} className="restart-button">
+                  Comprar microdosis de ayahuasca
+                </button>
+
               </div>
             )}
           </div>
