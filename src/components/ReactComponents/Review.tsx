@@ -17,6 +17,7 @@ export default function Review({ imageUrl }: any) {
         gap: "15px",
       }}
     >
+      {/*
       <img
         src={imageUrl}
         alt=""
@@ -25,6 +26,7 @@ export default function Review({ imageUrl }: any) {
         height="125"
         style={{ border: "1px solid red" }}
       />
+      */}
       <div style={{ flexDirection: "column" }}>
         <p style={{ marginTop: 0 }}>
           <i style={{ marginTop: 0, lineBreak: 4 }}>

@@ -9,6 +9,7 @@ function Button({
   padding = 10,
   styles,
   onClick = () => alert("click"),
+  disabled = false,
 }: any) {
   const { handleResponsiveness } = useResponsiveness();
   const mobile = useMediaQuery({ orientation: "portrait" });
@@ -16,10 +17,12 @@ function Button({
     <button
       id={id}
       onClick={onClick}
+      disabled={disabled}
       style={{
         display: "flex",
         width: "fit-content",
         height: "fit-content",
+        opacity: disabled ? "0.65" : "1",
         padding: padding,
         border: "none",
         fontSize: handleResponsiveness("35px", "30px", "30px", "20px", "20px"),

@@ -32,54 +32,79 @@ const API_KEY = import.meta.env.GOOGLE_SHEET_API_KEY as string;
  * @param range Rango de celdas (por defecto: "A1:Z1000")
  * @returns Valores de la hoja
  */
+
 async function getSheetData(
   sheetName: string,
   range: SheetRange = "A1:Z1000",
 ): Promise<SheetValues> {
-  if (!SPREADSHEET_ID) {
-    console.error("Error: SPREADSHEET_ID no está definido");
-    throw new Error(
-      "SPREADSHEET_ID no está configurado en las variables de entorno",
-    );
-  }
+  // 1. Usar el ID de publicación de la URL que generaste
+  const PUBLISHED_SHEET_ID =
+    "2PACX-1vRyo_8ixf17YTHOg0IlXZKxhSL0Hhiulq_ujFjg5b60010Cjry4ZiwMrYnOwFnh2YbWWU1xhLGejF8S";
 
-  if (!API_KEY) {
-    console.error("Error: API_KEY no está definido");
-    throw new Error("API_KEY no está configurado en las variables de entorno");
-  }
+  // 2. GID específico de tu pestaña (lo obtienes de la URL de edición)
+  const GID = "1721761715";
 
   try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(sheetName)}!${encodeURIComponent(range)}?key=${API_KEY}`;
+    // Codificar parámetros
+    const encodedRange = encodeURIComponent(range);
 
-    console.log(`Fetching sheet data from: ${sheetName}!${range}`);
+    // Nueva URL con formato de publicación web
+    const url = `https://docs.google.com/spreadsheets/d/e/${PUBLISHED_SHEET_ID}/pub?output=csv&gid=${GID}&range=${encodedRange}`;
 
-    const response = await fetch(url);
+    console.log(`Fetching data from URL: ${url}`);
+
+    // Headers importantes para evitar bloqueos
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+        Accept: "text/csv",
+      },
+    });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(
-        `Error fetching sheet data: Status ${response.status}, Response: ${errorText}`,
-      );
+      const errorContent = await response.text();
       throw new Error(
-        `Error fetching sheet data: ${response.statusText} (${response.status})`,
+        `HTTP Error ${response.status}: ${errorContent.slice(0, 100)}...`,
       );
     }
 
-    const data = (await response.json()) as SheetResponse;
+    const csvData = await response.text();
 
-    if (!data.values) {
-      console.warn(`No values found in ${sheetName}!${range}`);
-      return [];
-    }
-
-    return data.values;
+    return csvData
+      .split("\n")
+      .filter((line) => line.trim())
+      .map(parseCSVLine);
   } catch (error) {
-    console.error(
-      `Error completo al obtener datos de la hoja ${sheetName}:`,
-      error,
-    );
-    throw error;
+    console.error(`Error crítico: ${error.message}`);
+    throw new Error("Error al obtener datos de Google Sheets");
   }
+}
+
+function parseCSVLine(line: string): string[] {
+  const result = [];
+  let current = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      if (i + 1 < line.length && line[i + 1] === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === "," && !inQuotes) {
+      // End of field
+      result.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+  // Add the last field
+  result.push(current);
+  return result;
 }
 
 /**
@@ -240,7 +265,7 @@ async function ensureSheetExists(
     "Featured",
     "Tipo",
     "Tier",
-    "Beneficio General",
+    "BenefitGeneral",
     "Quienes Pueden Usarlo",
     "Uso Diario",
   ],
