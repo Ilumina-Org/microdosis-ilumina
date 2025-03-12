@@ -2,8 +2,9 @@ import React from "react";
 import Button from "../ReactComponents/Button";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
 import staticModel from "../../assets/model_static.png";
-import image1 from "../../assets/asset1.png?url";
-import image2 from "../../assets/asset2.png?url";
+import image1 from "../../assets/still.png?url";
+import image2 from "../../assets/asset1.png?url";
+import image3 from "../../assets/asset2.png?url";
 import useResponsiveness from "../../utils/useResponsiveness";
 import placeholder from "../../assets/place_holder_image.svg";
 import placeholdersvg from "../../assets/placeholder.svg";
@@ -46,17 +47,21 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               reconocidos beneficios curativos.
             </p>
           </div>
-          {/* <img src={placeholder.src} alt="trabajando en la imagen" className="about-image" /> */}
           <div className="about-image placeholderMask">
-            <PlaceHolderImage />
+            <img
+              src={image2}
+              alt="trabajando en la imagen"
+              className="about-image"
+            />
+            {/* <PlaceHolderImage /> */}
           </div>
         </div>
 
         {/* Second Section */}
         <div className="about-section">
-          {/* <img src={image2} alt="" className="about-image" /> */}
           <div className="about-image">
-            <PlaceHolderImage />
+            <img src={image3} alt="" className="about-image" />
+            {/* <PlaceHolderImage /> */}
           </div>
           <div className="about-text">
             <h2
@@ -121,9 +126,13 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               </li>
             </ul>
           </div>
-          {/* <img src={placeholder.src} alt="trabajando en la imagen" className="about-image" /> */}
           <div className="about-image">
-            <PlaceHolderImage />
+            <img
+              src={image1}
+              alt="trabajando en la imagen"
+              className="about-image"
+            />
+            {/* <PlaceHolderImage /> */}
           </div>
         </div>
       </div>
