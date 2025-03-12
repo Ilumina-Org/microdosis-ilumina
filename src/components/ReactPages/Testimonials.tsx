@@ -51,18 +51,17 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             }}
           >
             <iframe
-              width={mobile ? "350px" : desktop ? "850px" : "700px"}
-              height={mobile ? "200px" : desktop ? "450px" : "400px"}
-              src="https://www.youtube.com/embed/oCbUxZC_eto?rel=0&modestbranding=1&showinfo=0"
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
+              title="vimeo-player"
+              src="https://player.vimeo.com/video/1065240068?h=49d7e3887b"
+              width="640" height="360"
+              frameborder="0"
+              allowfullscreen
+            >
+            </iframe>
           </div>
           <TestimonialCarousel />
         </div>
-      </SectionLayout>
+      </SectionLayout >
     );
   }
 );
