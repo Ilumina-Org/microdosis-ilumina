@@ -83,7 +83,7 @@ const TestimonialCarousel = () => {
         interval={5000}
         // centerSlidePercentage={isMobile ? 90 : isTablet ? 70 : 50}
         centerSlidePercentage={
-          isMobile ? 100 : handleResponsiveness("60", "50", "40", "30", "")
+          isMobile ? 100 : handleResponsiveness("130", "30", "30", "30", "30")
         }
         showThumbs={false}
         showArrows={true}

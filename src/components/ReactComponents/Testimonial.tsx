@@ -17,7 +17,7 @@ export const Testimonial = ({
 }: TestimonialItem & { index: number }) => {
   // Very short text for mobile
   const formatText = (text: string, slice: number) => {
-    return `${text.slice(0, slice)}...`;
+    return `${text.slice(0, slice)}`;
   };
 
   const laptop = useMediaQuery({ query: "(min-width: 1400px)" });
@@ -28,7 +28,7 @@ export const Testimonial = ({
     query: "(min-width: 768px) and (max-width: 1023px)",
   });
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
-  const textLength = isMobile ? 120 : isTablet ? 120 : 150;
+  const textLength = isMobile ? 120 : isTablet ? 120 : 180;
   const { mobile, handleResponsiveness } = useResponsiveness();
 
   return (
