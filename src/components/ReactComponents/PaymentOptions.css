@@ -174,12 +174,50 @@
 }
 
 .contact-button {
-  background: #4a90e2;
+  background: #25d366;
+  color: white;
+  font-weight: 600;
+  border: 2px solid #128c7e;
+  border-radius: 8px;
+  padding: 12px 18px;
+  margin: 15px auto 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  max-width: 250px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .contact-button:hover {
+  background: #1ea952;
+  border-color: #075e54;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+}
+
+.contact-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(37, 211, 102, 0.2);
+  background: #128c7e;
+}
+
+.international-shipping-info {
+  background: #e9f9ef;
+  border: 1px solid #c5e8d5;
+  border-radius: 8px;
+  padding: 18px;
+  margin-top: 10px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(37, 211, 102, 0.05);
+}
+
+.international-shipping-info p {
+  color: #075e54;
+  margin-bottom: 10px;
+  font-weight: 500;
 }
 
 .shipping-selector {
@@ -347,6 +385,7 @@
 /* Estilos para los botones de tipo de ubicación */
 .location-type-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 15px;
 }
@@ -355,16 +394,18 @@
   padding: 8px 12px;
   border: 1px solid #bbb;
   background: #f5f5f5;
-  border-radius: 8px; /* Usamos bordes redondeados como en el botón de WhatsApp */
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.3s ease;
   color: #333;
-  font-size: 1rem; /* Mantemos un tamaño de fuente similar pero un poco más pequeño */
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 120px; /* Evitamos que los botones sean demasiado pequeños */
+  flex: 1; /* Allow buttons to grow */
+  min-width: 110px; /* Minimum width for buttons */
+  text-align: center;
 }
 
 .location-type-btn.active {
@@ -396,4 +437,18 @@
 .location-selector {
   margin-top: 10px;
   margin-bottom: 15px;
+}
+
+@media (max-width: 480px) {
+  .location-type-btn {
+    flex-basis: calc(50% - 10px);
+    min-width: 0;
+    font-size: 0.9rem;
+    padding: 8px 6px;
+  }
+
+  .location-type-buttons:has(.location-type-btn:nth-child(3))
+    .location-type-btn {
+    flex-basis: 100%;
+  }
 }
