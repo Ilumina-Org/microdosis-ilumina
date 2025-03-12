@@ -67,7 +67,6 @@ const NavigationButtons: React.FC = () => {
   ];
 
   useEffect(() => {
-
     if (observersRef.current.length > 0) {
       observersRef.current.forEach((observer) => observer.disconnect());
       observersRef.current = [];
@@ -134,7 +133,6 @@ const NavigationButtons: React.FC = () => {
     } else {
       return undefined;
     }
-
   };
 
   if (!hasMounted) {
@@ -196,14 +194,13 @@ const NavigationButtons: React.FC = () => {
             transition: ".25s ease-in-out",
             color: "#f2b130",
 
-
             ...(isMobile
               ? {
-                fontSize: "20px",
-                padding: "10px 0",
-                textAlign: "center",
-                width: "100%",
-              }
+                  fontSize: "20px",
+                  padding: "10px 0",
+                  textAlign: "center",
+                  width: "100%",
+                }
               : {}),
           }}
         >
@@ -310,7 +307,7 @@ const NavigationButtons: React.FC = () => {
           .navigation > a:hover {
             opacity: 1 !important;
             transition: opacity .2s ease-in-out !important;
-            text-shadow: 0px 0px 6px rgba(0, 0, 0, 1) !important;
+            /* text-shadow: 0px 0px 6px rgba(0, 0, 0, 1) !important; */
           }
         `}
       </style>

@@ -1,9 +1,11 @@
 "use client";
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import ProductContainer from "../../components/ReactComponents/ProductContainer";
 import { SectionLayout } from "../ReactComponents/SectionLayout";
 import useResponsiveness from "../../utils/useResponsiveness";
 import { useMediaQuery } from "react-responsive";
+import { Carousel } from "react-responsive-carousel";
 
 interface Product {
   sku: string;
@@ -27,16 +29,38 @@ interface ProductsPageProps {
 
 const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
   (props, ref) => {
-    const { handleResponsiveness } = useResponsiveness();
+    const { mobile, handleResponsiveness } = useResponsiveness();
     let padding = handleResponsiveness(16, 15, 25, 15, undefined);
     const small = useMediaQuery({ query: "(min-width: 1366px)" });
+    const [opacityIndex, setOpacityIndex] = useState<number>();
+    let headerPadding = handleResponsiveness(
+      "10rem",
+      "15rem",
+      "25rem",
+      "35rem",
+      ""
+    );
+
+    const [hasMounted, setHasMounted] = useState(false);
+
+    useEffect(() => {
+      setHasMounted(true);
+    }, []);
+
+    if (!hasMounted) {
+      return null;
+    }
+
+    const handleChange = (index: number) => {
+      setOpacityIndex(index);
+    };
 
     return (
       <SectionLayout
         id={props.id}
         ref={ref}
         background="white"
-        horizontalPadding={padding}
+        // horizontalPadding={padding}
         verticalPadding={"2rem"}
         height="auto"
       >
@@ -56,67 +80,74 @@ const Products = React.forwardRef<HTMLDivElement, ProductsPageProps>(
               fontWeight: 200,
               color: "black",
               opacity: 1,
+              // width: "100vw",
+              width: "55%",
+              paddingRight: headerPadding,
+              paddingLeft: headerPadding,
             }}
           >
-            Productos
+            Productos y paquetes
           </h3>
 
-          {props.productsError ? (
-            <div
-              style={{
-                width: "100%",
-                padding: "2rem",
-                backgroundColor: "#f8f8f8",
-                borderRadius: "8px",
-                textAlign: "center",
-                maxWidth: "800px",
-              }}
-            >
-              <h4
+          {
+            props.productsError ? (
+              <div
                 style={{
-                  color: "#e74c3c",
-                  marginBottom: "1rem",
-                  fontSize: "1.5rem",
+                  width: "100%",
+                  padding: "2rem",
+                  backgroundColor: "#f8f8f8",
+                  borderRadius: "8px",
+                  textAlign: "center",
+                  maxWidth: "800px",
                 }}
               >
-                Productos no encontrados
-              </h4>
-              <p style={{ fontSize: "1rem", color: "#555" }}>
-                Lo sentimos, no se pudieron cargar los productos. Por favor,
-                intente nuevamente más tarde.
-              </p>
-            </div>
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "30px",
-                maxWidth: "1200px",
-                width: "100%",
-              }}
-            >
-              {props.products.map((product: Product) => (
-                <ProductContainer
-                  sku={product.sku}
-                  link={"microdosis-package/" + product.sku}
-                  imageUrl={"products/" + product.sku + "-card.svg"}
-                  productTitle={product.title}
-                  productDetail={product.productDetail}
-                  benefitGeneral={product.benefitGeneral}
-                  productPrice={product.productPrice}
-                  productDeal={product.productDeal}
-                  stock={product.stock}
-                  purchaseType={product.tipo as any}
-                  tier={product.tier}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+                <h4
+                  style={{
+                    color: "#e74c3c",
+                    marginBottom: "1rem",
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  Productos no encontrados
+                </h4>
+                <p style={{ fontSize: "1rem", color: "#555" }}>
+                  Lo sentimos, no se pudieron cargar los productos. Por favor,
+                  intente nuevamente más tarde.
+                </p>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "30px",
+                  maxWidth: "1200px",
+                  width: "100%",
+                }}
+              >
+                {props.products.map((product: Product) => (
+                  <ProductContainer
+                    sku={product.sku}
+                    link={"microdosis-package/" + product.sku}
+                    imageUrl={"products/" + product.sku + "-card.svg"}
+                    productTitle={product.title}
+                    productDetail={product.productDetail}
+                    benefitGeneral={product.benefitGeneral}
+                    productPrice={product.productPrice}
+                    productDeal={product.productDeal}
+                    stock={product.stock}
+                    purchaseType={product.tipo as any}
+                    tier={product.tier}
+                    inView={true}
+                  />
+                ))}
+              </div>
+            )
+          }
+        </div >
       </SectionLayout >
     );
   },
