@@ -53,7 +53,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             <iframe
               width={mobile ? "350px" : desktop ? "850px" : "700px"}
               height={mobile ? "200px" : desktop ? "450px" : "400px"}
-              src="https://www.youtube.com/embed/qRTVg8HHzUo?si=oT9nLeT7KbVrjKc6"
+              src="https://www.youtube.com/embed/oCbUxZC_eto?rel=0&modestbranding=1&showinfo=0"
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
