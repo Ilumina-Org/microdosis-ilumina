@@ -79,6 +79,12 @@ export const DEPARTMENTS: Location[] = [
   { code: "UCAYA", name: "Ucayali" },
 ];
 
+export const COUNTRIES: Location[] = [
+  { code: "COL", name: "Colombia" },
+  { code: "MX", name: "México" },
+  { code: "SPN", name: "España" },
+];
+
 // Tarifas de envío para distritos de Lima (mantenido igual)
 export const DISTRICT_SHIPPING_RATES: { [code: string]: number } = {
   // Lima Metropolitana - tarifa estándar
@@ -156,6 +162,13 @@ export const DEPARTMENT_SHIPPING_RATES: { [code: string]: number } = {
   UCAYA: 45.0,
 };
 
+export const COUNTRY_SHIPPING_RATES: { [code: string]: number } = {
+  COL: 140.0,
+  MX: 150.0,
+  SPN: 160.0,
+};
+
+export const DEFAULT_COUNTRY_SHIPPING_COST = 40.0;
 export const DEFAULT_DISTRICT_SHIPPING_COST = 15.0;
 export const DEFAULT_DEPARTMENT_SHIPPING_COST = 35.0;
 
@@ -182,6 +195,17 @@ export function calculateDepartmentShippingCost(
     return DEPARTMENT_SHIPPING_RATES[department];
   }
   return DEFAULT_DEPARTMENT_SHIPPING_COST;
+}
+
+export function calculateCountryShippingCost(
+  country: string | null,
+  packageId: string | null,
+): number {
+  if (!country) return DEFAULT_COUNTRY_SHIPPING_COST;
+  if (COUNTRY_SHIPPING_RATES[country]) {
+    return COUNTRY_SHIPPING_RATES[country];
+  }
+  return DEFAULT_COUNTRY_SHIPPING_COST;
 }
 
 export function getCulqiLink(locationCode: string): string {

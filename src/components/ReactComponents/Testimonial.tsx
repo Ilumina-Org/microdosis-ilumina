@@ -6,20 +6,18 @@ import useResponsiveness from "../../utils/useResponsiveness";
 interface TestimonialItem {
   name: string;
   review: string;
-  image?: string;
   isInView?: boolean;
 }
 
 export const Testimonial = ({
   name,
   review,
-  image,
   index,
   isInView,
 }: TestimonialItem & { index: number }) => {
   // Very short text for mobile
   const formatText = (text: string, slice: number) => {
-    return `${text.slice(0, slice)}...`;
+    return `${text.slice(0, slice)}`;
   };
 
   const laptop = useMediaQuery({ query: "(min-width: 1400px)" });
@@ -30,7 +28,7 @@ export const Testimonial = ({
     query: "(min-width: 768px) and (max-width: 1023px)",
   });
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
-  const textLength = isMobile ? 120 : isTablet ? 120 : 150;
+  const textLength = isMobile ? 120 : isTablet ? 120 : 180;
   const { mobile, handleResponsiveness } = useResponsiveness();
 
   return (
@@ -49,6 +47,7 @@ export const Testimonial = ({
         flexDirection: "row",
       }}
     >
+      {/*
       <div
         style={{
           width: "100%",
@@ -57,6 +56,7 @@ export const Testimonial = ({
           maxWidth: "150px",
         }}
       >
+
         {image ? (
           <img
             src={image}
@@ -74,6 +74,7 @@ export const Testimonial = ({
           <PlaceHolder />
         )}
       </div>
+      */}
       <div
         style={{
           display: "flex",
@@ -114,6 +115,6 @@ export const Testimonial = ({
           {name}
         </p>
       </div>
-    </div>
+    </div >
   );
 };

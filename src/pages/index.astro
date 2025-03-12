@@ -10,63 +10,25 @@ import ChatBot from "../components/ReactComponents/Chatbot";
 import CookieConsent from "../components/ReactComponents/CookiesConsent";
 import NavigationButtons from "../components/ReactComponents/NavigationButtons";
 import { getProducts } from "../utils/stock";
-import { Debug } from "astro/components";
-// Variables para almacenar información de debugging
+
 let products = [];
 let productsError = false;
-let errorDetails = "";
-let debugState = {
-  startTime: new Date().toISOString(),
-  steps: [],
-};
-
-// Agregar pasos al debug
-debugState.steps.push("Iniciando obtención de productos");
 
 try {
-  debugState.steps.push("Llamando a getProducts()");
   const fetchedProducts = await getProducts();
-
-  debugState.steps.push(
-    `getProducts devolvió: ${!!fetchedProducts ? "datos" : "null/undefined"}`,
-  );
-  if (fetchedProducts) {
-    debugState.steps.push(
-      `Longitud de fetchedProducts: ${fetchedProducts.length}`,
-    );
-  }
-
+  console.log("fetchedProducts:", fetchedProducts);
   if (fetchedProducts && fetchedProducts.length > 0) {
     products = fetchedProducts.slice(0, 3);
-    debugState.steps.push(
-      `Se obtuvieron ${products.length} productos correctamente`,
-    );
   } else {
     productsError = true;
-    errorDetails = "No se encontraron productos (array vacío o null)";
-    debugState.steps.push(`Error: ${errorDetails}`);
   }
 } catch (error) {
+  console.error("Error obteniendo productos:", error);
   productsError = true;
-  errorDetails = `Error obteniendo productos: ${error.message}`;
-  debugState.steps.push(`Excepción capturada: ${error.message}`);
-  debugState.steps.push(`Stack: ${error.stack}`);
 }
-
-// Finalizar información de debug
-debugState.endTime = new Date().toISOString();
-debugState.productsCount = products.length;
-debugState.hasError = productsError;
-debugState.errorMessage = errorDetails;
 ---
 
 <Layout>
-  <div
-    style="background: #f8d7da; color: #721c24; padding: 20px; margin: 20px; border-radius: 5px; font-family: monospace; font-size: 14px;"
-  >
-    <h2>Debug Info:</h2>
-    <Debug data={debugState} />
-  </div>
   <Landing id="inicio" client:load />
   <About id="about" client:load />
   <Testimonials id="testimonios" client:load />

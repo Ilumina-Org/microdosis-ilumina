@@ -37,51 +37,47 @@ async function getSheetData(
   sheetName: string,
   range: SheetRange = "A1:Z1000",
 ): Promise<SheetValues> {
-  if (!SPREADSHEET_ID) {
-    console.error("Error: SPREADSHEET_ID no está definido");
-    throw new Error(
-      "SPREADSHEET_ID no está configurado en las variables de entorno",
-    );
-  }
+  // 1. Usar el ID de publicación de la URL que generaste
+  const PUBLISHED_SHEET_ID =
+    "2PACX-1vRyo_8ixf17YTHOg0IlXZKxhSL0Hhiulq_ujFjg5b60010Cjry4ZiwMrYnOwFnh2YbWWU1xhLGejF8S";
+
+  // 2. GID específico de tu pestaña (lo obtienes de la URL de edición)
+  const GID = "1721761715";
+
   try {
-    // Properly encode the sheet name and range
-    const encodedSheetName = encodeURIComponent(sheetName);
+    // Codificar parámetros
     const encodedRange = encodeURIComponent(range);
-    // URL usando el método gviz que ha funcionado
-    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodedSheetName}&range=${encodedRange}`;
-    console.log(`Fetching sheet data from: ${sheetName}!${range}, URL: ${url}`);
+
+    // Nueva URL con formato de publicación web
+    const url = `https://docs.google.com/spreadsheets/d/e/${PUBLISHED_SHEET_ID}/pub?output=csv&gid=${GID}&range=${encodedRange}`;
+
+    console.log(`Fetching data from URL: ${url}`);
+
+    // Headers importantes para evitar bloqueos
     const response = await fetch(url, {
       headers: {
-        Accept: "text/csv,application/json",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+        Accept: "text/csv",
       },
     });
+
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(
-        `Error fetching sheet data: Status ${response.status}, Response: ${errorText}`,
-      );
+      const errorContent = await response.text();
       throw new Error(
-        `Error fetching sheet data: ${response.statusText} (${response.status})`,
+        `HTTP Error ${response.status}: ${errorContent.slice(0, 100)}...`,
       );
     }
-    const csvText = await response.text();
-    const values = csvText
+
+    const csvData = await response.text();
+
+    return csvData
       .split("\n")
-      .filter((line) => line.trim() !== "") // Remove empty lines
-      .map((line) => {
-        return parseCSVLine(line);
-      });
-    if (values.length === 0) {
-      console.warn(`No values found in ${sheetName}!${range}`);
-      return [];
-    }
-    return values;
+      .filter((line) => line.trim())
+      .map(parseCSVLine);
   } catch (error) {
-    console.error(
-      `Error completo al obtener datos de la hoja ${sheetName}:`,
-      error,
-    );
-    throw error;
+    console.error(`Error crítico: ${error.message}`);
+    throw new Error("Error al obtener datos de Google Sheets");
   }
 }
 
@@ -269,7 +265,7 @@ async function ensureSheetExists(
     "Featured",
     "Tipo",
     "Tier",
-    "Beneficio General",
+    "BenefitGeneral",
     "Quienes Pueden Usarlo",
     "Uso Diario",
   ],

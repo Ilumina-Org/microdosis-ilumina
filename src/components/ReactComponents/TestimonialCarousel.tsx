@@ -30,28 +30,29 @@ const TestimonialCarousel = () => {
     {
       name: "Sofia P.",
       review:
-        "Tras sufrir de depresión por años, las microdosis de ayahuasca me han dado una nueva perspectiva de vida. Cada día me siento más conectada con mi alegría interior y con las personas a mi alrededor. Es como si hubiera encontrado la llave para desbloquear mi felicidad.",
-      image: "/assets/user1.png", // Ruta de ejemplo
+        "Las microdosis de ayahuasca me han dado una nueva perspectiva. Ahora me siento más conectada con mi alegría y con los demás. Es como encontrar la llave de mi felicidad.",
+      image: "/assets/user1.png",
     },
     {
       name: "Carlos M",
       review:
-        "La claridad mental que he alcanzado desde que comencé con las microdosis es increíble. Puedo pensar con más profundidad y resolver problemas con una eficiencia que nunca antes había experimentado. Ha mejorado enormemente mi desempeño en el trabajo y mi satisfacción personal.",
+        "Desde que uso microdosis, mi mente está más clara. Pienso mejor, resuelvo problemas rápido y rindo más en el trabajo. Ha mejorado mucho mi vida.",
       image: "/assets/user1.png",
     },
     {
       name: "Elena Q",
       review:
-        "Después de años luchando con trastornos de ansiedad, finalmente siento que tengo control sobre mi vida. Las microdosis me han ayudado a calmar mi mente y a enfrentar situaciones estresantes con una serenidad que nunca pensé posible.",
+        "Las microdosis me ayudaron a calmar mi ansiedad. Ahora enfrento el estrés con tranquilidad, algo que antes no creía posible.",
       image: "/assets/user1.png",
     },
     {
       name: "Tomás R",
       review:
-        "Como atleta, siempre estoy buscando mejorar mi rendimiento y recuperación. Las microdosis de ayahuasca han sido fundamentales para mejorar mi concentración durante las competencias y acelerar mi recuperación después de entrenamientos intensos. Es un cambio radical en mi rutina deportiva.",
+        "Como atleta, las microdosis mejoraron mi concentración y recuperación. Ahora entreno y compito mejor. Es un cambio total para mí.",
       image: "/assets/user1.png",
     },
   ];
+
 
   return (
     <div
@@ -77,15 +78,15 @@ const TestimonialCarousel = () => {
         Opiniones de nuestros clientes
       </p>
       <Carousel
-        autoPlay={false}
+        autoPlay={true}
         infiniteLoop={true}
-        interval={2250}
+        interval={5000}
         // centerSlidePercentage={isMobile ? 90 : isTablet ? 70 : 50}
         centerSlidePercentage={
-          isMobile ? 100 : handleResponsiveness("60", "50", "40", "30", "")
+          isMobile ? 100 : handleResponsiveness("130", "30", "30", "30", "30")
         }
         showThumbs={false}
-        showArrows={false}
+        showArrows={true}
         showIndicators={isMobile}
         showStatus={false}
         centerMode={true}
@@ -93,13 +94,12 @@ const TestimonialCarousel = () => {
         emulateTouch={true}
         swipeScrollTolerance={5}
         width={"100vw"}
-        // style={{ display: "flex", justifyContent: "center" }}
+      // style={{ display: "flex", justifyContent: "center" }}
       >
         {TestTestimonials.map((testimonial, index) => (
           <Testimonial
             name={testimonial.name}
             review={testimonial.review}
-            image={testimonial.image}
             isInView={opacityIndex == index}
             index={index}
             key={index}

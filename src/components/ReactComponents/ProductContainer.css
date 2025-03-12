@@ -9,6 +9,13 @@
   flex-direction: row;
 }
 
+.benefit-general {
+  font-size: 0.9rem;
+  margin: 0 0 5px 0;
+  color: #555 !important;
+  font-weight: 500;
+}
+
 .product-container-details {
   display: flex;
   flex-direction: row;
@@ -53,11 +60,12 @@
 }
 
 .product-title {
-  font-size: 1rem;
+  font-size: 1.2rem;
   margin: 0;
   line-height: 1.2;
-  color: #333;
+  color: #012f1f;
   font-weight: 600;
+  opacity: 1;
 }
 
 .product-detail {

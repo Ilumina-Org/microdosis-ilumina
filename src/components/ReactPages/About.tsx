@@ -167,7 +167,7 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             }
 
             .about-image {
-              width: 25rem;
+              width: 23rem;
               height: auto;
             }
 
@@ -189,14 +189,13 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               margin-right: 1rem;
             }
 
-        ${
-          mobile &&
+        ${mobile &&
           `.about-section:not(:nth-of-type(2)) {
             display: flex;
             flex-direction: column-reverse;
             /*or hide the image*/
           }`
-        }
+          }
 
 
           `}
