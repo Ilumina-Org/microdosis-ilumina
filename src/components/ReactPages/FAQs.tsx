@@ -98,7 +98,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
         )}
         // style={{ position: "absolute" }}
         style={{ display: "flex", flexDirection: "column", height: "auto" }}
-        // verticalPadding={"4rem"}
+      // verticalPadding={"4rem"}
       >
         <div
           style={{
@@ -219,8 +219,12 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
                   opacity: "0.5",
                 }}
               >
-                Lorem@ ipsum dolor sit amet consectetur. Mi viverra tristique
-                tristique mass
+                ¿Te gustó la página?
+                <a
+                  style={{ ...socialButtonStyles }}
+                  href="https://wa.me/+51984794603" target="blank">
+                  Escríbenos por WhatsApp
+                </a>
               </h4>
             </div>
           </div>
@@ -237,23 +241,23 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
           >
             <a
               style={{ ...socialButtonStyles }}
-              href="google.com"
+              href="https://wa.me/+51939114496"
               target="blank"
             >
               <Whatsapp size="30" color="white" variant="Bold" />
-              @31488226
+              +51939114496
             </a>
             <a
               style={{ ...socialButtonStyles }}
-              href="google.com"
+              href="https://www.facebook.com/ilumina.cle"
               target="blank"
             >
               <Facebook size="30" color="white" variant="Bold" />
-              @illumina
+              @ilumina
             </a>
           </div>
         </div>
-      </SectionLayout>
+      </SectionLayout >
     );
   }
 );

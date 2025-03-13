@@ -171,11 +171,13 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           styles={{ backgroundColor: "white" }}
           icon={<Whatsapp size="40" color="#013726" variant="Bold" />}
           padding={10}
+          onClick={() => window.open("https://wa.me/+51939114496")}
         />
         <Button
           styles={{ backgroundColor: "white" }}
           icon={<Facebook size="40" color="#013726" variant="Bold" />}
           padding={10}
+          onClick={() => window.open("https://www.facebook.com/ilumina.cle")}
         />
       </div>
 
