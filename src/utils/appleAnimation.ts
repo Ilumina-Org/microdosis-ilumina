@@ -1,22 +1,22 @@
 export function initializeAnimation(canvas: HTMLCanvasElement) {
   if (!canvas) {
-    console.error('Canvas not found, load static image instead');
+    console.error("Canvas not found, load static image instead");
     return;
   }
 
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   if (!ctx) {
-    console.error('Could not get 2D context for canvas');
+    console.error("Could not get 2D context for canvas");
     return;
   }
 
-  const frameCount = 71;
+  const frameCount = 47;
   const frames: HTMLImageElement[] = [];
-  let currentFrame =1;
+  let currentFrame = 1;
 
   function resizeCanvas() {
     const img = new Image();
-    img.src = '/frames/0010.png';
+    img.src = "/frames/0010.png";
     img.onload = () => {
       canvas.width = img.naturalWidth;
       canvas.height = img.naturalHeight;
@@ -27,7 +27,7 @@ export function initializeAnimation(canvas: HTMLCanvasElement) {
     //           1
     for (let i = 1; i < frameCount; i++) {
       const img = new Image();
-      const frameNumber = String(i).padStart(4, '0');
+      const frameNumber = String(i).padStart(4, "0");
       img.src = `/frames/${frameNumber}.png`;
       img.onerror = () => console.error(`Failed to load frame ${frameNumber}`);
       frames.push(img);
@@ -87,10 +87,11 @@ export function initializeAnimation(canvas: HTMLCanvasElement) {
   preloadFrames();
 
   setTimeout(() => {
-    console.log('▶️ Starting animation...');
+    console.log("▶️ Starting animation...");
     drawFrame();
   }, 500);
 
   // Handle window resize
-  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener("resize", resizeCanvas);
 }
+
