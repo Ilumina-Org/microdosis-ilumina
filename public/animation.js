@@ -4,9 +4,9 @@ if (!canvas) {
 }
 const ctx = canvas?.getContext('2d');
 
-const frameCount = 71;
+const frameCount = 46;
 const frames = [];
-let currentFrame = 0;
+let currentFrame = 1;
 
 function resizeCanvas() {
   if (canvas) {
@@ -14,13 +14,14 @@ function resizeCanvas() {
     img.src = '/frames/0001.png';
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
-  }
+  } 
 }
 
 function preloadFrames() {
   for (let i = 1; i < frameCount; i++) {
     const img = new Image();
     const frameNumber = String(i).padStart(4, '0');
+    alert(frameNumber);
     img.src = `/frames/${frameNumber}.png`;
     img.onerror = () => console.error(`Failed to load frame ${frameNumber}`);
     frames.push(img);
@@ -28,7 +29,7 @@ function preloadFrames() {
 }
 
 //delay
-let frameDelay = 1;
+let frameDelay = -1;
 let frameDelayCounter = 0;
 
 function drawFrame() {
