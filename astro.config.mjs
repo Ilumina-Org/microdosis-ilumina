@@ -6,7 +6,7 @@ import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "http://localhost:4321",
+  site: "https://www.ayahuasca-ilumina.com",
   server: {
     headers:
       import.meta.env.NODE_ENV === "production"
@@ -31,7 +31,7 @@ export default defineConfig({
       enabled: true,
     },
   }),
-  integrations: [react()],
+  integrations: [react(), sitemap()],
   vite: {
     resolve: {
       // Use react-dom/server.edge instead of react-dom/server.browser for React 19.

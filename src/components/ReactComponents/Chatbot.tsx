@@ -380,7 +380,7 @@ const ChatBot = () => {
       // Instrucciones de conservación y dieta
       let conservacion = `\n🌿 Mantener la microdosis en un lugar fresco. El frasco abierto tiene vencimiento en 6 meses.\n`;
       let dieta = `\n🌿 Durante la toma de las microdosis hay que tener coherencia en la alimentación, evitar en lo máximo la carne de res y chancho, no café, no gaseosas, no comida chatarra, comidas bajas en azúcar y harinas.\n`;
-      let mesesRecomendados = `\nRecomendamos tomar la microdosis de ayahuasca entre ${mesesRecomando.length > 1 ? mesesRecomando.join(" a ") : mesesRecomando[0]} meses.\n`;
+      let mesesRecomendados = `\n😊 Recomendamos tomar la microdosis de ayahuasca entre ${mesesRecomando.length > 1 ? mesesRecomando.join(" a ") : mesesRecomando[0]} meses.\n`;
       instrucciones =
         instruccionesBasicas +
         instruccionesMañana +
@@ -565,7 +565,7 @@ const ChatBot = () => {
                   Realizar otra consulta
                 </button>
                 <button onClick={handleClickProduct} className="restart-button">
-                  Comprar microdosis de ayahuasca
+                 🛒 Comprar microdosis de ayahuasca
                 </button>
 
               </div>
