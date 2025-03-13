@@ -47,8 +47,7 @@ export const Testimonial = ({
         flexDirection: "row",
       }}
     >
-      {/*
-      <div
+      {/* <div
         style={{
           width: "100%",
           borderRadius: "20px",
@@ -73,8 +72,7 @@ export const Testimonial = ({
         ) : (
           <PlaceHolder />
         )}
-      </div>
-      */}
+      </div> */}
       <div
         style={{
           display: "flex",

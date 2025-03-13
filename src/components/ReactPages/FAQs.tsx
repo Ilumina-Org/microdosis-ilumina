@@ -63,7 +63,7 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             fontWeight: "200",
             color: "white",
             // lineHeight: "1.75rem",
-            lineHeight: mobile ? "auto" : "1.5vw",
+            lineHeight: mobile ? "auto" : "auto",
             fontSize: small ? "1.2rem" : "1.25rem",
           }}
         >
