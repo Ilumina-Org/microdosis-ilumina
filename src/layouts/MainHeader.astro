@@ -12,9 +12,7 @@ const { title, description, image, frontmatter, robots } = Astro.props;
   <meta name="generator" content={Astro.generator} />
   <title>{title}</title>
   <meta name="description" content={description} />
-
   <Seo {title} {description} url={Astro.url} {image} {frontmatter} {robots} />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link
     rel="preconnect"
