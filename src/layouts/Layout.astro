@@ -1,24 +1,26 @@
 ---
-// Layout.astro
-const { title = "Ilumina - Microdosis" } = Astro.props;
-import NavigationButtons from "../components/ReactComponents/NavigationButtons";
----
+import MainHeader from "./MainHeader.astro";
 
+// Layout.astro
+
+const {
+  title = "Ayahuasca - Ilumina",
+  description = "Plantas medicinales de la familia de Ilumina",
+  image,
+  frontmatter,
+  robots,
+} = Astro.props;
+
+---
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <title>Ilumina - Ayahuasca</title>
-  </head>
+  <MainHeader
+    title={title}
+    description={description}
+    image={image}
+    frontmatter={frontmatter}
+    robots={robots}
+  />
   <body>
     <slot />
   </body>
