@@ -1,8 +1,8 @@
-const canvas = document.getElementById('model-image');
+const canvas = document.getElementById("model-image");
 if (!canvas) {
-  console.error('not found, load static image instead');
+  console.error("not found, load static image instead");
 }
-const ctx = canvas?.getContext('2d');
+const ctx = canvas?.getContext("2d");
 
 const frameCount = 46;
 const frames = [];
@@ -11,16 +11,16 @@ let currentFrame = 1;
 function resizeCanvas() {
   if (canvas) {
     const img = new Image();
-    img.src = '/frames/0001.png';
+    img.src = "/frames/0001.png";
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
-  } 
+  }
 }
 
 function preloadFrames() {
   for (let i = 1; i < frameCount; i++) {
     const img = new Image();
-    const frameNumber = String(i).padStart(4, '0');
+    const frameNumber = String(i).padStart(4, "0");
     alert(frameNumber);
     img.src = `/frames/${frameNumber}.png`;
     img.onerror = () => console.error(`Failed to load frame ${frameNumber}`);
@@ -29,7 +29,7 @@ function preloadFrames() {
 }
 
 //delay
-let frameDelay = -1;
+let frameDelay = 1;
 let frameDelayCounter = 0;
 
 function drawFrame() {
@@ -76,13 +76,12 @@ function drawFrame() {
   }
 }
 
-
 window.onload = () => {
   resizeCanvas();
   preloadFrames();
 
   setTimeout(() => {
-    console.log('▶️ Starting animation...');
+    console.log("▶️ Starting animation...");
     drawFrame();
     //delay to allow images to change might change for other method
   }, 500);
