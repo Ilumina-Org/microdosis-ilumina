@@ -20,7 +20,6 @@ interface LandingProps {
 }
 
 const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
-  // Use useEffect to run the script after the component mounts
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mobile = useMediaQuery({ orientation: "portrait" });
   const large = useMediaQuery({
@@ -41,7 +40,6 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
   //@ts-ignore
   const responsiveHandler = (s, m, l, xl, mob) => {
-    console.log("queso2", small, medium, desktop, large);
     if (small) {
       return s;
     }
@@ -58,9 +56,13 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   }, []);
 
   const handleClick = (): void => {
-    location.href = "#products";
+    const productsSection = document.getElementById("products");
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.location.hash = "products";
+    }
   };
-
   return (
     <SectionLayout
       id={props.id}
