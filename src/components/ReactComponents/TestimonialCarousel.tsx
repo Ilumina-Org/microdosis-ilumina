@@ -30,7 +30,7 @@ const TestimonialCarousel = () => {
     {
       name: "Sofia P.",
       review:
-        "Las microdosis de ayahuasca me han dado una nueva perspectiva. Ahora me siento más conectada con mi alegría y con los demás. Es como encontrar la llave de mi felicidad.",
+        "Las microdosis me han dado una nueva perspectiva. Ahora me siento más conectada con mi alegría y con los demás. Es como encontrar la llave de mi felicidad.",
       image: "/assets/user1.png",
     },
     {
