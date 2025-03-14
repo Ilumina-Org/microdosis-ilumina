@@ -94,6 +94,7 @@ const TestimonialCarousel = () => {
         swipeScrollTolerance={5}
         width={"100vw"}
         swipeable={true}
+        dynamicHeight={true}
       >
         {TestTestimonials.map((testimonial, index) => (
           <Testimonial

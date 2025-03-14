@@ -28,7 +28,7 @@ export const Testimonial = ({
     query: "(min-width: 768px) and (max-width: 1023px)",
   });
   const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
-  const textLength = isMobile ? 120 : isTablet ? 120 : 180;
+  const textLength = isMobile ? 180 : isTablet ? 120 : 180;
   const { mobile, handleResponsiveness } = useResponsiveness();
 
   return (
