@@ -85,18 +85,16 @@ export const COUNTRIES: Location[] = [
   { code: "SPN", name: "España" },
 ];
 
-// Tarifas de envío para distritos de Lima (mantenido igual)
 export const DISTRICT_SHIPPING_RATES: { [code: string]: number } = {
-  // Lima Metropolitana - tarifa estándar
   LIM01: 15.0,
-  MIRA: 15.0,
-  BARR: 15.0,
-  SURC: 15.0,
-  SANI: 15.0,
+  MIRA: 10.0,
+  BARR: 10.0,
+  SURC: 10.0,
+  SANI: 10.0,
   SJMI: 15.0,
-  SJLU: 15.0,
-  SABO: 15.0,
-  SLUI: 15.0,
+  SJLU: 25.0,
+  SABO: 10.0,
+  SLUI: 10.0,
   SAMI: 15.0,
   LAMO: 15.0,
   LAVI: 15.0,
@@ -104,62 +102,61 @@ export const DISTRICT_SHIPPING_RATES: { [code: string]: number } = {
   PLIB: 15.0,
   MAGD: 15.0,
   BRNA: 15.0,
-  RIMA: 15.0,
-  ANCON: 18.0,
-  SMAR: 20.0,
-  PUCH: 20.0,
+  RIMA: 20.0,
+  ANCON: 15.0,
+  SMAR: 15.0,
+  PUCH: 15.0,
   CHOR: 15.0,
-  INDE: 15.0,
-  COMAS: 18.0,
-  VMTE: 18.0,
-  VES: 18.0,
-  LURI: 18.0,
-  ANAV: 18.0,
-  CHAR: 20.0,
-  CINC: 20.0,
-  PACH: 20.0,
-  LURIN: 20.0,
-  CALE: 18.0,
-  PNVO: 18.0,
-  SMP: 15.0,
-  LPER: 15.0,
-  SANB: 18.0,
-  SBAR: 20.0,
+  INDE: 20.0,
+  COMAS: 30.0,
+  VMTE: 20.0,
+  VES: 20.0,
+  LURI: 15.0,
+  ANAV: 20.0,
+  CHAR: 15.0,
+  CINC: 15.0,
+  PACH: 15.0,
+  LURIN: 15.0,
+  CALE: 40.0,
+  PNVO: 15.0,
+  SMP: 25.0,
+  LPER: 20.0,
+  SANB: 15.0,
+  SBAR: 15.0,
   ELAGU: 15.0,
-  SURQ: 15.0,
-  LPUN: 25.0,
-  PUNT: 25.0,
-  SBART: 25.0,
+  SURQ: 10.0,
+  LPUN: 15.0,
+  PUNT: 15.0,
+  SBART: 15.0,
 };
 
-// Tarifas de envío para departamentos (reemplazando provincias)
 export const DEPARTMENT_SHIPPING_RATES: { [code: string]: number } = {
-  // Departamentos
   AMAZ: 40.0,
-  ANCA: 35.0,
-  APURI: 40.0,
-  AREQ: 30.0,
-  AYAC: 40.0,
-  CAJAM: 35.0,
-  CALL: 15.0,
-  CUSCO: 35.0,
-  HVANC: 40.0,
-  HUANU: 40.0,
-  ICA: 25.0,
-  JUNIN: 35.0,
-  LALIB: 30.0,
-  LAMBA: 30.0,
-  LIMA: 25.0,
   LORET: 45.0,
   MADRE: 45.0,
-  MOQUE: 35.0,
-  PASCO: 40.0,
-  PIURA: 35.0,
-  PUNO: 40.0,
   SMART: 40.0,
-  TACNA: 35.0,
-  TUMBS: 40.0,
   UCAYA: 45.0,
+
+  ANCA: 20.0,
+  APURI: 20.0,
+  AREQ: 20.0,
+  AYAC: 20.0,
+  CAJAM: 20.0,
+  CALL: 20.0,
+  CUSCO: 20.0,
+  HVANC: 20.0,
+  HUANU: 20.0,
+  ICA: 20.0,
+  JUNIN: 20.0,
+  LALIB: 20.0,
+  LAMBA: 20.0,
+  LIMA: 20.0,
+  MOQUE: 20.0,
+  PASCO: 20.0,
+  PIURA: 20.0,
+  PUNO: 20.0,
+  TACNA: 20.0,
+  TUMBS: 20.0,
 };
 
 export const COUNTRY_SHIPPING_RATES: { [code: string]: number } = {
@@ -170,7 +167,7 @@ export const COUNTRY_SHIPPING_RATES: { [code: string]: number } = {
 
 export const DEFAULT_COUNTRY_SHIPPING_COST = 40.0;
 export const DEFAULT_DISTRICT_SHIPPING_COST = 15.0;
-export const DEFAULT_DEPARTMENT_SHIPPING_COST = 35.0;
+export const DEFAULT_DEPARTMENT_SHIPPING_COST = 20.0;
 
 export function calculateShippingCost(
   district: string | null,
@@ -216,11 +213,9 @@ export function getCulqiLink(locationCode: string): string {
 }
 
 export const CULQI_PLANS: { [key: string]: string } = {
-  // Link de pago Culqi (mismo para todos como en tu ejemplo)
   DEFAULT:
     "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
 
-  // Distritos Lima
   LIM01:
     "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
   MIRA: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
@@ -233,7 +228,6 @@ export const CULQI_PLANS: { [key: string]: string } = {
   SLUI: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
   SAMI: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
 
-  // Departamentos principales (ejemplos)
   AREQ: "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
   CUSCO:
     "https://subscriptions.culqi.com/onboarding?id=24440d27-e3af-429f-b78e-c522d2012a23",
