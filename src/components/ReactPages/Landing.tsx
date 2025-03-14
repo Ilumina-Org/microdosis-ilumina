@@ -57,10 +57,8 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
     }
   }, []);
 
-  const handleClick = () => {
-    document
-      ?.getElementById("products")
-      ?.scrollIntoView({ behavior: "smooth" });
+  const handleClick = (): void => {
+    location.href = "#products";
   };
 
   return (
