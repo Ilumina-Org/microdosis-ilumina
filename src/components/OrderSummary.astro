@@ -1,5 +1,5 @@
 ---
-const { title, price } = Astro.props;
+const { title, price, deliveryPrice } = Astro.props;
 ---
 
 <div class="order-summary">
@@ -8,19 +8,23 @@ const { title, price } = Astro.props;
     <span>Producto:</span>
     <span>{title}</span>
   </div>
+  {/*
   <div class="summary-item">
     <span>Precio:</span>
     <span>S/. {price.toFixed(2)}</span>
   </div>
+  
   <div class="summary-item">
     <span>Envío:</span>
-    <span>Gratis</span>
+    <span>{deliveryPrice ? "S/. " + deliveryPrice.toFixed(2) : "Gratis"}</span>
   </div>
+   
   <div class="summary-divider"></div>
   <div class="summary-total">
     <span>Total:</span>
     <span>S/. {price.toFixed(2)}</span>
   </div>
+  */}
 
   <div class="secure-payment">
     <span class="secure-icon">🔒</span>
