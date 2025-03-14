@@ -70,28 +70,52 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   }, []);
 
   const handleClick = (): void => {
+    // Agregar un indicador visual de que se hizo clic
+    const indicator = document.createElement("div");
+    indicator.style.position = "fixed";
+    indicator.style.top = "10px";
+    indicator.style.right = "10px";
+    indicator.style.padding = "5px";
+    indicator.style.background = "#C1DC3A";
+    indicator.style.color = "#484848";
+    indicator.style.zIndex = "9999";
+    indicator.textContent = "Intentando scroll...";
+    document.body.appendChild(indicator);
+
     try {
       const productsSection = document.getElementById("products");
+      indicator.textContent = productsSection
+        ? "Elemento encontrado"
+        : "Elemento no encontrado";
+
       if (productsSection) {
         productsSection.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => document.body.removeChild(indicator), 2000);
       } else {
         const yOffset = -80;
         const targetUrl = "#products";
-
         window.location.href = targetUrl;
+        indicator.textContent = "Redirigiendo...";
 
         setTimeout(() => {
           const element = document.getElementById("products");
+          indicator.textContent = element
+            ? "Elemento encontrado tras redirección"
+            : "Elemento no encontrado tras redirección";
+
           if (element) {
             const y =
               element.getBoundingClientRect().top + window.scrollY + yOffset;
             window.scrollTo({ top: y, behavior: "smooth" });
           }
+          setTimeout(() => document.body.removeChild(indicator), 2000);
         }, 300);
       }
     } catch (error) {
+      indicator.textContent = "Error: " + (error as Error).message;
       console.error("Error navegando a productos:", error);
       window.location.href = "#products";
+      setTimeout(() => document.body.removeChild(indicator), 2000);
     }
   };
 

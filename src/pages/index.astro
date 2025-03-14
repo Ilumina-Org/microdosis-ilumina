@@ -10,6 +10,7 @@ import ChatBot from "../components/ReactComponents/Chatbot";
 import CookieConsent from "../components/ReactComponents/CookiesConsent";
 import NavigationButtons from "../components/ReactComponents/NavigationButtons";
 import { getProducts } from "../utils/stock";
+import { useRef } from "react";
 
 let products = [];
 let productsError = false;
@@ -26,6 +27,7 @@ try {
   console.error("Error obteniendo productos:", error);
   productsError = true;
 }
+const productsRef = useRef(null);
 ---
 
 <Layout title= "Ayahuasca - Ilumina">
@@ -34,6 +36,7 @@ try {
   <Testimonials id="testimonios" client:load />
   <Products
     id="products"
+    ref={productsRef}
     client:load
     products={products}
     productsError={productsError}
