@@ -8,6 +8,7 @@ import { initializeAnimation } from "../../utils/appleAnimation";
 import useResponsiveness from "../../utils/useResponsiveness";
 import { useMediaQuery } from "react-responsive";
 import staticImage from "../../assets/static-flask.png?url";
+import staticImage2 from "../../assets/static-flask2.png?url";
 import logo from "../../assets/ilumina-logo.svg?url";
 
 //now that im using react find a library that can do this easily,
@@ -74,7 +75,8 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           height: "auto",
           position: "absolute",
           left: mobile ? 0 : "2rem",
-          top: mobile ? 0 : "2rem",
+          top: mobile ? "0px" : "2rem",
+          bottom: "0px !important",
         }}
       >
         <img
@@ -130,17 +132,10 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
       <div className="image-container">
         {!small ? (
           <canvas id="model-image" ref={canvasRef}></canvas>
+        ) : mobile ? (
+          <img className="mobileImage" src={staticImage2} />
         ) : (
-          <img
-            className="fadeInIMage"
-            src={staticImage}
-            style={{
-              position: "relative",
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-            }}
-          />
+          <img className="fadeInIMage" src={staticImage} />
         )}
       </div>
       <a
@@ -237,13 +232,6 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             animation: fadeInSlideFromLeft 1s ease-out forwards;
           }
 
-        .fadeInIMage{
-          right: ${mobile ? "-50%" : "14rem"};
-          top: ${mobile ? "5rem" : "10rem"};
-          transform: ${mobile ? "scale(10) translate(-25%, 0%)" : "scale(3) rotate(0.2deg)"};
-          animation: fadeInSlideFromLeftImage 1.5s ease-in forwards;
-          }
-
           h1 {
             font-weight: 800;
             font-size: ${mobile ? "10vw" : "4vw"} !important;
@@ -265,17 +253,23 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           }
 
           .image-container {
-            ${mobile && "transform: scale(3);"}
-            ${mobile && "right: 2rem !important;"}
-            ${mobile && "bottom: 8rem !important;"}
-            ${mobile && "filter: blur(4px);"}
-            position:relative;
-            border: 1px solid transparent;
+            position: relative;
             flex: 1;
             flexGrow: 1;
             right: 0;
-            ${small ? "overflow: show" : "overflow: hidden"}
+            overflow: ${mobile ? "visible" : "visible"};
             z-index: 1 !important;
+          }
+
+          .mobileImage{
+          width: auto;
+          height: 100%;
+          position: absolute;
+          transform: translateX(25%);
+          filter: blur(6px);
+          opacity: 0.5;
+          right: 0;
+          bottom: 0;
           }
 
           canvas {
@@ -295,6 +289,16 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             top: 10% !important;
           }
 
+          .fadeInIMage{
+            position: absolute;
+            border:1px solid blue;
+            z-index: 4 !important;
+            ${small && !mobile && "margin-right: 0rem;"}
+            right: 0 !important;
+            width: auto;
+            height: 100%;
+            animation: fadeInSlideFromLeftImage 1.5s ease-in forwards;
+          }
 
           @media only screen and (min-width: 2530px) {
               .content > h1{

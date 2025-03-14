@@ -28,7 +28,7 @@ function preloadFrames() {
   }
 }
 
-//delay
+//delay 1/5 fifths
 let frameDelay = 5;
 let frameDelayCounter = 0;
 
