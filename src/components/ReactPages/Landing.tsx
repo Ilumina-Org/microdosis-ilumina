@@ -253,7 +253,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           }
 
           .image-container {
-            position: relative;
+            position: ${small && !mobile ? "relative" : "initial"};
             flex: 1;
             flexGrow: 1;
             right: 0;
@@ -291,7 +291,6 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
           .fadeInIMage{
             position: absolute;
-            border:1px solid blue;
             z-index: 4 !important;
             ${small && !mobile && "margin-right: 0rem;"}
             right: 0 !important;
