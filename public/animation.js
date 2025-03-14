@@ -28,8 +28,8 @@ function preloadFrames() {
   }
 }
 
-//delay
-let frameDelay = 1;
+//delay 1/5 fifths
+let frameDelay = 5;
 let frameDelayCounter = 0;
 
 function drawFrame() {

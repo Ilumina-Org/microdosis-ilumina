@@ -48,7 +48,7 @@ export default function ProductContainer({
     background: tierStyles[tier] || "",
     padding: ".5rem",
     borderRadius: "40px",
-    maxWidth: "340px",
+    maxWidth: "300px",
     // opacity: inView || isHovered ? 1 : 0.5,
     maxHeight: "550px",
     // transform: isHovered ? "translateY(-10px)" : "translateY(0)",
@@ -115,7 +115,7 @@ export default function ProductContainer({
           />
           <h4
             style={{
-              color: "black",
+              color: "#1e1e1e",
               fontSize: "1.20rem",
               minHeight: "2.5em",
               maxHeight: "2.5em",
@@ -125,13 +125,16 @@ export default function ProductContainer({
           >
             {productTitle}
           </h4>
-          <p className="product-detail"><s>{productDetail}</s></p>
+          <p className="product-detail">
+            <s>{productDetail}</s>
+          </p>
           <h4
             style={{
               ...baseText,
               fontSize: "1.40rem !important",
             }}
-          >Ahora: {productPrice}
+          >
+            Ahora: {productPrice}
           </h4>
           <h4 className="product-deal">{productDeal}</h4>
         </div>
@@ -171,7 +174,7 @@ export default function ProductContainer({
           }
         />
       </div>
-    </div >
+    </div>
   );
 
   return (
@@ -190,7 +193,6 @@ export default function ProductContainer({
           <p className="product-detail">{productDetail}</p>
           <p className="product-price">Ahora: {productPrice}</p>
 
-
           {productDeal && <p className="product-deal">{productDeal}</p>}
 
           <button
@@ -207,6 +209,6 @@ export default function ProductContainer({
           </button>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
