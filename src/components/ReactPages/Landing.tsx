@@ -70,52 +70,132 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   }, []);
 
   const handleClick = (): void => {
-    // Agregar un indicador visual de que se hizo clic
-    const indicator = document.createElement("div");
-    indicator.style.position = "fixed";
-    indicator.style.top = "10px";
-    indicator.style.right = "10px";
-    indicator.style.padding = "5px";
-    indicator.style.background = "#C1DC3A";
-    indicator.style.color = "#484848";
-    indicator.style.zIndex = "9999";
-    indicator.textContent = "Intentando scroll...";
-    document.body.appendChild(indicator);
+    // Crear un elemento de log visual que permanezca en pantalla
+    const logContainer = document.createElement("div");
+    logContainer.style.position = "fixed";
+    logContainer.style.top = "10px";
+    logContainer.style.left = "10px";
+    logContainer.style.width = "80%";
+    logContainer.style.maxHeight = "50%";
+    logContainer.style.overflow = "auto";
+    logContainer.style.backgroundColor = "rgba(0,0,0,0.7)";
+    logContainer.style.color = "white";
+    logContainer.style.padding = "10px";
+    logContainer.style.borderRadius = "5px";
+    logContainer.style.zIndex = "9999";
+    logContainer.style.fontSize = "14px";
+    document.body.appendChild(logContainer);
+
+    // Función para agregar logs
+    const addLog = (message) => {
+      const logEntry = document.createElement("div");
+      logEntry.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+      logEntry.style.borderBottom = "1px solid rgba(255,255,255,0.3)";
+      logEntry.style.paddingBottom = "5px";
+      logEntry.style.marginBottom = "5px";
+      logContainer.appendChild(logEntry);
+      console.log(message);
+    };
+
+    // Botón para cerrar el log
+    const closeButton = document.createElement("button");
+    closeButton.textContent = "Cerrar";
+    closeButton.style.position = "absolute";
+    closeButton.style.top = "5px";
+    closeButton.style.right = "5px";
+    closeButton.style.padding = "5px";
+    closeButton.style.backgroundColor = "#C1DC3A";
+    closeButton.style.border = "none";
+    closeButton.style.borderRadius = "3px";
+    closeButton.style.cursor = "pointer";
+    closeButton.onclick = () => document.body.removeChild(logContainer);
+    logContainer.appendChild(closeButton);
+
+    // Comenzar el logging
+    addLog("Iniciando proceso de scroll");
+    addLog(`User Agent: ${navigator.userAgent}`);
+    addLog(`Window Location: ${window.location.href}`);
 
     try {
+      // Paso 1: Intentar encontrar directamente el elemento
       const productsSection = document.getElementById("products");
-      indicator.textContent = productsSection
-        ? "Elemento encontrado"
-        : "Elemento no encontrado";
+      addLog(
+        `Paso 1: Elemento "products" ${productsSection ? "encontrado" : "NO encontrado"}`,
+      );
 
       if (productsSection) {
+        addLog("Intentando scrollIntoView");
         productsSection.scrollIntoView({ behavior: "smooth" });
-        setTimeout(() => document.body.removeChild(indicator), 2000);
+        addLog("scrollIntoView ejecutado");
+
+        // Verificar si realmente se scrolleó
+        setTimeout(() => {
+          const elementPosition = productsSection.getBoundingClientRect().top;
+          addLog(
+            `Posición del elemento después de scrollIntoView: ${elementPosition}px desde el top`,
+          );
+        }, 1000);
       } else {
-        const yOffset = -80;
-        const targetUrl = "#products";
-        window.location.href = targetUrl;
-        indicator.textContent = "Redirigiendo...";
+        // Paso 2: Intentar con window.location.href
+        addLog("Paso 2: Intentando con window.location.href = '#products'");
+        const originalUrl = window.location.href;
+        window.location.href = "#products";
 
         setTimeout(() => {
+          addLog(`URL después de cambiar: ${window.location.href}`);
+          addLog(
+            `¿Cambió la URL? ${originalUrl !== window.location.href ? "Sí" : "No"}`,
+          );
+
+          // Paso 3: Verificar si ahora existe el elemento
           const element = document.getElementById("products");
-          indicator.textContent = element
-            ? "Elemento encontrado tras redirección"
-            : "Elemento no encontrado tras redirección";
+          addLog(
+            `Paso 3: Elemento "products" después de cambiar URL: ${element ? "encontrado" : "NO encontrado"}`,
+          );
 
           if (element) {
-            const y =
-              element.getBoundingClientRect().top + window.scrollY + yOffset;
+            addLog("Intentando scrollTo");
+            const y = element.getBoundingClientRect().top + window.scrollY;
+            addLog(`Posición calculada para scrollTo: ${y}px`);
             window.scrollTo({ top: y, behavior: "smooth" });
+            addLog("scrollTo ejecutado");
+          } else {
+            addLog(
+              "ERROR: No se pudo encontrar el elemento 'products' después de cambiar la URL",
+            );
           }
-          setTimeout(() => document.body.removeChild(indicator), 2000);
-        }, 300);
+        }, 500);
       }
     } catch (error) {
-      indicator.textContent = "Error: " + (error as Error).message;
-      console.error("Error navegando a productos:", error);
-      window.location.href = "#products";
-      setTimeout(() => document.body.removeChild(indicator), 2000);
+      addLog(`ERROR: ${error.message}`);
+      addLog(`Stack trace: ${error.stack}`);
+
+      // Último intento de fallback
+      addLog("Último intento: Intentando scroll a una posición fija");
+      try {
+        window.scrollTo({
+          top: window.innerHeight, // Scroll aproximadamente una pantalla hacia abajo
+          behavior: "smooth",
+        });
+        addLog("scrollTo posición fija ejecutado");
+      } catch (fallbackError) {
+        addLog(`ERROR en fallback: ${fallbackError.message}`);
+      }
+    }
+
+    // Añadir también un log para documentos cargados
+    addLog(`Documento actual: ${document.readyState}`);
+    addLog(
+      `Número de elementos con id 'products': ${document.querySelectorAll("#products").length}`,
+    );
+
+    // Verificar si el scroll funciona en general
+    addLog("Probando scroll general");
+    try {
+      window.scrollBy(0, 50);
+      addLog("scrollBy ejecutado");
+    } catch (e) {
+      addLog(`ERROR en scrollBy: ${e.message}`);
     }
   };
 
