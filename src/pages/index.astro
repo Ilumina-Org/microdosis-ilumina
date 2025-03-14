@@ -27,7 +27,6 @@ try {
   console.error("Error obteniendo productos:", error);
   productsError = true;
 }
-const productsRef = useRef(null);
 ---
 
 <Layout title= "Ayahuasca - Ilumina">
@@ -36,7 +35,6 @@ const productsRef = useRef(null);
   <Testimonials id="testimonios" client:load />
   <Products
     id="products"
-    ref={productsRef}
     client:load
     products={products}
     productsError={productsError}
