@@ -253,7 +253,7 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           }
 
           .image-container {
-            position: ${small && !mobile ? "relative" : "initial"};
+            position: ${small ? "relative" : "initial"};
             flex: 1;
             flexGrow: 1;
             right: 0;
