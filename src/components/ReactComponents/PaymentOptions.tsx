@@ -249,7 +249,7 @@ const PaymentOptions = ({
           !loadingShipping &&
           shippingType !== "internacional" && (
             <div className="shipping-cost">
-              Costo de envío: S/ {shippingCost.toFixed(2)}
+              Costo de envío: S/. {shippingCost.toFixed(2)}
             </div>
           )}
       </div>
@@ -279,7 +279,7 @@ const PaymentOptions = ({
               {selectedLocation ? (
                 <div className="culqi-payment">
                   <p>
-                    Pago seguro con Culqi - Total: S/ {totalPrice.toFixed(2)}
+                    Pago seguro con Culqi - Total: S/. {totalPrice.toFixed(2)}
                   </p>
                   {(() => {
                     const culqiLink = getCulqiLink(selectedLocation);

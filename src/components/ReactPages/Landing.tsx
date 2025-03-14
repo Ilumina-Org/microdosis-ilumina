@@ -337,7 +337,6 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             flex: 1;
             flexGrow: 1;
             right: 0;
-            overflow: ${mobile ? "visible" : "visible"};
             z-index: 1 !important;
           }
 
