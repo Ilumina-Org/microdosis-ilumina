@@ -53,7 +53,14 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             fontWeight: "500",
             color: "#c1dc3a",
             margin: 0,
-            lineHeight: mobile ? "2.5rem" : "auto",
+            // lineHeight:  mobile ? "2.5rem" : "auto",
+            lineHeight: handleResponsiveness(
+              "auto",
+              "auto",
+              "auto",
+              "2rem",
+              "auto"
+            ),
           }}
         >
           {title}
@@ -63,7 +70,14 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             fontWeight: "200",
             color: "white",
             // lineHeight: "1.75rem",
-            lineHeight: mobile ? "auto" : "auto",
+            lineHeight: handleResponsiveness(
+              "auto",
+              "auto",
+              "auto",
+              "2rem",
+              "auto"
+            ),
+            // lineHeight: mobile ? "auto" : "auto",
             fontSize: small ? "1.2rem" : "1.25rem",
           }}
         >

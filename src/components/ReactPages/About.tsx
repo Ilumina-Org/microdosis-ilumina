@@ -18,9 +18,8 @@ interface LandingProps {
 }
 
 const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
-  const desktop = useMediaQuery({ query: "(min-width: 1920px)" });
   const small = useMediaQuery({ query: "(min-width: 1366px)" });
-  const { mobile } = useResponsiveness();
+  const { mobile, desktop, large, handleResponsiveness } = useResponsiveness();
 
   return (
     <SectionLayout
@@ -64,12 +63,7 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             {/* <PlaceHolderImage /> */}
           </div>
           <div className="about-text">
-            <h2
-              className="about-title"
-              style={{ transform: mobile ? undefined : "translateX(35px)" }}
-            >
-              Beneficios Principales
-            </h2>
+            <h2 className="about-title">Beneficios Principales</h2>
             <ul className="about-list">
               <li className="about-paragraph text">
                 <span className="about-check">✓</span>
@@ -171,7 +165,7 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
             .about-paragraph {
               font-size: 1.25rem;
-              line-height: ${mobile ? "auto" : "auto"};
+              line-height: ${handleResponsiveness("auto", "auto", "auto", "2rem", "auto")};
               color: #1d1d1d;
             }
 
@@ -185,11 +179,13 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               display: flex;
               flex-direction: column;
               blockMargin: 0 !important;
-              margin: 0;
+              padding: 0 !important;
+              margin: 0 !important;
               }
 
             .about-paragraph{
               font-size: 1.3vw;
+              margin-bottom: 1rem;
             }
 
             .about-check {
@@ -198,13 +194,14 @@ const About = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
               margin-right: 1rem;
             }
 
-        ${mobile &&
+        ${
+          mobile &&
           `.about-section:not(:nth-of-type(2)) {
             display: flex;
             flex-direction: column-reverse;
             /*or hide the image*/
           }`
-          }
+        }
 
 
           `}

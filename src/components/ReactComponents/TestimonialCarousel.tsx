@@ -53,7 +53,6 @@ const TestimonialCarousel = () => {
     },
   ];
 
-
   return (
     <div
       style={{
@@ -91,10 +90,10 @@ const TestimonialCarousel = () => {
         showStatus={false}
         centerMode={true}
         onChange={(e) => handleChange(e)}
-        emulateTouch={true}
+        emulateTouch={false}
         swipeScrollTolerance={5}
         width={"100vw"}
-      // style={{ display: "flex", justifyContent: "center" }}
+        swipeable={true}
       >
         {TestTestimonials.map((testimonial, index) => (
           <Testimonial

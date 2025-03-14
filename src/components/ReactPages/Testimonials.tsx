@@ -53,15 +53,15 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
             <iframe
               title="vimeo-player"
               src="https://player.vimeo.com/video/1065240068?h=49d7e3887b"
-              width="640" height="360"
-              frameborder="0"
-              allowfullscreen
-            >
-            </iframe>
+              width={mobile ? "350px" : desktop ? "850px" : "640px"}
+              height={mobile ? "200px" : desktop ? "450px" : "360px"}
+              frameBorder="0"
+              allowFullScreen
+            ></iframe>
           </div>
           <TestimonialCarousel />
         </div>
-      </SectionLayout >
+      </SectionLayout>
     );
   }
 );
