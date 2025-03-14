@@ -136,14 +136,9 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             src={staticImage}
             style={{
               position: "relative",
-              right: mobile ? "-50%" : "14rem",
-              top: mobile ? "5rem" : "10rem",
               width: "100%",
               height: "100%",
               objectFit: "contain",
-              transform: mobile
-                ? "scale(10) translate(-25%, 0%)"
-                : "scale(3) rotate(0.2deg)",
             }}
           />
         )}
@@ -242,7 +237,10 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             animation: fadeInSlideFromLeft 1s ease-out forwards;
           }
 
-          .fadeInIMage{
+        .fadeInIMage{
+          right: ${mobile ? "-50%" : "14rem"};
+          top: ${mobile ? "5rem" : "10rem"};
+          transform: ${mobile ? "scale(10) translate(-25%, 0%)" : "scale(3) rotate(0.2deg)"};
           animation: fadeInSlideFromLeftImage 1.5s ease-in forwards;
           }
 
@@ -267,8 +265,10 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           }
 
           .image-container {
-            ${mobile && "transform: scale(1.25);"}
-            ${mobile && "filter: blur(5px);"}
+            ${mobile && "transform: scale(3);"}
+            ${mobile && "right: 2rem !important;"}
+            ${mobile && "bottom: 8rem !important;"}
+            ${mobile && "filter: blur(4px);"}
             position:relative;
             border: 1px solid transparent;
             flex: 1;
@@ -280,9 +280,9 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
 
           canvas {
             position: absolute !important;
-            bottom: ${responsiveHandler("", "1rem", "4rem", "10rem", "0rem")};
-            right: ${responsiveHandler("", "2rem", "9rem", "20rem", "0rem")};
-            transform: scale(${mobile ? 10 : responsiveHandler(2.4, 2.5, 3, 4, 10)}) !important;
+            bottom: ${responsiveHandler("", "-2rem", "-2rem", "2rem", "0rem")};
+            right: ${responsiveHandler("", "-2rem", "7rem", "20rem", "0rem")};
+            transform: scale(${mobile ? 7 : responsiveHandler(2.4, 3, 3, 2.7, 7)}) !important;
             max-height: 90vh;
             max-width: 99vw;
             z-index: 2 !important;

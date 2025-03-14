@@ -29,7 +29,7 @@ function preloadFrames() {
 }
 
 //delay
-let frameDelay = 1;
+let frameDelay = 5;
 let frameDelayCounter = 0;
 
 function drawFrame() {
