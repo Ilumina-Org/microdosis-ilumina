@@ -55,14 +55,46 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
     }
   }, []);
 
+  useEffect(() => {
+    // Verificar si hay un hash en la URL al cargar
+    const hash = window.location.hash;
+    if (hash === "#products") {
+      // Dar tiempo al DOM para renderizar
+      setTimeout(() => {
+        const element = document.getElementById("products");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 500);
+    }
+  }, []);
+
   const handleClick = (): void => {
-    const productsSection = document.getElementById("products");
-    if (productsSection) {
-      productsSection.scrollIntoView({ behavior: "smooth" });
-    } else {
-      window.location.hash = "products";
+    try {
+      const productsSection = document.getElementById("products");
+      if (productsSection) {
+        productsSection.scrollIntoView({ behavior: "smooth" });
+      } else {
+        const yOffset = -80;
+        const targetUrl = "#products";
+
+        window.location.href = targetUrl;
+
+        setTimeout(() => {
+          const element = document.getElementById("products");
+          if (element) {
+            const y =
+              element.getBoundingClientRect().top + window.scrollY + yOffset;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+        }, 300);
+      }
+    } catch (error) {
+      console.error("Error navegando a productos:", error);
+      window.location.href = "#products";
     }
   };
+
   return (
     <SectionLayout
       id={props.id}
