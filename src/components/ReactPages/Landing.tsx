@@ -56,10 +56,8 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   }, []);
 
   useEffect(() => {
-    // Verificar si hay un hash en la URL al cargar
     const hash = window.location.hash;
     if (hash === "#products") {
-      // Dar tiempo al DOM para renderizar
       setTimeout(() => {
         const element = document.getElementById("products");
         if (element) {
@@ -70,73 +68,13 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
   }, []);
 
   const handleClick = (): void => {
-    try {
-      // Obtener el elemento
-      const productsSection = document.getElementById("products");
-
-      if (productsSection) {
-        // Crear un indicador visual
-        const indicator = document.createElement("div");
-        indicator.textContent = "Scrolleando...";
-        indicator.style.position = "fixed";
-        indicator.style.top = "10px";
-        indicator.style.right = "10px";
-        indicator.style.background = "#C1DC3A";
-        indicator.style.padding = "5px";
-        indicator.style.zIndex = "9999";
-        document.body.appendChild(indicator);
-
-        // Calcular la posición
-        const rect = productsSection.getBoundingClientRect();
-        const scrollTop =
-          window.pageYOffset || document.documentElement.scrollTop;
-        const targetY = rect.top + scrollTop;
-
-        // Implementar un scroll manual con animación
-        const startPosition = window.pageYOffset;
-        const distance = targetY - startPosition;
-        const duration = 500; // ms
-        let startTime = null;
-
-        function animation(currentTime) {
-          if (startTime === null) startTime = currentTime;
-          const timeElapsed = currentTime - startTime;
-          const progress = Math.min(timeElapsed / duration, 1);
-
-          // Función de easing para un movimiento más natural
-          const easeInOutQuad = (progress) => {
-            return progress < 0.5
-              ? 2 * progress * progress
-              : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-          };
-
-          window.scrollTo(
-            0,
-            startPosition + distance * easeInOutQuad(progress),
-          );
-
-          if (timeElapsed < duration) {
-            requestAnimationFrame(animation);
-          } else {
-            // Asegurarse de llegar exactamente a la posición final
-            window.scrollTo(0, targetY);
-            indicator.textContent = "¡Scroll completado!";
-            setTimeout(() => {
-              document.body.removeChild(indicator);
-            }, 1000);
-          }
-        }
-
-        // Iniciar la animación
-        requestAnimationFrame(animation);
-      } else {
-        console.error("Elemento 'products' no encontrado");
-        // Fallback: ir a la URL directamente
-        window.location.href = "#products";
-      }
-    } catch (error) {
-      console.error("Error en scroll:", error);
-      // Último recurso
+    const productsSection = document.getElementById("products");
+    if (productsSection) {
+      productsSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    } else {
       window.location.href = "#products";
     }
   };
