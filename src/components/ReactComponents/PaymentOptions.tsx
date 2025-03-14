@@ -3,20 +3,18 @@ import "./PaymentOptions.css";
 import type { JSX } from "astro/jsx-runtime";
 import { CULQI_PLANS, getCulqiLink } from "../../utils/shipping";
 import { safeRedirect, isValidCulqiUrl } from "../../utils/cookies";
-
 interface PaymentOptionsProps {
   basePrice: number;
   title: string;
   packageId: string;
 }
-
 const PaymentOptions = ({
   basePrice,
   title,
   packageId,
 }: PaymentOptionsProps) => {
   const [shippingType, setShippingType] = useState<
-    "distrito" | "departamento" | "internacional" | null
+    "distrito" | "departamento" | "internacional" | "local" | null
   >(null);
   const [districts, setDistricts] = useState<
     Array<{ code: string; name: string }>
@@ -33,7 +31,6 @@ const PaymentOptions = ({
   const [activeOption, setActiveOption] = useState<string | null>(
     "culqi-option",
   );
-
   useEffect(() => {
     const fetchLocations = async () => {
       try {
@@ -55,11 +52,15 @@ const PaymentOptions = ({
       setIsPaymentInProgress(true);
     }
   }, []);
-
   useEffect(() => {
     const controller = new AbortController();
     const calculateShipping = async () => {
-      if (!selectedLocation || shippingType === "internacional") return;
+      if (
+        !selectedLocation ||
+        shippingType === "internacional" ||
+        shippingType === "local"
+      )
+        return;
       setLoadingShipping(true);
       setError("");
       try {
@@ -98,19 +99,26 @@ const PaymentOptions = ({
     return () => controller.abort();
   }, [selectedLocation, packageId, basePrice, shippingType]);
 
+  // Efecto adicional para cuando se selecciona retiro local
+  useEffect(() => {
+    if (shippingType === "local") {
+      setShippingCost(0);
+      setTotalPrice(basePrice);
+      setSelectedLocation("local");
+    }
+  }, [shippingType, basePrice]);
+
   const toggleAccordion = (optionId: string) => {
     setActiveOption((prev) => (prev === optionId ? null : optionId));
   };
-
   const handleLocationTypeChange = (
-    type: "distrito" | "departamento" | "internacional",
+    type: "distrito" | "departamento" | "internacional" | "local",
   ) => {
     setShippingType(type);
-    setSelectedLocation("");
+    setSelectedLocation(type === "local" ? "local" : "");
     setShippingCost(0);
     setError("");
   };
-
   const handleCulqiPayment = (culqiLink: string) => {
     if (!isValidCulqiUrl(culqiLink)) {
       setError("No se encontró un método de pago válido para esta ubicación");
@@ -137,14 +145,12 @@ const PaymentOptions = ({
       setIsPaymentInProgress(false);
     }
   };
-
   const handleWhatsAppContact = () => {
     const message = encodeURIComponent(
       `Hola, estoy interesado en comprar ${title} con envío internacional. ¿Podrían darme más información?`,
     );
     const whatsappUrl = `https://wa.me/+51939114496?text=${message}`;
     window.open(whatsappUrl, "_blank");
-
     try {
       //@ts-ignore
       if (typeof window !== "undefined" && window.gtag) {
@@ -160,6 +166,37 @@ const PaymentOptions = ({
     }
   };
 
+  const handleLocalPickupContact = () => {
+    const message = encodeURIComponent(
+      `Hola, estoy interesado en comprar ${title} con retiro local. ¿Podrían darme más información sobre la dirección y horarios de retiro?`,
+    );
+    const whatsappUrl = `https://wa.me/+51939114496?text=${message}`;
+    window.open(whatsappUrl, "_blank");
+    try {
+      //@ts-ignore
+      if (typeof window !== "undefined" && window.gtag) {
+        //@ts-ignore
+        window.gtag("event", "local_pickup_inquiry", {
+          event_category: "contact",
+          event_label: "local_pickup",
+          value: basePrice,
+        });
+      }
+    } catch (e) {
+      console.error("Error registrando evento de analítica", e);
+    }
+  };
+
+  const storeInfo = {
+    name: "Tienda Principal - Barranco",
+    address: "JR. Tumbes Nr. 279, URB. San Ignacio",
+    city: "Lima",
+    zipCode: "15047",
+    phone: "+51939114496",
+    hours: "Lunes a Viernes: 9:00 AM - 6:00 PM | Sábados: 10:00 AM - 2:00 PM",
+    reference: "Barranco, Lima, Perú",
+  };
+
   return (
     <div className="payment-section">
       <h2>Método de Pago</h2>
@@ -169,10 +206,16 @@ const PaymentOptions = ({
           para continuar.
         </div>
       )}
-
       {/* Selector de ubicación */}
       <div className="shipping-selector">
         <div className="location-type-buttons">
+          <button
+            className={`location-type-btn ${shippingType === "local" ? "active" : ""}`}
+            onClick={() => handleLocationTypeChange("local")}
+            disabled={isPaymentInProgress}
+          >
+            Retiro Local
+          </button>
           <button
             className={`location-type-btn ${shippingType === "distrito" ? "active" : ""}`}
             onClick={() => handleLocationTypeChange("distrito")}
@@ -195,8 +238,32 @@ const PaymentOptions = ({
             Envío Internacional
           </button>
         </div>
-
-        {shippingType === "internacional" ? (
+        {shippingType === "local" ? (
+          <div className="local-pickup-info">
+            <p>
+              Puede retirar su producto en nuestra tienda. No hay costo
+              adicional de envío.
+            </p>
+            <div className="store-address-container">
+              <div className="store-details">
+                <h4>{storeInfo.name}</h4>
+                <p>{storeInfo.address}</p>
+                <p>
+                  {storeInfo.city}, {storeInfo.zipCode}
+                </p>
+                <p>
+                  <strong>Teléfono:</strong> {storeInfo.phone}
+                </p>
+                <p>
+                  <strong>Horario:</strong> {storeInfo.hours}
+                </p>
+                <p>
+                  <strong>Referencia:</strong> {storeInfo.reference}
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : shippingType === "internacional" ? (
           <div className="international-shipping-info">
             <p>
               Para envíos internacionales, por favor contáctenos directamente:
@@ -241,20 +308,24 @@ const PaymentOptions = ({
             </div>
           )
         )}
-
         {loadingShipping && (
           <span className="loading">Calculando envío...</span>
         )}
         {shippingCost > 0 &&
           !loadingShipping &&
-          shippingType !== "internacional" && (
+          shippingType !== "internacional" &&
+          shippingType !== "local" && (
             <div className="shipping-cost">
               Costo de envío: S/. {shippingCost.toFixed(2)}
             </div>
           )}
+        {shippingType === "local" && (
+          <div className="total-price-display">
+            Precio total: S/. {basePrice.toFixed(2)}
+          </div>
+        )}
       </div>
-
-      {shippingType !== "internacional" && (
+      {shippingType !== "internacional" && selectedLocation && (
         <div className="payment-options">
           {/* Opción: Culqi */}
           <div
@@ -276,48 +347,44 @@ const PaymentOptions = ({
               <span className="toggle-icon">▼</span>
             </div>
             <div className="payment-option-content">
-              {selectedLocation ? (
-                <div className="culqi-payment">
-                  <p>
-                    Pago seguro con Culqi - Total: S/. {totalPrice.toFixed(2)}
-                  </p>
-                  {(() => {
-                    const culqiLink = getCulqiLink(selectedLocation);
-                    return (
-                      <button
-                        className={`culqi-button ${!isValidCulqiUrl(culqiLink) || isPaymentInProgress ? "disabled" : ""}`}
-                        onClick={() => handleCulqiPayment(culqiLink)}
-                        disabled={
-                          !isValidCulqiUrl(culqiLink) || isPaymentInProgress
-                        }
-                      >
-                        {isPaymentInProgress
-                          ? "Procesando..."
-                          : "Pagar con Culqi"}
-                        <span className="external-icon" aria-hidden="true">
-                          ↗
-                        </span>
-                      </button>
-                    );
-                  })()}
-                  <div className="security-info">
-                    <span className="lock-icon">🔒</span>
-                    <span>Protegido por encriptación SSL de 256-bits</span>
-                  </div>
-                  <div className="cookies-info">
-                    <small>
-                      Este método de pago requiere cookies de terceros. Al hacer
-                      clic en "Pagar con Culqi", aceptas el uso de cookies
-                      necesarias para procesar el pago.
-                    </small>
-                  </div>
-                </div>
-              ) : (
-                <p className="select-district-alert">
-                  ⚠️ Por favor selecciona tu ubicación para mostrar las opciones
-                  de pago
+              <div className="culqi-payment">
+                <p>
+                  Pago seguro con Culqi - Total: S/. {totalPrice.toFixed(2)}
                 </p>
-              )}
+                {(() => {
+                  const culqiLink =
+                    shippingType === "local"
+                      ? CULQI_PLANS.local || getCulqiLink("local")
+                      : getCulqiLink(selectedLocation);
+                  return (
+                    <button
+                      className={`culqi-button ${!isValidCulqiUrl(culqiLink) || isPaymentInProgress ? "disabled" : ""}`}
+                      onClick={() => handleCulqiPayment(culqiLink)}
+                      disabled={
+                        !isValidCulqiUrl(culqiLink) || isPaymentInProgress
+                      }
+                    >
+                      {isPaymentInProgress
+                        ? "Procesando..."
+                        : "Pagar con Culqi"}
+                      <span className="external-icon" aria-hidden="true">
+                        ↗
+                      </span>
+                    </button>
+                  );
+                })()}
+                <div className="security-info">
+                  <span className="lock-icon">🔒</span>
+                  <span>Protegido por encriptación SSL de 256-bits</span>
+                </div>
+                <div className="cookies-info">
+                  <small>
+                    Este método de pago requiere cookies de terceros. Al hacer
+                    clic en "Pagar con Culqi", aceptas el uso de cookies
+                    necesarias para procesar el pago.
+                  </small>
+                </div>
+              </div>
             </div>
           </div>
           {error && <div className="error-message">{error}</div>}
@@ -326,5 +393,4 @@ const PaymentOptions = ({
     </div>
   );
 };
-
 export default PaymentOptions;
