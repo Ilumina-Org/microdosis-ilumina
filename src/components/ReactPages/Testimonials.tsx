@@ -44,21 +44,44 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
         >
           <div
             style={{
-              height: "fit-content",
-              borderRadius: "20px",
+              position: "relative",
+              width: "100%",
+              maxWidth: "800px",
+              margin: "0 auto",
+              borderRadius: "16px",
               overflow: "hidden",
-              boxShadow: "1px 10px 40px rgba(0, 0, 0, 0.48)",
+              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)"
             }}
           >
-            <iframe
-              width={mobile ? "350px" : desktop ? "850px" : "700px"}
-              height={mobile ? "200px" : desktop ? "450px" : "400px"}
-              src="https://www.youtube.com/embed/oCbUxZC_eto?rel=0&modestbranding=1&showinfo=0"
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
+            <div
+              style={{
+                paddingTop: "56.25%",
+                position: "relative"
+              }}
+            >
+              <iframe
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  border: "none"
+                }}
+                src="https://www.youtube.com/embed/FgpXYVLzCEs?si=cG0SBXKDw-bf_Vsh"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            </div>
+            <div
+              style={{
+                background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.02) 80%, rgba(0,0,0,0.05) 100%)",
+                height: "10px",
+                width: "100%"
+              }}
+            />
           </div>
           <TestimonialCarousel />
         </div>
