@@ -235,8 +235,12 @@ const Testimonials = React.forwardRef<HTMLDivElement, LandingProps>(
               >
                 ¿Te gustó la página?
                 <a
-                  style={{ ...socialButtonStyles }}
-                  href="https://wa.me/+51984794603" target="blank">
+                  style={{
+                    ...socialButtonStyles,
+                    color: "yellow",
+                    opacity: "1 !important",
+                  }}
+                  href="https://wa.me/+51984794603" target="blank" >
                   Escríbenos por WhatsApp
                 </a>
               </h4>
