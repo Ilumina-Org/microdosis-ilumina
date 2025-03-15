@@ -10,7 +10,7 @@ export function initializeAnimation(canvas: HTMLCanvasElement) {
     return;
   }
 
-  const frameCount = 47;
+  const frameCount = 71;
   const frames: HTMLImageElement[] = [];
   let currentFrame = 1;
 
@@ -35,7 +35,7 @@ export function initializeAnimation(canvas: HTMLCanvasElement) {
   }
 
   // Delay
-  let frameDelay = 4;
+  let frameDelay = 5;
   let frameDelayCounter = 0;
 
   function drawFrame() {

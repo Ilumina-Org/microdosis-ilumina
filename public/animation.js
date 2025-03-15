@@ -4,7 +4,7 @@ if (!canvas) {
 }
 const ctx = canvas?.getContext("2d");
 
-const frameCount = 46;
+const frameCount = 70;
 const frames = [];
 let currentFrame = 1;
 

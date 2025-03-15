@@ -38,6 +38,18 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
     query: "(max-width: 1370px)",
   });
 
+  //prevents jump but it wond animate fade out
+  // if (!desktop) {
+  //   return (
+  //     <div
+  //       style={{ backgroundColor: "#013726", width: "100vw", height: "100vh" }}
+  //       className="load-in"
+  //     >
+  //       .
+  //     </div>
+  //   );
+  // }
+
   //@ts-ignore
   const responsiveHandler = (s, m, l, xl, mob) => {
     if (small) {
@@ -193,6 +205,23 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           z-index: 2
           }
 
+          .load-in{
+           animation: overlayFade 1.5s ease-in forwards;
+           opacity: 0;
+           display:none;
+          }
+
+          @keyframes overlayFade {
+            0% {
+              opacity: 1;
+            }
+            100% {
+              opacity: 0;
+            }
+          }
+
+
+
           .bottom-action{
             position: absolute;
             bottom: ${mobile ? ".5rem" : "2rem"};
@@ -226,15 +255,6 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
             z-index: 3 !important;
           }
 
-
-          @keyframes fadeInSlideFromLeft {
-            0% {
-              opacity: 0;
-            }
-            100% {
-              opacity: 1;
-            }
-          }
           @keyframes fadeInSlideFromLeftImage {
             0% {
               opacity: 0;
@@ -247,7 +267,8 @@ const Landing = React.forwardRef<HTMLDivElement, LandingProps>((props, ref) => {
           }
 
           .fade-in-slide-left {
-            animation: fadeInSlideFromLeft 1s ease-out forwards;
+          transition: .5s ease-in-out !important;
+
           }
 
           h1 {

@@ -232,14 +232,14 @@ const NavigationButtons: React.FC = () => {
             right: "1rem",
             zIndex: 1100,
             cursor: "pointer",
-            backgroundColor: "rgba(0, 0, 0, 0.3)",
-            borderRadius: "50%",
+            // backgroundColor: "rgba(0, 0, 0, 0.3)",
+            // borderRadius: "50%",
             width: "40px",
             height: "40px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)",
+            // boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)",
           }}
           onClick={toggleMobileMenu}
         >
